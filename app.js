@@ -1,2 +1,2 @@
 "use strict";
-console.log('Hellfafo fa');
+console.log('typescript - lite-server');
