@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="./app.js" defer></script>
+  <script type="text/javascript" data-main="app.js"
+  src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.22/require.js"></script>
   <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
   <title>BlackJack Game</title>
 </head>
@@ -23,7 +24,7 @@
     </section>
 
     <section id="gamePage" class="px-8 pt-8 pb-4 flex flex-col justify-around items-center">
-      <div id="dealerField" class="flex flex-col">
+      <div id="houseField" class="flex flex-col">
         <h3>name</h3>
         <div class="">
           <div id="card" class="w-4 h-12 bg-blue-200"></div>
@@ -44,6 +45,10 @@
         </div>
       </div>
     </section>
+
+    <form id="betForm" >
+
+    </form>
   </div>
 </body>
 </html>
