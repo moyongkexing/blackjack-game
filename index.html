@@ -4,51 +4,68 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script type="text/javascript" data-main="app.js"
+  <script type="text/javascript" data-main="js/app.js"
   src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.22/require.js"></script>
   <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
   <title>BlackJack Game</title>
 </head>
-<body>
-  <div class="h-screen flex justify-center items-center bg-green-800">
+<body class="h-screen flex flex-col justify-center items-center bg-blue-100">
+  <a class="font-bold mt-10 mb-5 tracking-tight font-mono underline" target="_blank" rel="noopener noreferrer" href="https://github.com/moyongkexing/clicker-empire-game">CODE</a>
+  <!-- <div class="w-2/3 h-64 flex justify-center items-center bg-gradient-to-r from-green-800 to-green-900" > -->
+  <div class="w-full xl:w-3/5 main-wrapper">
     <section id="startPage" class="px-8 pt-8 pb-4 flex flex-col justify-around items-center hidden">
-      <h1 class="font-bold text-2xl ">Welcome to Card Game!</h1>
+      <h1 class="font-bold text-2xl text-gray-200">Welcome to Card Game!</h1>
       <form action="" class="w-2/3 h-full flex flex-col justify-around items-center py-4">
         <input placeholder="name" type="text" class="p-2">
-        <select name="" id="" class="w-full p-2 m-4">
+        <select name="" id="" class="w-full p-2 my-4">
           <option>Blackjack</option>
-          <option>Poker</option>
+          <option disabled>Poker</option>
         </select>
-        <button class="p-3 font-bold bg-green-400">Start Game</button>
+        <button type="submit" class="p-3 font-bold bg-green-700 text-white">Start Game</button>
       </form>
     </section>
+    
+    <section id="game-wrapper" class="w-full h-full flex flex-col items-center">
+      <div id="houseField" class="w-full flex flex-col items-center">
+        <h3 class="font-bold text-white text-lg text-gray-200">DEALER</h3>
+        <div id="card-wrapper" class="w-full flex justify-center relative">
+          <div class="w-20 h-24 bg-gray-200 border-2"></div>
+          <div class="w-20 h-24 bg-gray-200 border-2 absolute ml-8 mt-2"></div>
+        </div>
+      </div>
+      <div id="playerFiled" class="w-3/5 flex justify-around mt-8">
+        <div id="bot1-wrapper" class="flex flex-col items-center">
+          <h3 class="font-bold text-white text-lg text-gray-200">BOT 1</h3>
+          <div id="card-wrapper" class="w-full flex justify-center relative">
+            <div class="w-20 h-24 bg-gray-200 border-2"></div>
+            <div class="w-20 h-24 bg-gray-200 border-2 absolute ml-8 mt-2"></div>
+          </div>
+        </div>
+        <div id="user-wrapper" class="mt-4 flex flex-col items-center">
+          <h3 class="font-bold text-white text-lg text-gray-200">USER</h3>
+          <div id="card-wrapper" class="w-full flex justify-center relative">
+          <div class="w-20 h-24 bg-gray-200 border-2"></div>
+          <div class="w-20 h-24 bg-gray-200 border-2 absolute ml-8 mt-2"></div>
+        </div>
+        </div>
+        <div id="bot2-wrapper" class="flex flex-col items-center">
+          <h3 class="font-bold text-white text-lg text-gray-200">BOT 2</h3>
+          <div id="card-wrapper" class="w-full flex justify-center relative">
+          <div class="w-20 h-24 bg-gray-200 border-2"></div>
+          <div class="w-20 h-24 bg-gray-200 border-2 absolute ml-8 mt-2"></div>
+        </div>
+        </div>
+      </div>
 
-    <section id="gamePage" class="px-8 pt-8 pb-4 flex flex-col justify-around items-center">
-      <div id="houseField" class="flex flex-col">
-        <h3>name</h3>
-        <div class="">
-          <div id="card" class="w-4 h-12 bg-blue-200"></div>
-        </div>
+      <div id="control-wrapper" class="control-wrapper">
+        <button class="button"></button>
       </div>
-      <div id="playerFiled" class="flex justify-center items-center">
-        <div>
-          <h3>name</h3>
-          <div class="w-4 h-12 bg-blue-100"></div>
-        </div>
-        <div>
-          <h3>name</h3>
-          <div class="w-4 h-12 bg-blue-100"></div>
-        </div>
-        <div>
-          <h3>name</h3>
-          <div class="w-4 h-12 bg-blue-100"></div>
-        </div>
-      </div>
+      <!-- <form id="betForm" class="flex" >
+  
+      </form> -->
     </section>
 
-    <form id="betForm" >
-
-    </form>
   </div>
 </body>
 </html>
