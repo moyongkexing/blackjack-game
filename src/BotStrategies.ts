@@ -1,7 +1,6 @@
-import { Player } from "./Player";
-type Action = Player["action"];
+export type ActionType = "surrender" | "stand" | "hit" | "double";
 type Actions = {
-  [key in Action]?: number[];
+  [key in ActionType]: number[];
 }
 type BotStrategies = {
   [key: string]: Actions;
