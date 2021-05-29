@@ -7,16 +7,18 @@
   <script type="text/javascript" data-main="js/app.js"
   src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.22/require.js"></script>
   <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/styles.css">
   <title>BlackJack Game</title>
 </head>
 <body class="h-screen flex flex-col justify-center items-center bg-blue-100">
-  <a class="font-bold mt-10 mb-5 tracking-tight font-mono underline" target="_blank" rel="noopener noreferrer" href="https://github.com/moyongkexing/clicker-empire-game">CODE</a>
-  <!-- <div class="w-2/3 h-64 flex justify-center items-center bg-gradient-to-r from-green-800 to-green-900" > -->
+  <a class="font-bold mt-10 mb-5 tracking-tight font-mono underline" target="_blank" rel="noopener noreferrer" href="https://github.com/moyongkexing/blackjack-game-oop">CODE</a>
+  
   <div class="w-full xl:w-3/5 main-wrapper">
-    <section id="startPage" class="px-8 pt-8 pb-4 flex flex-col justify-around items-center hidden">
+
+    <section id="startPage" class="h-full px-8 pt-8 pb-4 flex flex-col justify-center items-center hidden">
       <h1 class="font-bold text-2xl text-gray-200">Welcome to Card Game!</h1>
-      <form action="" class="w-2/3 h-full flex flex-col justify-around items-center py-4">
+      <form action="" class="flex flex-col justify-around items-center py-4">
         <input placeholder="name" type="text" class="p-2">
         <select name="" id="" class="w-full p-2 my-4">
           <option>Blackjack</option>
@@ -26,44 +28,72 @@
       </form>
     </section>
     
-    <section id="game-wrapper" class="w-full h-full flex flex-col items-center">
-      <div id="houseField" class="w-full flex flex-col items-center">
-        <h3 class="font-bold text-white text-lg text-gray-200">DEALER</h3>
-        <div id="card-wrapper" class="w-full flex justify-center relative">
-          <div class="w-20 h-24 bg-gray-200 border-2"></div>
-          <div class="w-20 h-24 bg-gray-200 border-2 absolute ml-8 mt-2"></div>
-        </div>
-      </div>
-      <div id="playerFiled" class="w-3/5 flex justify-around mt-8">
-        <div id="bot1-wrapper" class="flex flex-col items-center">
-          <h3 class="font-bold text-white text-lg text-gray-200">BOT 1</h3>
-          <div id="card-wrapper" class="w-full flex justify-center relative">
-            <div class="w-20 h-24 bg-gray-200 border-2"></div>
-            <div class="w-20 h-24 bg-gray-200 border-2 absolute ml-8 mt-2"></div>
-          </div>
-        </div>
-        <div id="user-wrapper" class="mt-4 flex flex-col items-center">
-          <h3 class="font-bold text-white text-lg text-gray-200">USER</h3>
-          <div id="card-wrapper" class="w-full flex justify-center relative">
-          <div class="w-20 h-24 bg-gray-200 border-2"></div>
-          <div class="w-20 h-24 bg-gray-200 border-2 absolute ml-8 mt-2"></div>
-        </div>
-        </div>
-        <div id="bot2-wrapper" class="flex flex-col items-center">
-          <h3 class="font-bold text-white text-lg text-gray-200">BOT 2</h3>
-          <div id="card-wrapper" class="w-full flex justify-center relative">
-          <div class="w-20 h-24 bg-gray-200 border-2"></div>
-          <div class="w-20 h-24 bg-gray-200 border-2 absolute ml-8 mt-2"></div>
-        </div>
+    <section id="game-wrapper" class="w-full h-full flex flex-col items-center -ml-12">
+      <div id="house-wrapper" class="w-full flex flex-col items-center">
+        <h3 class="text-white text-lg text-gray-200">DEALER</h3>
+        <div id="house-cards" class="w-full flex justify-center relative">
+          <div id="house-card-1" class="card"></div>
+          <div id="house-card-1" class="card card2"></div>
+          <div id="house-card-1" class="card card3"></div>
+          <div id="house-card-1" class="card card4"></div>
+          <div id="house-card-1" class="card card5"></div>
         </div>
       </div>
 
-      <div id="control-wrapper" class="control-wrapper">
-        <button class="button"></button>
+      <div id="player-wrapper" class="w-full flex justify-around mt-12">
+        <div id="bot1" class="flex flex-col items-center">
+          <h3 class="text-white text-lg text-gray-200">BOT 1</h3>
+          <div id="bot1-cards" class="w-full flex justify-center relative">
+            <div class="card"></div>
+            <div class="card card2"></div>
+            <div class="card card3"></div>
+            <div class="card card4"></div>
+            <div class="card card5"></div>
+          </div>
+        </div>
+
+        <div id="user" class="mt-8 flex flex-col items-center">
+          <h3 class="text-white text-lg text-gray-200">USER</h3>
+          <div id="user-cards" class="w-full flex justify-center relative">
+            <div class="card"></div>
+            <div class="card card2"></div>
+            <div class="card card3"></div>
+            <div class="card card4"></div>
+            <div class="card card5"></div>
+          </div>
+        </div>
+          
+        <div id="bot2" class="flex flex-col items-center">
+          <h3 class="text-white text-lg text-gray-200">BOT 2</h3>
+          <div id="bot2-cards" class="w-full flex justify-center relative">
+            <div class="card"></div>
+            <div class="card card2"></div>
+            <div class="card card3"></div>
+            <div class="card card4"></div>
+            <div class="card card5"></div>
+          </div>
+        </div>
       </div>
-      <!-- <form id="betForm" class="flex" >
-  
-      </form> -->
+
+      <div id="bet-amount" class=" ml-12 mt-12 flex justify-center font-bold text-white text-2xl text-gray-200">bet $200</div>
+
+
+      <div id="control-wrapper" class="control-wrapper">
+        <div id="actions-ctrl" class="h-full flex justify-around items-center">
+          <button id="next-game-btn"class="submit-btn disable">NEXT GAME</button>
+          <button class="stand-btn"></button>
+          <button class="hit-btn"></button>
+          <button class="double-btn"></button>
+          <button class="surrender-btn"></button>
+        </div>
+        <div id="bet-ctrl" class="h-full flex justify-around items-center hidden">
+          <button id="deal-btn" class="submit-btn">DEAL</button>
+          <div class="coin red"><div>5</div></div>
+          <div class="coin orange"><div>20</div></div>
+          <div class="coin green"><div>50</div></div>
+          <div class="coin blue"><div>100</div></div>
+        </div>
+      </div>
     </section>
 
   </div>

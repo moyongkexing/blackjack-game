@@ -1,16 +1,268 @@
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 .main-wrapper {
   position: relative;
-  padding-top: 20px;
+  padding-top: 40px;
   height: 66%;
-  background: rgb(9,69,28);
-  background: radial-gradient(circle, rgba(9,69,28,1) 0%, rgba(2,20,8,0.7399334733893557) 100%);
+  background: rgb(9, 69, 28);
+  background: -webkit-radial-gradient(
+    circle,
+    rgba(9, 69, 28, 1) 0%,
+    rgba(2, 20, 8, 0.7399334733893557) 100%
+  );
+  background: -moz-radial-gradient(
+    circle,
+    rgba(9, 69, 28, 1) 0%,
+    rgba(2, 20, 8, 0.7399334733893557) 100%
+  );
+  background: -o-radial-gradient(
+    circle,
+    rgba(9, 69, 28, 1) 0%,
+    rgba(2, 20, 8, 0.7399334733893557) 100%
+  );
+  background: radial-gradient(
+    circle,
+    rgba(9, 69, 28, 1) 0%,
+    rgba(2, 20, 8, 0.7399334733893557) 100%
+  );
 }
 
+.card {
+  width: 6rem;
+  height: 7rem;
+  background-color: white;
+  border: 2px solid gray;
+}
+.card2 {
+  position: absolute;
+  margin-left: 3rem;
+  margin-top: 9px;
+}
+.card3 {
+  position: absolute;
+  margin-left: 6rem;
+  margin-top: 18px;
+}
+.card4 {
+  position: absolute;
+  margin-left: 9rem;
+  margin-top: 27px;
+}
+.card5 {
+  position: absolute;
+  margin-left: 12rem;
+  margin-top: 36px;
+}
 .control-wrapper {
   position: absolute;
+  padding: 0 40px;
+  margin-left: 6rem;
   bottom: 0;
   width: 100%;
   height: 15%;
-  background: rgb(28,28,28);
-  background: linear-gradient(180deg, rgba(28,28,28,1) 0%, rgba(40,40,40,1) 51%, rgba(28,28,28,0.7399334733893557) 100%);
+  background: rgb(28, 28, 28);
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(rgba(28, 28, 28, 1)),
+    color-stop(51%, rgba(40, 40, 40, 1)),
+    to(rgba(28, 28, 28, 0.7399334733893557))
+  );
+  background: -webkit-linear-gradient(
+    top,
+    rgba(28, 28, 28, 1) 0%,
+    rgba(40, 40, 40, 1) 51%,
+    rgba(28, 28, 28, 0.7399334733893557) 100%
+  );
+  background: -moz-linear-gradient(
+    top,
+    rgba(28, 28, 28, 1) 0%,
+    rgba(40, 40, 40, 1) 51%,
+    rgba(28, 28, 28, 0.7399334733893557) 100%
+  );
+  background: -o-linear-gradient(
+    top,
+    rgba(28, 28, 28, 1) 0%,
+    rgba(40, 40, 40, 1) 51%,
+    rgba(28, 28, 28, 0.7399334733893557) 100%
+  );
+  background: linear-gradient(
+    180deg,
+    rgba(28, 28, 28, 1) 0%,
+    rgba(40, 40, 40, 1) 51%,
+    rgba(28, 28, 28, 0.7399334733893557) 100%
+  );
 }
+
+.stand-btn {
+  position: relative;
+  border: 8px solid rgb(196, 177, 8);
+  width: 80px;
+  height: 80px;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  border-radius: 100%;
+  background-color: red;
+}
+.stand-btn::after {
+  content: "STAND";
+  text-align: center;
+  font-weight: bold;
+  position: absolute;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  transform: translateX(-50%);
+  bottom: -5px;
+  width: 85px;
+  height: 25px;
+  background-color: rgb(196, 177, 8);
+}
+.stand-btn:focus {
+  outline: none;
+}
+
+.hit-btn {
+  position: relative;
+  border: 8px solid rgb(196, 177, 8);
+  width: 80px;
+  height: 80px;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  border-radius: 100%;
+  background-color: green;
+}
+.hit-btn::after {
+  content: "HIT";
+  text-align: center;
+  font-weight: bold;
+  position: absolute;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  transform: translateX(-50%);
+  bottom: -5px;
+  width: 85px;
+  height: 25px;
+  background-color: rgb(196, 177, 8);
+}
+.hit-btn:focus {
+  outline: none;
+}
+
+.double-btn {
+  position: relative;
+  border: 8px solid rgb(196, 177, 8);
+  width: 80px;
+  height: 80px;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  border-radius: 100%;
+  background-color: gold;
+}
+.double-btn::after {
+  content: "DOUBLE";
+  text-align: center;
+  font-weight: bold;
+  position: absolute;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  transform: translateX(-50%);
+  bottom: -5px;
+  width: 85px;
+  height: 25px;
+  background-color: rgb(196, 177, 8);
+}
+.double-btn:focus {
+  outline: none;
+}
+
+.surrender-btn {
+  position: relative;
+  border: 8px solid rgb(196, 177, 8);
+  width: 80px;
+  height: 80px;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  border-radius: 100%;
+  background-color: purple;
+}
+.surrender-btn::after {
+  content: "SURRENDER";
+  text-align: center;
+  font-size: 14px;
+  text-align: center;
+  font-weight: bold;
+  position: absolute;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  transform: translateX(-50%);
+  bottom: -5px;
+  width: 85px;
+  height: 25px;
+  line-height: 25px;
+  background-color: rgb(196, 177, 8);
+}
+.surrender-btn:focus {
+  outline: none;
+}
+
+.submit-btn {
+  font-weight: bold;
+  color: white;
+  font-size: large;
+  width: 200px;
+  height: 65px;
+  background-color: rgb(22, 22, 22);
+}
+.submit-btn:focus {
+  outline: none;
+}
+
+.disable {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color: rgb(61, 61, 61);
+  pointer-events: none;
+  cursor: default;
+}
+
+
+div.coin {
+  float: left;
+  width: 85px;
+  height: 85px;
+  margin: 30px;
+  border-radius: 150px;
+  -webkit-border-radius: 150px;
+  -moz-border-radius: 150px;
+  box-shadow: inset 0 0 1px 1px rgba(0,0,0, 0.1), 0 0 5px 1px rgba(90,90,90, 0.1), inset 0 35px 1px rgba(255,255,255, 0.2);
+  -moz-box-shadow: inset 0 0 1px 1px rgba(0,0,0, 0.1), 0 0 5px 1px rgba(90,90,90, 0.1), inset 0 35px 1px rgba(255,255,255, 0.2);
+  -webkit-box-shadow: inset 0 0 1px 1px rgba(0,0,0, 0.1), 0 0 5px 1px rgba(90,90,90, 0.1), inset 0 35px 1px rgba(255,255,255, 0.2);
+  border: 10px dotted #fff;
+}
+
+div.coin div {
+  font-family: Verdana;
+  text-align: center;
+  line-height: 70px;
+  font-size: 1.7em;
+  
+}
+div.red { background: #fd5f72 }
+div.orange { background: #f7b55e }
+div.green { background: #92ed40 }
+div.blue { background: #4cc3fe }
