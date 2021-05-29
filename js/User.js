@@ -34,8 +34,8 @@ var __extends = (this && this.__extends) || (function () {
             _this.playerType = "User";
             return _this;
         }
-        // これはModelにViewの状態が依存してる悪い例...?
-        User.prototype.getBetAmount = function () {
+        // これはModelにViewの状態が依存してる悪い例かも
+        User.prototype.bet = function () {
             var amount = 0;
             // Table.betDenominations = [5,20,50,100]
             for (var _i = 0, _a = Table_1.Table.betDenominations; _i < _a.length; _i++) {
@@ -44,13 +44,10 @@ var __extends = (this && this.__extends) || (function () {
                 var value = document.getElementById("betInput" + bd).value;
                 amount += parseInt(label) * parseInt(value);
             }
-            return amount;
+            this.betAmount = amount;
         };
         User.prototype.makeAction = function () {
             // idのvalueをもってきてaction
-        };
-        User.prototype.bet = function () {
-            this.betAmount = this.getBetAmount();
         };
         return User;
     }(Player_1.Player));

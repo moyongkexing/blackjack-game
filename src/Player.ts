@@ -1,4 +1,5 @@
 import { Card } from "./Card";
+import { Table } from "./Table";
 
 export class Player {
   public name: string;
@@ -37,11 +38,11 @@ export class Player {
   private get NumAce(): number {
     return this.hand.filter((card) => card.rank === "A").length;
   }
-  public isBlackjack(): boolean {
+  public get isBlackjack(): boolean {
     return this.handScore === 21 && this.NumAce > 0;
   }
-  public isBroke(): boolean {
-    return this.money === 0;
+  public get isBroke(): boolean {
+    return this.money < Table.betDenominations[0]; // Table.betDenominations[0] = 5
   }
 
   private loseMoney(amount: number): void {
@@ -52,7 +53,7 @@ export class Player {
   }
   public getCard(card: Card): void {
     this.hand.push(card);
-    if(this.isBlackjack()) this.status = "blackjack";
+    if(this.isBlackjack) this.status = "blackjack";
   }
   public surrender(): void {
     this.status = "surrender";

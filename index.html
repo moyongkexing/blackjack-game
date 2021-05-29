@@ -14,9 +14,9 @@
 <body class="h-screen flex flex-col justify-center items-center bg-blue-100">
   <a class="font-bold mt-10 mb-5 tracking-tight font-mono underline" target="_blank" rel="noopener noreferrer" href="https://github.com/moyongkexing/blackjack-game-oop">CODE</a>
   
-  <div class="w-full xl:w-3/5 main-wrapper">
+  <div id="root" class="w-full xl:w-3/5 main-wrapper">
 
-    <section id="startPage" class="h-full px-8 pt-8 pb-4 flex flex-col justify-center items-center hidden">
+    <section id="startPage" class="h-full px-8 pt-8 pb-4 flex flex-col justify-center items-center">
       <h1 class="font-bold text-2xl text-gray-200">Welcome to Card Game!</h1>
       <form action="" class="flex flex-col justify-around items-center py-4">
         <input placeholder="name" type="text" class="p-2">
@@ -28,15 +28,15 @@
       </form>
     </section>
     
-    <section id="game-wrapper" class="w-full h-full flex flex-col items-center -ml-12">
+    <section id="game-wrapper" class="w-full h-full flex flex-col items-center -ml-12 hidden">
       <div id="house-wrapper" class="w-full flex flex-col items-center">
         <h3 class="text-white text-lg text-gray-200">DEALER</h3>
         <div id="house-cards" class="w-full flex justify-center relative">
           <div id="house-card-1" class="card"></div>
-          <div id="house-card-1" class="card card2"></div>
-          <div id="house-card-1" class="card card3"></div>
-          <div id="house-card-1" class="card card4"></div>
-          <div id="house-card-1" class="card card5"></div>
+          <div id="house-card-2" class="card card2"></div>
+          <div id="house-card-3" class="card card3"></div>
+          <div id="house-card-4" class="card card4"></div>
+          <div id="house-card-5" class="card card5"></div>
         </div>
       </div>
 
@@ -44,33 +44,33 @@
         <div id="bot1" class="flex flex-col items-center">
           <h3 class="text-white text-lg text-gray-200">BOT 1</h3>
           <div id="bot1-cards" class="w-full flex justify-center relative">
-            <div class="card"></div>
-            <div class="card card2"></div>
-            <div class="card card3"></div>
-            <div class="card card4"></div>
-            <div class="card card5"></div>
+            <div id="bot1-card-1" class="card"></div>
+            <div id="bot1-card-2" class="card card2"></div>
+            <div id="bot1-card-3" class="card card3"></div>
+            <div id="bot1-card-4" class="card card4"></div>
+            <div id="bot1-card-5" class="card card5"></div>
           </div>
         </div>
 
         <div id="user" class="mt-8 flex flex-col items-center">
           <h3 class="text-white text-lg text-gray-200">USER</h3>
           <div id="user-cards" class="w-full flex justify-center relative">
-            <div class="card"></div>
-            <div class="card card2"></div>
-            <div class="card card3"></div>
-            <div class="card card4"></div>
-            <div class="card card5"></div>
+            <div id="user-card-1" class="card"></div>
+            <div id="user-card-2" class="card card2"></div>
+            <div id="user-card-3" class="card card3"></div>
+            <div id="user-card-4" class="card card4"></div>
+            <div id="user-card-5" class="card card5"></div>
           </div>
         </div>
           
         <div id="bot2" class="flex flex-col items-center">
           <h3 class="text-white text-lg text-gray-200">BOT 2</h3>
           <div id="bot2-cards" class="w-full flex justify-center relative">
-            <div class="card"></div>
-            <div class="card card2"></div>
-            <div class="card card3"></div>
-            <div class="card card4"></div>
-            <div class="card card5"></div>
+            <div id="user-card-1" class="card"></div>
+            <div id="user-card-2" class="card card2"></div>
+            <div id="user-card-3" class="card card3"></div>
+            <div id="user-card-4" class="card card4"></div>
+            <div id="user-card-5" class="card card5"></div>
           </div>
         </div>
       </div>

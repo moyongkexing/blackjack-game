@@ -7,9 +7,8 @@ export class User extends Player {
     super({ name: arg.name, gameType: arg.gameType });
   }
   
-
-  // これはModelにViewの状態が依存してる悪い例...?
-  private getBetAmount(): number {
+  // これはModelにViewの状態が依存してる悪い例かも
+  public bet(): void {
     let amount = 0;
     // Table.betDenominations = [5,20,50,100]
     for (let bd of Table.betDenominations) {
@@ -17,15 +16,10 @@ export class User extends Player {
       let value = document.getElementById(`betInput${bd}`)!.value;
       amount += parseInt(label) * parseInt(value);
     }
-    return amount;
+    this.betAmount = amount;
   }
-  
+
   public makeAction(): Player["action"] {
     // idのvalueをもってきてaction
   }
-
-  public bet(): void {
-    this.betAmount = this.getBetAmount();
-  }
-  
 }

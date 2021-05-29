@@ -4,12 +4,13 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
+        define(["require", "exports", "./Table"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Player = void 0;
+    var Table_1 = require("./Table");
     var Player = /** @class */ (function () {
         function Player(arg) {
             this.name = arg.name;
@@ -45,12 +46,20 @@
             enumerable: false,
             configurable: true
         });
-        Player.prototype.isBlackjack = function () {
-            return this.handScore === 21 && this.NumAce > 0;
-        };
-        Player.prototype.isBroke = function () {
-            return this.money === 0;
-        };
+        Object.defineProperty(Player.prototype, "isBlackjack", {
+            get: function () {
+                return this.handScore === 21 && this.NumAce > 0;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Player.prototype, "isBroke", {
+            get: function () {
+                return this.money < Table_1.Table.betDenominations[0]; // Table.betDenominations[0] = 5
+            },
+            enumerable: false,
+            configurable: true
+        });
         Player.prototype.loseMoney = function (amount) {
             this.money -= amount;
         };
@@ -59,7 +68,7 @@
         };
         Player.prototype.getCard = function (card) {
             this.hand.push(card);
-            if (this.isBlackjack())
+            if (this.isBlackjack)
                 this.status = "blackjack";
         };
         Player.prototype.surrender = function () {

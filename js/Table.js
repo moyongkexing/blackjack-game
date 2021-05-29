@@ -20,26 +20,26 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
     var Bot_1 = require("./Bot");
     var Dealer_1 = require("./Dealer");
     var Table = /** @class */ (function () {
-        // private turnCounter: number;
         function Table(arg, username) {
             this.numBots = 2;
             this.numInitialHands = 2;
             this.gameType = arg.gameType;
             this.deck = new Deck_1.Deck({ gameType: this.gameType });
-            this.dealer = new Dealer_1.Dealer({ name: "ディーラー", gameType: this.gameType });
+            this.dealer = new Dealer_1.Dealer({ name: "DEALER", gameType: this.gameType });
             this.user = new User_1.User({ name: username, gameType: this.gameType });
             switch (this.gameType) {
                 case "Blackjack":
                     this.bots = this.generateBotsBJ();
-                    break; // return [new Bot(), new Bot()]
+                    break;
                 case "Poker":
                     this.bots = this.generatePlayerArrPoker();
                     break;
             }
             this.players = this.bots;
-            this.players.push(this.user); // this.players = [Bot, Bot, User]
+            this.players.push(this.user);
             this.resultLog = ["Have fun!"];
         }
+        // return [new Bot(), new Bot()]
         Table.prototype.generateBotsBJ = function () {
             var _this = this;
             var arr = [];
@@ -52,8 +52,8 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
             // 今回実装しない
             return [];
         };
-        Table.prototype.proceedGame = function () {
-            while (!this.user.isBroke()) {
+        Table.prototype.proceedBJ = function () {
+            while (!this.user.isBroke) {
                 this.betPhase();
                 this.distributePhase();
                 this.actPhase();
@@ -62,6 +62,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
             // ユーザーが破産したときの処理をここに書く
         };
         Table.prototype.betPhase = function () {
+            // this.players = [Bot, Bot, User]
             for (var _i = 0, _a = this.players; _i < _a.length; _i++) {
                 var player = _a[_i];
                 player.bet();
@@ -82,38 +83,36 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
         Table.prototype.actPhase = function () {
             for (var _i = 0, _a = this.players; _i < _a.length; _i++) {
                 var player = _a[_i];
-                // 手札がブラックジャックのプレイヤーは何もしない
-                if (player.isBlackjack())
+                if (player.isBlackjack)
                     continue;
                 // プレーヤーはsurrenderかstandするまでmakeAction()を繰り返す
-                var isEnd = false;
-                while (!isEnd) {
-                    // Botはディーラーのオープンカード（一枚目）のランクをもとに自動的にアクションを決定する
-                    var action = player.playerType === "Bot" ? player.makeAction(this.dealer.openCard) : player.makeAction();
+                var isTurnEnd = false;
+                while (!isTurnEnd) {
+                    var action = player.playerType === "Bot"
+                        ? player.makeAction(this.dealer.openCard)
+                        : player.makeAction();
                     switch (action) {
-                        case "surrender":
+                        case "surrender": {
                             player.surrender();
-                            isEnd = true;
-                            break; // player.status = "surrender"
-                        case "stand":
+                            isTurnEnd = true;
+                            break;
+                        }
+                        case "stand": {
                             player.stand();
-                            isEnd = true;
-                            break; // player.status = "stand"
+                            isTurnEnd = true;
+                            break;
+                        }
                         case "hit":
                             player.hit(this.deck.drawOne());
-                            break; // player.status = "surrender"
+                            break;
                         case "double":
                             player.double(this.deck.drawOne());
-                            break; // player.status = "surrender"
+                            break;
                     }
                 }
             }
         };
         Table.prototype.evaluatePhase = function () {
-            // this.resultLog.push(this.generateLog());
-        };
-        Table.prototype.generateLog = function (phase) {
-            return "" + phase;
         };
         Table.betDenominations = [5, 20, 50, 100];
         return Table;
