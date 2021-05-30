@@ -1,20 +1,22 @@
-// import { Table } from "./Table";
+import { Table } from "./Table";
 
-// const IDS = {
-//   root: document.getElementById("root"),
-// }
-
-class ViewControl {
-  public constructor() {
-    const startBtn = document.getElementById("start-btn");
-    startBtn?.addEventListener("click", () => ViewControl.startGame());
+class Controller {
+  private static readonly IDS = {
+    betCtrl: "control-wrapper bet-ctrl",
+    actionCtrl: "control-wrapper bet-ctrl",
   }
-  private static startGame(): void {
-    console.log("test")
+  public constructor() {
+    // const startBtn = document.getElementById("start-btn") as HTMLElement;
+    const form = document.getElementById("form") as HTMLFormElement;
+    if(form) form.addEventListener("submit", () => this.startGame());
+  }
+
+  private startGame() {
+    console.log("hi")
   }
 }
 
-new ViewControl();
+new Controller();
 
 // 状態の更新は必ずそのクラスのインスタンスメソッドで行う
 // 他クラスの状態は、読み取るだけで更新することはしない

@@ -49,9 +49,13 @@
             enumerable: false,
             configurable: true
         });
-        Dealer.prototype.isBlackjack = function () {
-            return this.handScore === 21 && this.NumAce > 0;
-        };
+        Object.defineProperty(Dealer.prototype, "isBlackjack", {
+            get: function () {
+                return this.handScore === 21 && this.NumAce > 0;
+            },
+            enumerable: false,
+            configurable: true
+        });
         Dealer.prototype.getCard = function (card) {
             this.hand.push(card);
         };

@@ -12,8 +12,8 @@ export class User extends Player {
     let amount = 0;
     // Table.betDenominations = [5,20,50,100]
     for (let bd of Table.betDenominations) {
-      let label = document.getElementById(`betLabel${bd}`)!.innerText;
-      let value = document.getElementById(`betInput${bd}`)!.value;
+      let label = (<HTMLInputElement>document.getElementById(`betLabel${bd}`)).innerText;
+      let value = (<HTMLInputElement>document.getElementById(`betInput${bd}`)).value;
       amount += parseInt(label) * parseInt(value);
     }
     this.betAmount = amount;

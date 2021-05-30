@@ -27,7 +27,6 @@
                     break;
             }
             this.shuffle();
-            console.log(this.cards);
         };
         Deck.prototype.createDeckBJ = function () {
             for (var _i = 0, _a = Deck.suits; _i < _a.length; _i++) {

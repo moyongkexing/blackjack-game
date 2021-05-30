@@ -20,10 +20,10 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
     var Bot_1 = require("./Bot");
     var Dealer_1 = require("./Dealer");
     var Table = /** @class */ (function () {
-        function Table(arg, username) {
+        function Table(gameType, username) {
             this.numBots = 2;
             this.numInitialHands = 2;
-            this.gameType = arg.gameType;
+            this.gameType = gameType;
             this.deck = new Deck_1.Deck({ gameType: this.gameType });
             this.dealer = new Dealer_1.Dealer({ name: "DEALER", gameType: this.gameType });
             this.user = new User_1.User({ name: username, gameType: this.gameType });
@@ -39,7 +39,6 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
             this.players.push(this.user);
             this.resultLog = ["Have fun!"];
         }
-        // return [new Bot(), new Bot()]
         Table.prototype.generateBotsBJ = function () {
             var _this = this;
             var arr = [];

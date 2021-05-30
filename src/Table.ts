@@ -16,13 +16,12 @@ export class Table {
   private players: Array<User | Bot>;
   private resultLog: string[];
 
-  public constructor(arg: Pick<Table, "gameType">, username: string) {
-    this.gameType = arg.gameType;
+  public constructor(gameType: "Blackjack" | "Poker", username: string) {
+    this.gameType = gameType;
     this.deck = new Deck({gameType: this.gameType});
     this.dealer = new Dealer({name: "DEALER", gameType: this.gameType});
     this.user = new User({name: username, gameType: this.gameType});
     switch(this.gameType) {
-      
       case "Blackjack": this.bots = this.generateBotsBJ();break; 
       case "Poker": this.bots = this.generatePlayerArrPoker();break;
     }
@@ -30,7 +29,7 @@ export class Table {
     this.players.push(this.user);
     this.resultLog = ["Have fun!"];
   }
-  // return [new Bot(), new Bot()]
+  
   private generateBotsBJ(): Bot[] {
     let arr: Bot[] = [];
     [...Array(this.numBots)].forEach(i => {
@@ -69,7 +68,7 @@ export class Table {
       if(player.isBlackjack) continue;
 
       // プレーヤーはsurrenderかstandするまでmakeAction()を繰り返す
-      let isTurnEnd = false;
+      let isTurnEnd: boolean = false;
       while(!isTurnEnd) {
         let action = player.playerType === "Bot"
         ? player.makeAction(this.dealer.openCard)

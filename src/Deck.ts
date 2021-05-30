@@ -16,7 +16,6 @@ export class Deck {
       case "Poker": this.createDeckPoker();break;
     }
     this.shuffle();
-    console.log(this.cards);
   }
   private createDeckBJ(): void {
     for(let suit of Deck.suits) {

@@ -34,7 +34,7 @@ export class Dealer {
   private get NumAce(): number {
     return this.hand.filter((card) => card.rank === "A").length;
   }
-  public isBlackjack(): boolean {
+  public get isBlackjack(): boolean {
     return this.handScore === 21 && this.NumAce > 0;
   }
 
