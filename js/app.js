@@ -1,20 +1,19 @@
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
+"use strict";
+// import { Table } from "./Table";
+// const IDS = {
+//   root: document.getElementById("root"),
+// }
+var ViewControl = /** @class */ (function () {
+    function ViewControl() {
+        var startBtn = document.getElementById("start-btn");
+        startBtn === null || startBtn === void 0 ? void 0 : startBtn.addEventListener("click", function () { return ViewControl.startGame(); });
     }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Table"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var Table_1 = require("./Table");
-    var IDS = {
-        root: document.getElementById("root"),
+    ViewControl.startGame = function () {
+        console.log("test");
     };
-    new Table_1.Table();
-});
+    return ViewControl;
+}());
+new ViewControl();
 // 状態の更新は必ずそのクラスのインスタンスメソッドで行う
 // 他クラスの状態は、読み取るだけで更新することはしない
 // Playerクラスが肥大化してる...?

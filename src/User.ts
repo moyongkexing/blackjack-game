@@ -19,7 +19,11 @@ export class User extends Player {
     this.betAmount = amount;
   }
 
-  public makeAction(): Player["action"] {
+  public makeAction(): any {
+    return "test";
     // idのvalueをもってきてaction
   }
+  // public makeAction(): Player["action"] {
+  //   // idのvalueをもってきてaction
+  // }
 }

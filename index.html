@@ -18,14 +18,14 @@
 
     <section id="startPage" class="h-full px-8 pt-8 pb-4 flex flex-col justify-center items-center">
       <h1 class="font-bold text-2xl text-gray-200">Welcome to Card Game!</h1>
-      <form action="" class="flex flex-col justify-around items-center py-4">
-        <input placeholder="name" type="text" class="p-2">
-        <select name="" id="" class="w-full p-2 my-4">
+      <div class="flex flex-col justify-around items-center py-4">
+        <input id="username-input" autofocus placeholder="name" type="text" class="p-2">
+        <select id="gametype-input" class="w-full p-2 my-4">
           <option>Blackjack</option>
           <option disabled>Poker</option>
         </select>
-        <button type="submit" class="p-3 font-bold bg-green-700 text-white">Start Game</button>
-      </form>
+        <button id="start-btn" type="button" class="p-3 font-bold bg-green-700 text-white">Start Game</button>
+      </div>
     </section>
     
     <section id="game-wrapper" class="w-full h-full flex flex-col items-center -ml-12 hidden">

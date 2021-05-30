@@ -47,6 +47,7 @@ var __extends = (this && this.__extends) || (function () {
             this.betAmount = amount;
         };
         User.prototype.makeAction = function () {
+            return "test";
             // idのvalueをもってきてaction
         };
         return User;
