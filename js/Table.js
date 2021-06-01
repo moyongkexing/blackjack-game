@@ -20,55 +20,35 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
     var Bot_1 = require("./Bot");
     var Dealer_1 = require("./Dealer");
     var Table = /** @class */ (function () {
-        function Table(gameType, username) {
+        function Table(username) {
             this.numBots = 2;
             this.numInitialHands = 2;
-            this.gameType = gameType;
-            this.deck = new Deck_1.Deck({ gameType: this.gameType });
-            this.dealer = new Dealer_1.Dealer({ name: "DEALER", gameType: this.gameType });
-            this.user = new User_1.User({ name: username, gameType: this.gameType });
-            switch (this.gameType) {
-                case "Blackjack":
-                    this.bots = this.generateBotsBJ();
-                    break;
-                case "Poker":
-                    this.bots = this.generatePlayerArrPoker();
-                    break;
-            }
-            this.players = this.bots;
+            this.players = [];
+            this.deck = new Deck_1.Deck();
+            this.dealer = new Dealer_1.Dealer();
+            this.user = new User_1.User(username);
             this.players.push(this.user);
+            for (var i = 1; i <= this.numBots; i++) {
+                this.players.push(new Bot_1.Bot("BOT " + i));
+            }
             this.resultLog = ["Have fun!"];
         }
-        Table.prototype.generateBotsBJ = function () {
-            var _this = this;
-            var arr = [];
-            __spreadArray([], Array(this.numBots)).forEach(function (i) {
-                arr.push(new Bot_1.Bot({ name: "\u30DC\u30C3\u30C8" + i + "\u53F7", gameType: _this.gameType }));
-            });
-            return arr;
-        };
-        Table.prototype.generatePlayerArrPoker = function () {
-            // 今回実装しない
-            return [];
-        };
-        Table.prototype.proceedBJ = function () {
-            while (!this.user.isBroke) {
-                this.betPhase();
-                this.distributePhase();
-                this.actPhase();
-                this.evaluatePhase();
-            }
-            // ユーザーが破産したときの処理をここに書く
-        };
-        Table.prototype.betPhase = function () {
-            // this.players = [Bot, Bot, User]
+        Table.prototype.betPhase = function (userBetAmount) {
+            // this.players = [User, Bot, Bot]
             for (var _i = 0, _a = this.players; _i < _a.length; _i++) {
                 var player = _a[_i];
-                player.bet();
+                switch (player.playerType) {
+                    case "User":
+                        player.bet(userBetAmount);
+                        break;
+                    case "Bot": player.bet();
+                }
             }
+            this.distributePhase();
         };
         Table.prototype.distributePhase = function () {
             var _this = this;
+            console.log("distributePhaseが呼ばれた");
             var _loop_1 = function (player) {
                 __spreadArray([], Array(this_1.numInitialHands)).forEach(function () { return player.getCard(_this.deck.drawOne()); });
             };
@@ -78,18 +58,19 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
                 _loop_1(player);
             }
             this.dealer.getCard(this.deck.drawOne());
+            this.players.forEach(function (player) { return console.log(player.hand); });
         };
-        Table.prototype.actPhase = function () {
+        Table.prototype.actPhase = function (userAction) {
             for (var _i = 0, _a = this.players; _i < _a.length; _i++) {
                 var player = _a[_i];
                 if (player.isBlackjack)
                     continue;
-                // プレーヤーはsurrenderかstandするまでmakeAction()を繰り返す
                 var isTurnEnd = false;
                 while (!isTurnEnd) {
-                    var action = player.playerType === "Bot"
-                        ? player.makeAction(this.dealer.openCard)
-                        : player.makeAction();
+                    // BOT determines the action based on the rank of the dealer's open cards
+                    var action = player.playerType === "User"
+                        ? userAction
+                        : player.makeAction(this.dealer.openCard);
                     switch (action) {
                         case "surrender": {
                             player.surrender();

@@ -1,84 +1,69 @@
 import { Deck } from "./Deck";
 import { User } from "./User";
 import { Bot } from "./Bot";
-
 import { Dealer } from "./Dealer";
+import { ViewController } from "./ViewController";
+import { ActionType } from "./types/ActionType";
 
 export class Table {
   public static readonly betDenominations = [5,20,50,100];
-  public gameType: "Blackjack" | "Poker";
   private numBots: number = 2;
   private numInitialHands: number = 2;
   private deck: Deck;
   private dealer: Dealer;
-  private user: User;
-  private bots: Bot[];
-  private players: Array<User | Bot>;
+  public user: User;
+  private players: Array<User | Bot> = [];
   private resultLog: string[];
 
-  public constructor(gameType: "Blackjack" | "Poker", username: string) {
-    this.gameType = gameType;
-    this.deck = new Deck({gameType: this.gameType});
-    this.dealer = new Dealer({name: "DEALER", gameType: this.gameType});
-    this.user = new User({name: username, gameType: this.gameType});
-    switch(this.gameType) {
-      case "Blackjack": this.bots = this.generateBotsBJ();break; 
-      case "Poker": this.bots = this.generatePlayerArrPoker();break;
-    }
-    this.players = this.bots;
+  public constructor(username: string) {
+    this.deck = new Deck();
+    this.dealer = new Dealer();
+    this.user = new User(username);
     this.players.push(this.user);
+    for(let i = 1; i <= this.numBots; i++) {
+      this.players.push(new Bot(`BOT ${i}`));
+    }
     this.resultLog = ["Have fun!"];
   }
-  
-  private generateBotsBJ(): Bot[] {
-    let arr: Bot[] = [];
-    [...Array(this.numBots)].forEach(i => {
-      arr.push(new Bot({name: `ボット${i}号`, gameType: this.gameType}));
-    });
-    return arr;
-  }
-  private generatePlayerArrPoker(): Bot[] {
-    // 今回実装しない
-    return [];
-  }
-  private proceedBJ(): void {
-    while(!this.user.isBroke) {
-      this.betPhase();
-      this.distributePhase();
-      this.actPhase();
-      this.evaluatePhase();
+
+  public betPhase(userBetAmount: number): void {
+    // this.players = [User, Bot, Bot]
+    for(let player of this.players) {
+      switch(player.playerType) {
+        case "User": (player as User).bet(userBetAmount);break;
+        case "Bot": (player as Bot).bet();
+      }
     }
-    // ユーザーが破産したときの処理をここに書く
-  }
-  private betPhase(): void {
-    // this.players = [Bot, Bot, User]
-    for(let player of this.players) player.bet();
+    this.distributePhase();
   }
 
   private distributePhase(): void {
+    console.log("distributePhaseが呼ばれた")
     for(let player of this.players) {
       [...Array(this.numInitialHands)] // = [undifined, undifined]
       .forEach(() => player.getCard(this.deck.drawOne()));
     }
     this.dealer.getCard(this.deck.drawOne());
+    this.players.forEach((player) => console.log(player.hand))
+
   }
 
-  private actPhase(): void {
+  public actPhase(userAction: ActionType): void {
     for(let player of this.players) {
       if(player.isBlackjack) continue;
 
-      // プレーヤーはsurrenderかstandするまでmakeAction()を繰り返す
       let isTurnEnd: boolean = false;
       while(!isTurnEnd) {
-        let action = player.playerType === "Bot"
-        ? player.makeAction(this.dealer.openCard)
-        : player.makeAction();
+        // BOT determines the action based on the rank of the dealer's open cards
+        let action = player.playerType === "User"
+        ? userAction
+        : (player as Bot).makeAction(this.dealer.openCard);
 
         switch(action) {
           case "surrender": {
             player.surrender();
             isTurnEnd = true;break; 
-          } 
+          }
           case "stand": {
             player.stand();
             isTurnEnd = true;break;
@@ -90,7 +75,7 @@ export class Table {
     }
   }
   private evaluatePhase(): void {
-
+    
   }
 
   

@@ -1,9 +1,9 @@
-export type ActionType = "surrender" | "stand" | "hit" | "double";
+import { ActionType } from "./types/ActionType";
 type Actions = {
-  [key in ActionType]: number[];
+  [action in ActionType]: number[];
 }
 type BotStrategies = {
-  [key: string]: Actions;
+  [rank: string]: Actions;
 }
 
 // 参考: https://www.youtube.com/watch?v=iyfrI0Eqw40

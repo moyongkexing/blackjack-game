@@ -12,12 +12,11 @@
     exports.Player = void 0;
     var Table_1 = require("./Table");
     var Player = /** @class */ (function () {
-        function Player(arg) {
-            this.name = arg.name;
-            this.gameType = arg.gameType;
+        function Player(username) {
+            this.name = username;
             this.status = "initial";
             this.hand = [];
-            this.money = 400;
+            this.money = Player.initialMoney;
             this.betAmount = 0;
             this.winAmount = 0;
         }
@@ -87,6 +86,7 @@
             if (this.handScore > 21)
                 this.status = "doublebust";
         };
+        Player.initialMoney = 400;
         return Player;
     }());
     exports.Player = Player;

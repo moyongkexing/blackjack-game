@@ -12,23 +12,12 @@
     exports.Deck = void 0;
     var Card_1 = require("./Card");
     var Deck = /** @class */ (function () {
-        function Deck(arg) {
+        function Deck() {
             this.cards = [];
-            this.resetDeck(arg.gameType);
+            this.resetDeck();
         }
-        Deck.prototype.resetDeck = function (gameType) {
+        Deck.prototype.resetDeck = function () {
             this.cards = [];
-            switch (gameType) {
-                case "Blackjack":
-                    this.createDeckBJ();
-                    break;
-                case "Poker":
-                    this.createDeckPoker();
-                    break;
-            }
-            this.shuffle();
-        };
-        Deck.prototype.createDeckBJ = function () {
             for (var _i = 0, _a = Deck.suits; _i < _a.length; _i++) {
                 var suit = _a[_i];
                 for (var _b = 0, _c = Deck.ranks; _b < _c.length; _b++) {
@@ -36,9 +25,7 @@
                     this.cards.push(new Card_1.Card({ suit: suit, rank: rank }));
                 }
             }
-        };
-        Deck.prototype.createDeckPoker = function () {
-            // 今回実装しない
+            this.shuffle();
         };
         Deck.prototype.shuffle = function () {
             var len = this.cards.length;

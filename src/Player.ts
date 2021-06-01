@@ -3,23 +3,18 @@ import { Table } from "./Table";
 
 export class Player {
   public name: string;
-  public gameType: "Blackjack" | "Poker";
-  // stateの説明
-  //  waiting: 他プレイヤーがbettingまたはplayingのときの状態
-  //  betting: 掛け金を選択しているときの状態
-  //  playing: アクション（hitやstandなど）の選択および終了までの間の状態
-  protected hand: Card[];
-  protected money: number;
-  protected betAmount: number;
+  public static initialMoney = 400;
+  public hand: Card[];
+  public money: number;
+  public betAmount: number;
   protected winAmount: number;
   protected status: "surrender" | "stand" | "bust" | "doublebust" | "blackjack" | "initial";
 
-  public constructor(arg: Pick<Player, "name" | "gameType">) {
-    this.name = arg.name;
-    this.gameType = arg.gameType;
+  public constructor(username: string) {
+    this.name = username;
     this.status = "initial";
     this.hand = [];
-    this.money = 400;
+    this.money = Player.initialMoney;
     this.betAmount = 0;
     this.winAmount = 0;
   }

@@ -3,7 +3,6 @@ import { Table } from "./Table";
 
 export class Dealer {
   public name: string;
-  public gameType: "Blackjack" | "Poker";
   // stateの説明
   //  waiting: 他プレイヤーがbettingまたはplayingのときの状態
   //  betting: 掛け金を選択しているときの状態
@@ -11,9 +10,8 @@ export class Dealer {
   protected hand: Card[];
   protected status: | "stand" | "bust" | "blackjack" | "initial";
 
-  public constructor(arg: Pick<Dealer, "name" | "gameType">) {
-    this.name = arg.name;
-    this.gameType = arg.gameType;
+  public constructor() {
+    this.name = "Dealer";
     this.status = "initial";
     this.hand = [];
   }

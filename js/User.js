@@ -19,36 +19,22 @@ var __extends = (this && this.__extends) || (function () {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Player", "./Table"], factory);
+        define(["require", "exports", "./Player"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.User = void 0;
     var Player_1 = require("./Player");
-    var Table_1 = require("./Table");
     var User = /** @class */ (function (_super) {
         __extends(User, _super);
-        function User(arg) {
-            var _this = _super.call(this, { name: arg.name, gameType: arg.gameType }) || this;
+        function User(username) {
+            var _this = _super.call(this, username) || this;
             _this.playerType = "User";
             return _this;
         }
-        // これはModelにViewの状態が依存してる悪い例かも
-        User.prototype.bet = function () {
-            var amount = 0;
-            // Table.betDenominations = [5,20,50,100]
-            for (var _i = 0, _a = Table_1.Table.betDenominations; _i < _a.length; _i++) {
-                var bd = _a[_i];
-                var label = document.getElementById("betLabel" + bd).innerText;
-                var value = document.getElementById("betInput" + bd).value;
-                amount += parseInt(label) * parseInt(value);
-            }
-            this.betAmount = amount;
-        };
-        User.prototype.makeAction = function () {
-            return "test";
-            // idのvalueをもってきてaction
+        User.prototype.bet = function (userBetAmount) {
+            this.betAmount = userBetAmount;
         };
         return User;
     }(Player_1.Player));

@@ -1,0 +1,1 @@
+export type ActionType = "surrender" | "stand" | "hit" | "double";

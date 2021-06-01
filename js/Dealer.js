@@ -11,9 +11,8 @@
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Dealer = void 0;
     var Dealer = /** @class */ (function () {
-        function Dealer(arg) {
-            this.name = arg.name;
-            this.gameType = arg.gameType;
+        function Dealer() {
+            this.name = "Dealer";
             this.status = "initial";
             this.hand = [];
         }
