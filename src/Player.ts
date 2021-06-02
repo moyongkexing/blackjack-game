@@ -3,26 +3,21 @@ import { Table } from "./Table";
 
 export class Player {
   public name: string;
-  public static initialMoney = 400;
-  public hand: Card[];
-  public money: number;
-  public betAmount: number;
-  protected winAmount: number;
-  protected status: "surrender" | "stand" | "bust" | "doublebust" | "blackjack" | "initial";
+  public hand: Card[] = [];
+  public money: number = 400;
+  public betAmount: number = Table.betDenominations[0]; // 5
+  public status: "surrender" | "stand" | "bust" | "doublebust" | "blackjack" | "initial" = "initial";
+  public isTurnEnd: boolean;
 
   public constructor(username: string) {
     this.name = username;
-    this.status = "initial";
-    this.hand = [];
-    this.money = Player.initialMoney;
-    this.betAmount = 0;
-    this.winAmount = 0;
+    this.isTurnEnd = false;
   }
 
-  protected get handScore(): number {
+  public get handScore(): number {
     let score = 0;
-    for (let card of this.hand) score += card.RankNum;
-    // 21を超えている場合、エースがあれば10を引く(Rankを11から1に切り替える)
+    for (let card of this.hand) score += card.rankNum;
+    // If the score is over 21, subtract 10 if there is an Ace in player's hand (switch rank of A from 11 to 1)
     let i = this.NumAce;
     while (score > 21 && i > 0) {
       score -= 10;
@@ -30,39 +25,66 @@ export class Player {
     }
     return score;
   }
+
   private get NumAce(): number {
     return this.hand.filter((card) => card.rank === "A").length;
   }
-  public get isBlackjack(): boolean {
+
+  private get isBlackjack(): boolean {
     return this.handScore === 21 && this.NumAce > 0;
   }
+
   public get isBroke(): boolean {
-    return this.money < Table.betDenominations[0]; // Table.betDenominations[0] = 5
+    return this.money < Table.betDenominations[0]; 
   }
 
-  private loseMoney(amount: number): void {
-    this.money -= amount;
-  }
-  private earnMoney(amount: number): void {
-    this.money += amount;
-  }
   public getCard(card: Card): void {
     this.hand.push(card);
-    if(this.isBlackjack) this.status = "blackjack";
+    if(this.hand.length === 2 && this.isBlackjack) {
+      this.status = "blackjack";
+      this.isTurnEnd = true;
+    }
   }
+  
   public surrender(): void {
     this.status = "surrender";
+    this.isTurnEnd = true;
   }
+
   public stand(): void {
     this.status = "stand";
+    this.isTurnEnd = true;
   }
+
   public hit(card: Card): void {
     this.getCard(card);
-    if(this.handScore > 21) this.status = "bust";
+    if(this.handScore > 21) {
+      this.status = "bust";
+      this.isTurnEnd = true;
+    } 
   }
+
   public double(card: Card): void {
     this.getCard(card);
-    if(this.handScore > 21) this.status = "doublebust";
+    if(this.handScore > 21) {
+      this.status = "doublebust";
+      this.isTurnEnd = true;
+    } 
+  }
+  
+  public resetState(): void {
+    this.hand = [];
+    this.betAmount = Table.betDenominations[0];
+    this.status = "initial";
+    this.isTurnEnd = false;
+  }
+
+  public loseMoney(amount: number): void {
+    this.money -= amount;
+  }
+
+  public earnMoney(amount: number): void {
+    this.money += amount;
   }
 }
 

@@ -18,10 +18,6 @@
             this.initializeEventListener();
             this.hide("startPage");
             this.showBetPage();
-            // 開発用↓
-            // (document.getElementById("username") as HTMLInputElement).value = "test";
-            // (document.getElementById("gametype") as HTMLInputElement).value = "Blackjack";
-            // this.startGame();
         }
         ViewController.prototype.initializeEventListener = function () {
             var _this = this;
@@ -43,19 +39,47 @@
             document.getElementById("resetBtn").addEventListener("click", function () { return betAmount.innerText = String(Table_1.Table.betDenominations[0]); });
             // "DEAL" button
             document.getElementById("dealBtn").addEventListener("click", function () {
-                _this.table.betPhase(parseInt(betAmount.innerText));
+                _this.table.bet(parseInt(betAmount.innerText));
+                _this.table.distribution();
+                _this.table.botAct();
+                _this.toString();
                 _this.hide("betPage");
                 _this.showDealPage();
             });
-            // button of ["stand", "hit", "double", "surrender"]
-            // const actions: ActionType[] = ["stand", "hit", "double", "surrender"];
-            // for(let action of actions) {
-            //   (document.getElementById(`${action}-btn`) as HTMLButtonElement).addEventListener
-            //   ("click", () => {
-            //       this.table.actPhase(action);
-            //     }
-            //   )
-            // }
+            // button of ["surrender", "stand", "hit", "double"]
+            var actions = ["surrender", "stand", "hit", "double"];
+            var _loop_2 = function (action) {
+                document.getElementById(action + "-btn").addEventListener("click", function () {
+                    _this.table.userAct(action);
+                    if (_this.table.user.isTurnEnd) {
+                        _this.hide("actionBtns");
+                        _this.table.dealerAct();
+                        _this.table.evaluation();
+                    }
+                    _this.toString();
+                });
+            };
+            for (var _b = 0, actions_1 = actions; _b < actions_1.length; _b++) {
+                var action = actions_1[_b];
+                _loop_2(action);
+            }
+        };
+        ViewController.prototype.toString = function () {
+            console.log("");
+            console.log("");
+            for (var _i = 0, _a = this.table.players; _i < _a.length; _i++) {
+                var player = _a[_i];
+                console.log(player);
+                console.log(player.hand);
+                console.log("isTurnEnd");
+                console.log(player.isTurnEnd);
+                console.log("handScore");
+                console.log(player.handScore);
+            }
+            console.log(this.table.dealer);
+            console.log(this.table.dealer.hand);
+            console.log("handScore");
+            console.log(this.table.dealer.handScore);
         };
         ViewController.prototype.showBetPage = function () {
             this.show("betPage");

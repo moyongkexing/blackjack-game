@@ -15,7 +15,7 @@
             this.suit = arg.suit;
             this.rank = arg.rank;
         }
-        Object.defineProperty(Card.prototype, "RankNum", {
+        Object.defineProperty(Card.prototype, "rankNum", {
             get: function () {
                 var hash = {
                     A: 11, J: 10, Q: 10, K: 10,

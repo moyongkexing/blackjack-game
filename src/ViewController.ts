@@ -10,10 +10,6 @@ export class ViewController {
     this.initializeEventListener();
     this.hide("startPage");
     this.showBetPage();
-    // 開発用↓
-    // (document.getElementById("username") as HTMLInputElement).value = "test";
-    // (document.getElementById("gametype") as HTMLInputElement).value = "Blackjack";
-    // this.startGame();
   }
   
   private initializeEventListener(): void {
@@ -38,21 +34,46 @@ export class ViewController {
     // "DEAL" button
     (document.getElementById("dealBtn") as HTMLElement).addEventListener
     ("click", () => {
-      this.table.betPhase(parseInt(betAmount.innerText));
+      this.table.bet(parseInt(betAmount.innerText));
+      this.table.distribution();
+      this.table.botAct();
+      this.toString();
       this.hide("betPage");
       this.showDealPage();
     });
 
-    // button of ["stand", "hit", "double", "surrender"]
-    // const actions: ActionType[] = ["stand", "hit", "double", "surrender"];
-    // for(let action of actions) {
-    //   (document.getElementById(`${action}-btn`) as HTMLButtonElement).addEventListener
-    //   ("click", () => {
-    //       this.table.actPhase(action);
+    // button of ["surrender", "stand", "hit", "double"]
+    const actions: ActionType[] = ["surrender", "stand", "hit", "double"];
+    for(let action of actions) {
+      (document.getElementById(`${action}-btn`) as HTMLButtonElement).addEventListener
+      ("click", () => {
+          this.table.userAct(action);
+          if(this.table.user.isTurnEnd) {
+            this.hide("actionBtns");
+            this.table.dealerAct();
+            this.table.evaluation();
+          } 
+          this.toString();
+        }
+      )
+    }
+  }
 
-    //     }
-    //   )
-    // }
+  private toString(): void {
+    console.log("")
+    console.log("")
+    for(let player of this.table.players) {
+      console.log(player);
+      console.log(player.hand);
+      console.log("isTurnEnd");
+      console.log(player.isTurnEnd);
+      console.log("handScore");
+      console.log(player.handScore);
+    }
+    console.log(this.table.dealer)
+    console.log(this.table.dealer.hand)
+    console.log("handScore");
+    console.log(this.table.dealer.handScore);
   }
 
   private showBetPage(): void {

@@ -13,7 +13,7 @@
     var Dealer = /** @class */ (function () {
         function Dealer() {
             this.name = "Dealer";
-            this.status = "initial";
+            this.status = "stand";
             this.hand = [];
         }
         Object.defineProperty(Dealer.prototype, "openCard", {
@@ -28,7 +28,7 @@
                 var score = 0;
                 for (var _i = 0, _a = this.hand; _i < _a.length; _i++) {
                     var card = _a[_i];
-                    score += card.RankNum;
+                    score += card.rankNum;
                 }
                 // 21を超えている場合、エースがあれば10を引く(Rankを11から1に切り替える)
                 var i = this.NumAce;
@@ -57,9 +57,8 @@
         });
         Dealer.prototype.getCard = function (card) {
             this.hand.push(card);
-        };
-        Dealer.prototype.stand = function () {
-            this.status = "stand";
+            if (this.hand.length === 2 && this.isBlackjack)
+                this.status = "blackjack";
         };
         Dealer.prototype.hit = function (card) {
             this.getCard(card);

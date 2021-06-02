@@ -6,7 +6,7 @@ type BotStrategies = {
   [rank: string]: Actions;
 }
 
-// 参考: https://www.youtube.com/watch?v=iyfrI0Eqw40
+// https://www.youtube.com/watch?v=iyfrI0Eqw40
 export const BotStrategies: BotStrategies = {
   2: {
     "hit": [3,4,5,6,7,8,9,12],

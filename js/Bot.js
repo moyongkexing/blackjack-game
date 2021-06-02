@@ -31,9 +31,7 @@ var __extends = (this && this.__extends) || (function () {
     var Bot = /** @class */ (function (_super) {
         __extends(Bot, _super);
         function Bot(username) {
-            var _this = _super.call(this, username) || this;
-            _this.playerType = "Bot";
-            return _this;
+            return _super.call(this, username) || this;
         }
         Bot.prototype.bet = function () {
             // betDenominations = [5,20,50,100];
@@ -43,14 +41,13 @@ var __extends = (this && this.__extends) || (function () {
                 : Table_1.Table.betDenominations[randomIndex];
         };
         Bot.prototype.makeAction = function (openCard) {
-            var strategy = BotStrategies_1.BotStrategies[String(openCard.RankNum)]; // src/BotStrategies.ts
+            var strategy = BotStrategies_1.BotStrategies[String(openCard.rankNum)]; // src/BotStrategies.ts
             var actions = Object.keys(strategy);
             for (var _i = 0, actions_1 = actions; _i < actions_1.length; _i++) {
                 var action = actions_1[_i];
                 if (strategy[action].indexOf(this.handScore) !== -1)
                     return action;
             }
-            // handScoreが 18 以上の場合はstandを返す
             return "stand";
         };
         return Bot;
