@@ -1,5 +1,4 @@
 import { Deck } from "./Deck";
-import { Card } from "./Card";
 import { User } from "./User";
 import { Bot } from "./Bot";
 import { Dealer } from "./Dealer";
@@ -45,9 +44,7 @@ export class Table {
   }
 
   public distribution(): void {
-    this.user.getCard(new Card({suit: "S", rank: "K"}));
-    this.user.getCard(new Card({suit: "S", rank: "A"}));
-    for(let player of this.bots) {
+    for(let player of this.players) {
       player.getCard(this.deck.drawOne());
       player.getCard(this.deck.drawOne());
     }

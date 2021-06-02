@@ -37,9 +37,10 @@ export class ViewController {
       this.table.bet(parseInt(betAmount.innerText));
       this.table.distribution();
       this.table.botAct();
-      this.toString();
       this.hide("betPage");
       this.showDealPage();
+      this.isUserTuenEnd();
+      this.toString();
     });
 
     // button of ["surrender", "stand", "hit", "double"]
@@ -52,7 +53,7 @@ export class ViewController {
             this.hide("actionBtns");
             this.table.dealerAct();
             this.table.evaluation();
-          } 
+          }
           this.toString();
         }
       )
@@ -76,6 +77,14 @@ export class ViewController {
     console.log(this.table.dealer.handScore);
   }
 
+
+  private isUserTuenEnd(): void {
+    if(this.table.user.isTurnEnd) {
+      this.hide("actionBtns");
+      this.table.dealerAct();
+      this.table.evaluation();
+    }
+  }
   private showBetPage(): void {
     this.show("betPage");
     (document.getElementById("moneyAmountInBetPage") as HTMLSpanElement)

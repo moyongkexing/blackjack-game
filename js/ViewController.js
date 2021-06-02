@@ -42,9 +42,10 @@
                 _this.table.bet(parseInt(betAmount.innerText));
                 _this.table.distribution();
                 _this.table.botAct();
-                _this.toString();
                 _this.hide("betPage");
                 _this.showDealPage();
+                _this.isUserTuenEnd();
+                _this.toString();
             });
             // button of ["surrender", "stand", "hit", "double"]
             var actions = ["surrender", "stand", "hit", "double"];
@@ -80,6 +81,13 @@
             console.log(this.table.dealer.hand);
             console.log("handScore");
             console.log(this.table.dealer.handScore);
+        };
+        ViewController.prototype.isUserTuenEnd = function () {
+            if (this.table.user.isTurnEnd) {
+                this.hide("actionBtns");
+                this.table.dealerAct();
+                this.table.evaluation();
+            }
         };
         ViewController.prototype.showBetPage = function () {
             this.show("betPage");

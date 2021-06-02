@@ -4,14 +4,13 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Deck", "./Card", "./User", "./Bot", "./Dealer"], factory);
+        define(["require", "exports", "./Deck", "./User", "./Bot", "./Dealer"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Table = void 0;
     var Deck_1 = require("./Deck");
-    var Card_1 = require("./Card");
     var User_1 = require("./User");
     var Bot_1 = require("./Bot");
     var Dealer_1 = require("./Dealer");
@@ -41,9 +40,7 @@
             }
         };
         Table.prototype.distribution = function () {
-            this.user.getCard(new Card_1.Card({ suit: "S", rank: "K" }));
-            this.user.getCard(new Card_1.Card({ suit: "S", rank: "A" }));
-            for (var _i = 0, _a = this.bots; _i < _a.length; _i++) {
+            for (var _i = 0, _a = this.players; _i < _a.length; _i++) {
                 var player = _a[_i];
                 player.getCard(this.deck.drawOne());
                 player.getCard(this.deck.drawOne());
