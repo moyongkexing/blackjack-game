@@ -72,19 +72,19 @@ export class Player {
     } 
   }
   
+  public loseMoney(amount: number): void {
+    this.money = Math.floor(this.money - amount);
+  }
+
+  public earnMoney(amount: number): void {
+    this.money = Math.floor(this.money + amount);
+  }
+
   public resetState(): void {
     this.hand = [];
     this.betAmount = Table.betDenominations[0];
     this.status = "initial";
     this.isTurnEnd = false;
-  }
-
-  public loseMoney(amount: number): void {
-    this.money -= amount;
-  }
-
-  public earnMoney(amount: number): void {
-    this.money += amount;
   }
 }
 

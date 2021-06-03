@@ -88,17 +88,17 @@
                 this.isTurnEnd = true;
             }
         };
+        Player.prototype.loseMoney = function (amount) {
+            this.money = Math.floor(this.money - amount);
+        };
+        Player.prototype.earnMoney = function (amount) {
+            this.money = Math.floor(this.money + amount);
+        };
         Player.prototype.resetState = function () {
             this.hand = [];
             this.betAmount = Table_1.Table.betDenominations[0];
             this.status = "initial";
             this.isTurnEnd = false;
-        };
-        Player.prototype.loseMoney = function (amount) {
-            this.money -= amount;
-        };
-        Player.prototype.earnMoney = function (amount) {
-            this.money += amount;
         };
         return Player;
     }());

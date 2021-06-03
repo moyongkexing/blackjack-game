@@ -16,7 +16,7 @@
             var username = document.getElementById("username").value;
             this.table = new Table_1.Table(username);
             this.initializeEventListener();
-            this.hide("startPage");
+            document.getElementById("startPage").classList.add("hidden");
             this.showBetPage();
         }
         ViewController.prototype.initializeEventListener = function () {
@@ -42,9 +42,13 @@
                 _this.table.bet(parseInt(betAmount.innerText));
                 _this.table.distribution();
                 _this.table.botAct();
-                _this.hide("betPage");
+                document.getElementById("betPage").classList.add("hidden");
                 _this.showDealPage();
-                _this.isUserTuenEnd();
+                if (_this.table.user.isTurnEnd) {
+                    document.getElementById("actionBtns").style.display = "none";
+                    _this.table.dealerAct();
+                    _this.table.evaluation();
+                }
                 _this.toString();
             });
             // button of ["surrender", "stand", "hit", "double"]
@@ -53,11 +57,12 @@
                 document.getElementById(action + "-btn").addEventListener("click", function () {
                     _this.table.userAct(action);
                     if (_this.table.user.isTurnEnd) {
-                        _this.hide("actionBtns");
+                        document.getElementById("actionBtns")
+                            .style.display = "none";
                         _this.table.dealerAct();
                         _this.table.evaluation();
+                        _this.toString();
                     }
-                    _this.toString();
                 });
             };
             for (var _b = 0, actions_1 = actions; _b < actions_1.length; _b++) {
@@ -82,28 +87,15 @@
             console.log("handScore");
             console.log(this.table.dealer.handScore);
         };
-        ViewController.prototype.isUserTuenEnd = function () {
-            if (this.table.user.isTurnEnd) {
-                this.hide("actionBtns");
-                this.table.dealerAct();
-                this.table.evaluation();
-            }
-        };
         ViewController.prototype.showBetPage = function () {
-            this.show("betPage");
+            document.getElementById("betPage").classList.remove("hidden");
             document.getElementById("moneyAmountInBetPage")
                 .innerText = String(this.table.user.money);
         };
         ViewController.prototype.showDealPage = function () {
-            this.show("dealPage");
+            document.getElementById("dealPage").classList.remove("hidden");
             document.getElementById("betAmountInDealPage")
                 .innerText = String(this.table.user.betAmount);
-        };
-        ViewController.prototype.hide = function (id) {
-            document.getElementById(id).classList.add("hidden");
-        };
-        ViewController.prototype.show = function (id) {
-            document.getElementById(id).classList.remove("hidden");
         };
         return ViewController;
     }());

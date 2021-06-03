@@ -8,7 +8,7 @@ export class ViewController {
     const username = (document.getElementById("username") as HTMLInputElement).value;
     this.table = new Table(username);
     this.initializeEventListener();
-    this.hide("startPage");
+    (document.getElementById("startPage") as HTMLElement).classList.add("hidden");
     this.showBetPage();
   }
   
@@ -37,9 +37,13 @@ export class ViewController {
       this.table.bet(parseInt(betAmount.innerText));
       this.table.distribution();
       this.table.botAct();
-      this.hide("betPage");
+      (document.getElementById("betPage") as HTMLElement).classList.add("hidden");
       this.showDealPage();
-      this.isUserTuenEnd();
+      if(this.table.user.isTurnEnd) {
+        (document.getElementById("actionBtns") as HTMLElement).style.display = "none";
+        this.table.dealerAct();
+        this.table.evaluation();
+      }
       this.toString();
     });
 
@@ -50,11 +54,12 @@ export class ViewController {
       ("click", () => {
           this.table.userAct(action);
           if(this.table.user.isTurnEnd) {
-            this.hide("actionBtns");
+            (document.getElementById("actionBtns") as HTMLElement)
+              .style.display = "none";
             this.table.dealerAct();
             this.table.evaluation();
+            this.toString();
           }
-          this.toString();
         }
       )
     }
@@ -77,30 +82,15 @@ export class ViewController {
     console.log(this.table.dealer.handScore);
   }
 
-
-  private isUserTuenEnd(): void {
-    if(this.table.user.isTurnEnd) {
-      this.hide("actionBtns");
-      this.table.dealerAct();
-      this.table.evaluation();
-    }
-  }
   private showBetPage(): void {
-    this.show("betPage");
+    (document.getElementById("betPage") as HTMLElement).classList.remove("hidden");
     (document.getElementById("moneyAmountInBetPage") as HTMLSpanElement)
       .innerText = String(this.table.user.money);
   }
 
   private showDealPage(): void {
-    this.show("dealPage");
+    (document.getElementById("dealPage") as HTMLElement).classList.remove("hidden");
     (document.getElementById("betAmountInDealPage") as HTMLSpanElement)
       .innerText = String(this.table.user.betAmount);
-  }
-
-  private hide(id: string): void {
-    (document.getElementById(id) as HTMLElement).classList.add("hidden");
-  }
-  private show(id: string): void {
-    (document.getElementById(id) as HTMLElement).classList.remove("hidden");
   }
 }
