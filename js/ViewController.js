@@ -45,7 +45,7 @@
                 document.getElementById("betPage").classList.add("hidden");
                 _this.showDealPage();
                 if (_this.table.user.isTurnEnd) {
-                    document.getElementById("actionBtns").style.display = "none";
+                    document.getElementById("action-buttons").style.display = "none";
                     _this.table.dealerAct();
                     _this.table.evaluation();
                 }
@@ -57,7 +57,7 @@
                 document.getElementById(action + "-btn").addEventListener("click", function () {
                     _this.table.userAct(action);
                     if (_this.table.user.isTurnEnd) {
-                        document.getElementById("actionBtns")
+                        document.getElementById("action-buttons")
                             .style.display = "none";
                         _this.table.dealerAct();
                         _this.table.evaluation();
@@ -69,6 +69,8 @@
                 var action = actions_1[_b];
                 _loop_2(action);
             }
+        };
+        ViewController.prototype.renderHand = function () {
         };
         ViewController.prototype.toString = function () {
             console.log("");

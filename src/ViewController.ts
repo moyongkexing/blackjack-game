@@ -40,7 +40,7 @@ export class ViewController {
       (document.getElementById("betPage") as HTMLElement).classList.add("hidden");
       this.showDealPage();
       if(this.table.user.isTurnEnd) {
-        (document.getElementById("actionBtns") as HTMLElement).style.display = "none";
+        (document.getElementById("action-buttons") as HTMLElement).style.display = "none";
         this.table.dealerAct();
         this.table.evaluation();
       }
@@ -54,7 +54,7 @@ export class ViewController {
       ("click", () => {
           this.table.userAct(action);
           if(this.table.user.isTurnEnd) {
-            (document.getElementById("actionBtns") as HTMLElement)
+            (document.getElementById("action-buttons") as HTMLElement)
               .style.display = "none";
             this.table.dealerAct();
             this.table.evaluation();
@@ -63,6 +63,10 @@ export class ViewController {
         }
       )
     }
+  }
+
+  private renderHand(): void {
+    
   }
 
   private toString(): void {

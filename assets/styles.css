@@ -259,6 +259,9 @@ div.blue { background: #4cc3fe }
   position:relative; 
   box-shadow:  -10px 10px 60px rgba(0,0,0,0.2);
 }
+/* .card:hover {
+  z-index: 100;
+} */
 .card span{
   font-size: 20px;
   font-weight: bold;
@@ -291,27 +294,27 @@ div.blue { background: #4cc3fe }
   background-position: center;
 }
 
-#card-2 {
+#dealer-card-2, #bot1-card-2, #bot2-card-2, #user-card-2{
   position: absolute;
   margin-left: 4rem;
   margin-top: 9px;
 }
-#card-3 {
+#dealer-card-3, #bot1-card-3, #bot2-card-3, #user-card-3{
   position: absolute;
   margin-left: 8rem;
   margin-top: 18px;
 }
-#card-4 {
+#dealer-card-4, #bot1-card-4, #bot2-card-4, #user-card-4{
   position: absolute;
   margin-left: 12rem;
   margin-top: 27px;
 }
-#card-5 {
+#dealer-card-5, #bot1-card-5, #bot2-card-5, #user-card-5{
   position: absolute;
   margin-left: 16rem;
   margin-top: 36px;
 }
-#card-6 {
+#dealer-card-6, #bot1-card-6, #bot2-card-6, #user-card-6{
   position: absolute;
   margin-left: 20rem;
   margin-top: 45px;
