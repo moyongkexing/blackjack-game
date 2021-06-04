@@ -2,8 +2,7 @@ import { Deck } from "./Deck";
 import { User } from "./User";
 import { Bot } from "./Bot";
 import { Dealer } from "./Dealer";
-import { Player } from "./Player";
-import { ViewController } from "./ViewController";
+import { Card } from "./Card";
 import { ActionType } from "./types/ActionType";
 
 export class Table {
@@ -14,32 +13,31 @@ export class Table {
   public user: User;
   public bots: Bot[] = [];
   public players: Array<User | Bot> = [];
-  // private dealer: Dealer;
-  // public user: User;
-  // private bots: Bot[] = [];
-  // private players: Array<User | Bot> = [];
-  // private players: Array<User | Bot> = [];
-  private resultLog: string[];
+  public resultLog: string[] = [];
 
   public constructor(username: string) {
     this.deck = new Deck();
     this.dealer = new Dealer();
     this.user = new User(username);
+    this.players.push(this.user);
     for(let i = 1; i <= this.numBots; i++) {
-      let newBot = new Bot(`BOT ${i}`);
+      let newBot = new Bot(`Bot${i}`);
       this.bots.push(newBot);
       this.players.push(newBot);
     }
-    this.players.push(this.user);
-    this.resultLog = ["Have fun!"];
   }
 
-  // Each method here is called in ViewContoller
-  // bet → distribution → {player}Act → evaluation → bet → ... as blackjack's flow
+  // #####################################################################
+  // Each public method in this class is called in ViewContoller
+  // bet → distribution → {player}Act → evaluation → bet → distribution →...
+  // #####################################################################
+
   public bet(userBetAmount: number): void {
     this.user.bet(userBetAmount);
+    this.resultLog.push(this.user.generateLog("bet"));
     for(let bot of this.bots) {
       bot.bet();
+      this.resultLog.push(bot.generateLog("bet"));
     }
   }
 
@@ -49,18 +47,22 @@ export class Table {
       player.getCard(this.deck.drawOne());
     }
     this.dealer.getCard(this.deck.drawOne());
+    this.dealer.getCard(this.deck.drawOne());
   }
 
   public userAct(userAction: ActionType): void {
+    console.log("userAct() is called");
     switch(userAction) {
       case "surrender": this.user.surrender();break;
       case "stand": this.user.stand();break;
       case "hit": this.user.hit(this.deck.drawOne());break;
       case "double": this.user.double(this.deck.drawOne());break;
     }
+    this.resultLog.push(this.user.generateLog(userAction));
   }
 
   public botAct(): void {
+    console.log("botAct() is called");
     for(let bot of this.bots) {
       while(!bot.isTurnEnd) {
         let botAction = bot.makeAction(this.dealer.openCard)
@@ -70,20 +72,22 @@ export class Table {
           case "hit": bot.hit(this.deck.drawOne());break;
           case "double": bot.double(this.deck.drawOne());break;
         }
+        this.resultLog.push(bot.generateLog(botAction));
       }
     }
   }
 
   public dealerAct(): void {
-    this.dealer.getCard(this.deck.drawOne());
-    while(this.dealer.handScore < 17) this.dealer.hit(this.deck.drawOne());
+    console.log("dealerAct() is called");
+    while(!this.dealer.isTurnEnd) {
+      this.dealer.hit(this.deck.drawOne());
+      this.resultLog.push(this.dealer.generateLog("hit"));
+    }
   }
 
   public evaluation(): void {
     console.log("evaluation() is called")
     for(let player of this.players) {
-      // player.status = "surrender" || "stand" || "bust" || "doublebust" || "blackjack" ;
-      // dealer.status = "bust" || "blackjack" || "stand"; ;
       switch(player.status) {
         case "surrender": player.loseMoney(player.betAmount * .5);break;
         case "bust": player.loseMoney(player.betAmount);break;
@@ -93,6 +97,7 @@ export class Table {
             case "bust": player.earnMoney(player.betAmount);break;
             case "stand": this.compareHand(player);break;
             case "blackjack": player.loseMoney(player.betAmount);break;
+            default: break;
           }
         }break;
         case "blackjack": {
@@ -102,8 +107,13 @@ export class Table {
       }
     }
   }
-
-  private compareHand(player: Player): void {
+  
+  public reset(): void {
+    this.deck.resetDeck();
+    this.dealer.resetState();
+    this.players.forEach(player => player.resetState());
+  }
+  private compareHand(player: User | Bot): void {
     if(player.handScore > this.dealer.handScore) {
       player.earnMoney(player.betAmount);
     }

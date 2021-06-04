@@ -15,7 +15,7 @@
   <a class="font-bold mt-10 mb-5 tracking-tight font-mono underline" target="_blank" rel="noopener noreferrer" href="https://github.com/moyongkexing/blackjack-game-oop">CODE</a>
 
   <main class="xl:w-3/5">
-    <section id="startPage" class="h-full px-8 pt-8 pb-4 flex flex-col justify-center items-center">
+    <section id="start-page" class="h-full px-8 pt-8 pb-4 flex flex-col justify-center items-center">
       <h1 class="font-bold text-2xl text-gray-200">Let's play Blackjack!</h1>
       <form
         id="form"
@@ -31,129 +31,88 @@
       </form>
     </section>
 
-    <section id="betPage" class="h-full flex justify-center items-center mt-32 hidden">
-      <div class="font-bold text-white text-3xl text-gray-200 text-center">
-        <h1>You have $<span id="moneyAmountInBetPage"></span></h1>
-        <h1>Bet $<span id="betAmountInBetPage">5</span></h1>
-      </div>
+    <section id="bet-page" class="h-full hidden"> 
+      <div class="h-full flex items-center justify-center relative">
+        <div class="font-bold text-white text-3xl text-gray-200 text-center">
+          <h1>You have $<span id="moneyAmountInBetPage"></span></h1>
+          <h1>Bet $<span id="betAmountInBetPage">5</span></h1>
+        </div>
 
-      <div class="w-full flex justify-around items-center control-wrapper-bg">
-        <button id="dealBtn" class="next-btn bg-green-500">DEAL</button>
-        <div id="bet-5" class="coin red"><div>5</div></div>
-        <div id="bet-20" class="coin orange"><div>20</div></div>
-        <div id="bet-50" class="coin green"><div>50</div></div>
-        <div id="bet-100" class="coin blue"><div>100</div></div>
-        <button id="resetBtn" class="bg-green-500 p-2 font-bold focus:outline-none">RESET</button>
+        <div class="w-full absolute bottom-0 flex justify-around items-center control-wrapper-bg">
+          <button id="deal-btn" class="next-btn bg-green-500">DEAL</button>
+          <div id="bet-5" class="coin red"><div>5</div></div>
+          <div id="bet-20" class="coin orange"><div>20</div></div>
+          <div id="bet-50" class="coin green"><div>50</div></div>
+          <div id="bet-100" class="coin blue"><div>100</div></div>
+          <button id="reset-btn" class="bg-green-500 p-2 font-bold focus:outline-none">RESET</button>
+        </div>
       </div>
     </section>
 
-    <section id="dealPage" class="relative h-full flex flex-col items-center hidden">
-      <div class="w-full h-56 mt-8 flex flex-col items-center">
+    <section id="deal-page" class="relative h-full flex flex-col items-center hidden p-8">
+      <div class="w-full h-56 flex flex-col items-center relative">
+        <div id="DEALER-status" class="font-bold text-2xl text-white"></div>
         <h3 class="text-white text-lg text-gray-200">DEALER</h3>
-        <div id="dealer-cards" class="-ml-24 w-full flex justify-center relative">
-          <div id="dealer-card-1">
-            <!-- <div class="card heart"><span>A</span></div> -->
-          </div>
-          <div id="dealer-card-2">
-            <!-- <div class="card spade"><span>9</span></div> -->
-          </div>
-          <div id="dealer-card-3">
-            <!-- <div class="card heart"><span>5</span></div> -->
-          </div>
-          <div id="dealer-card-4">
-            <!-- <div class="card diamond"><span>3</span></div> -->
-          </div>
-          <div id="dealer-card-5">
-            <!-- <div class="card club"><span>K</span></div> -->
-          </div>
-          <div id="dealer-card-6">
-            <!-- <div class="card spade"><span>2</span></div> -->
-          </div>
+        <div id="DEALER-width" class="flex">
+          <div id="DEALER-card-1"></div>
+          <div id="DEALER-card-2"></div>
+          <div id="DEALER-card-3"></div>
+          <div id="DEALER-card-4"></div>
+          <div id="DEALER-card-5"></div>
+          <div id="DEALER-card-6"></div>
         </div>
       </div>
 
-      <div class="w-full flex justify-around mt-6">
-        <div id="bot1" class="w-1/3 h-56 flex flex-col items-center">
+      <div class="w-full flex justify-around ">
+        <div class="w-1/3 h-full h-56 flex flex-col items-center">
+          <h3 id="BOT1-status" class="font-bold text-2xl text-white"></h3>
           <h3 class="text-white text-lg text-gray-200">BOT 1</h3>
-          <div id="bot1-cards" class="-ml-24 w-full flex justify-center relative">
-            <div id="bot1-card-1">
-              <!-- <div class="card heart"><span>A</span></div> -->
-            </div>
-            <div id="bot1-card-2">
-              <!-- <div class="card spade"><span>9</span></div> -->
-            </div>
-            <div id="bot1-card-3">
-              <!-- <div class="card heart"><span>5</span></div> -->
-            </div>
-            <div id="bot1-card-4">
-              <!-- <div class="card diamond"><span>3</span></div> -->
-            </div>
-            <div id="bot1-card-5">
-              <!-- <div class="card club"><span>K</span></div> -->
-            </div>
-            <div id="bot1-card-6">
-              <!-- <div class="card spade"><span>2</span></div> -->
-            </div>
+          <div id="BOT1-width" class="flex">
+            <div id="BOT1-card-1"></div>
+            <div id="BOT1-card-2"></div>
+            <div id="BOT1-card-3"></div>
+            <div id="BOT1-card-4"></div>
+            <div id="BOT1-card-5"></div>
+            <div id="BOT1-card-6"></div>
           </div>
         </div>
 
-        <div id="user" class=" w-1/3 h-56 mt-8 flex flex-col items-center">
+        <div class="w-1/3 h-full h-56 mt-8 flex flex-col items-center">
+          <div id="USER-status" class="font-bold text-2xl text-white"></div>
           <h3 class="text-white text-lg text-gray-200">USER</h3>
-          <div id="user-cards" class="-ml-24 w-full flex justify-center relative">
-            <div id="user-card-1">
-              <div class="card heart"><span>A</span></div>
-            </div>
-            <div id="user-card-2">
-              <div class="card spade"><span>9</span></div>
-            </div>
-            <div id="user-card-3">
-              <!-- <div class="card heart"><span>5</span></div> -->
-            </div>
-            <div id="user-card-4">
-              <!-- <div class="card diamond"><span>3</span></div> -->
-            </div>
-            <div id="user-card-5">
-              <!-- <div class="card club"><span>K</span></div> -->
-            </div>
-            <div id="user-card-6">
-              <!-- <div class="card spade"><span>2</span></div> -->
-            </div>
+          <div id="USER-width" class="flex">
+            <div id="USER-card-1"></div>
+            <div id="USER-card-2"></div>
+            <div id="USER-card-3"></div>
+            <div id="USER-card-4"></div>
+            <div id="USER-card-5"></div>
+            <div id="USER-card-6"></div>
           </div>
         </div>
           
-        <div id="bot2" class="w-1/3 h-56 flex flex-col items-center">
+        <div class="w-1/3 h-full h-56 flex flex-col items-center">
+          <div id="BOT2-status" class="font-bold text-2xl text-white"></div>
           <h3 class="text-white text-lg text-gray-200">BOT 2</h3>
-          <div id="bot2-cards" class="-ml-24 w-full flex justify-center relative">
-            <div id="bot2-card-1">
-              <!-- <div class="card heart"><span>A</span></div> -->
-            </div>
-            <div id="bot2-card-2">
-              <!-- <div class="card spade"><span>9</span></div> -->
-            </div>
-            <div id="bot2-card-3">
-              <!-- <div class="card heart"><span>5</span></div> -->
-            </div>
-            <div id="bot2-card-4">
-              <!-- <div class="card diamond"><span>3</span></div> -->
-            </div>
-            <div id="bot2-card-5">
-              <!-- <div class="card club"><span>K</span></div> -->
-            </div>
-            <div id="bot2-card-6">
-              <!-- <div class="card spade"><span>2</span></div> -->
-            </div>
+          <divs id="BOT2-width" class="flex">
+            <div id="BOT2-card-1"></div>
+            <div id="BOT2-card-2"></div>
+            <div id="BOT2-card-3"></div>
+            <div id="BOT2-card-4"></div>
+            <div id="BOT2-card-5"></div>
+            <div id="BOT2-card-6"></div>
           </div>
         </div>
       </div>
-      <h1 class="mt-16 font-bold text-white text-3xl text-gray-200 text-center">Bet $<span id="betAmountInDealPage"></span></h1>
+      <!-- <h1 class="mt-16 font-bold text-white text-3xl text-gray-200 text-center">Bet $<span id="betAmountInDealPage"></span></h1> -->
     
-      <!-- <div id="actionBtns" class="absolute w-full bottom-0 flexcontrol-wrapper"> -->
-      <div id="action-buttons" class="w-full flex justify-around items-center control-wrapper-bg">
-        <button id="nextgame-btn" class="next-btn bg-green-500">NEXT GAME</button>
-        <button id="stand-btn" class="stand-btn"></button>
-        <button id="hit-btn" class="hit-btn"></button>
-        <button id="double-btn" class="double-btn"></button>
-        <button id="surrender-btn" class="surrender-btn"></button>
+      <div id="action-buttons" class="hidden">
+        <div class="w-full absolute left-0 bottom-0 flex justify-around items-center control-wrapper-bg">
+          <button id="nextgame-btn" class="next-btn bg-green-500">NEXT GAME</button>
+          <button id="stand-btn" class="stand-btn"></button>
+          <button id="hit-btn" class="hit-btn"></button>
+          <button id="double-btn" class="double-btn"></button>
+          <button id="surrender-btn" class="surrender-btn"></button>
+        </div>
       </div>
     </section>
   </main>

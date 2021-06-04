@@ -1,15 +1,11 @@
 import { Card } from "./Card";
 
 export class Dealer {
-  public name: string;
-  public hand: Card[];
-  public status: "bust" | "blackjack" | "stand";
-
-  public constructor() {
-    this.name = "Dealer";
-    this.status = "stand";
-    this.hand = [];
-  }
+  public type: string = "DEALER";
+  public name: string = "Dealer";
+  public hand: Card[] = [];
+  public status: "bust" | "blackjack" | "stand" | "initial" = "initial";
+  public isTurnEnd: boolean = false;
 
   public get openCard(): Card {
     return this.hand[0];
@@ -18,7 +14,7 @@ export class Dealer {
   public get handScore(): number {
     let score = 0;
     for (let card of this.hand) score += card.rankNum;
-    // 21を超えている場合、エースがあれば10を引く(Rankを11から1に切り替える)
+    // If score is over 21, subtract 10 if there is an ace in one's hand(switch the rank from 11 to 1).
     let i = this.NumAce;
     while (score > 21 && i > 0) {
       score -= 10;
@@ -26,7 +22,6 @@ export class Dealer {
     }
     return score;
   }
-
   private get NumAce(): number {
     return this.hand.filter((card) => card.rank === "A").length;
   }
@@ -37,11 +32,27 @@ export class Dealer {
 
   public getCard(card: Card): void {
     this.hand.push(card);
-    if(this.hand.length === 2 && this.isBlackjack) this.status = "blackjack";
+    if(this.hand.length === 2 && this.isBlackjack) {
+      this.status = "blackjack";
+      this.isTurnEnd = true;
+    } 
   }
 
   public hit(card: Card): void {
     this.getCard(card);
+    if(this.handScore > 16) {
+      this.status = "stand";
+      this.isTurnEnd = true;
+    }
     if(this.handScore > 21) this.status = "bust";
+  }
+  
+  public resetState(): void {
+    this.hand = [];
+    this.status = "stand";
+  }
+
+  public generateLog(verb: string): string {
+    return `${this.name} has chosen to ${verb}.`
   }
 }

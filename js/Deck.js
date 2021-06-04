@@ -39,7 +39,7 @@
         Deck.prototype.drawOne = function () {
             return this.cards.pop();
         };
-        Deck.suits = ["H", "D", "C", "S"];
+        Deck.suits = ["heart", "diamond", "club", "spade"];
         Deck.ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
         return Deck;
     }());

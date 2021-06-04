@@ -12,9 +12,11 @@
     exports.Dealer = void 0;
     var Dealer = /** @class */ (function () {
         function Dealer() {
+            this.type = "DEALER";
             this.name = "Dealer";
-            this.status = "stand";
             this.hand = [];
+            this.status = "initial";
+            this.isTurnEnd = false;
         }
         Object.defineProperty(Dealer.prototype, "openCard", {
             get: function () {
@@ -30,7 +32,7 @@
                     var card = _a[_i];
                     score += card.rankNum;
                 }
-                // 21を超えている場合、エースがあれば10を引く(Rankを11から1に切り替える)
+                // If score is over 21, subtract 10 if there is an ace in one's hand(switch the rank from 11 to 1).
                 var i = this.NumAce;
                 while (score > 21 && i > 0) {
                     score -= 10;
@@ -57,13 +59,26 @@
         });
         Dealer.prototype.getCard = function (card) {
             this.hand.push(card);
-            if (this.hand.length === 2 && this.isBlackjack)
+            if (this.hand.length === 2 && this.isBlackjack) {
                 this.status = "blackjack";
+                this.isTurnEnd = true;
+            }
         };
         Dealer.prototype.hit = function (card) {
             this.getCard(card);
+            if (this.handScore > 16) {
+                this.status = "stand";
+                this.isTurnEnd = true;
+            }
             if (this.handScore > 21)
                 this.status = "bust";
+        };
+        Dealer.prototype.resetState = function () {
+            this.hand = [];
+            this.status = "stand";
+        };
+        Dealer.prototype.generateLog = function (verb) {
+            return this.name + " has chosen to " + verb + ".";
         };
         return Dealer;
     }());

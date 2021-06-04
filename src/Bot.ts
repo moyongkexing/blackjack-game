@@ -5,14 +5,15 @@ import { ActionType } from "./types/ActionType";
 import { Card } from "./Card";
 
 export class Bot extends Player {
+  public type: string;
   public constructor(username: string) {
     super(username);
+    this.type = username.toUpperCase();
   }
   
   public bet(): void {
-    // betDenominations = [5,20,50,100];
     const randomIndex = Math.floor(Math.random() * 3);
-    this.betAmount = this.money >= Table.betDenominations[3] * 3
+    this.betAmount = this.money >= Table.betDenominations[3] * 3 // betDenominations = [5,20,50,100];
     ? Table.betDenominations[Table.betDenominations.length - 1]
     : Table.betDenominations[randomIndex];
   }

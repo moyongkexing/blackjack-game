@@ -1,8 +1,7 @@
 import { Player } from "./Player";
-import { Table } from "./Table";
-import { ActionType } from "./types/ActionType";
 
 export class User extends Player {
+  public type: string = "USER";
   public constructor(username: string) {
     super(username);
   }

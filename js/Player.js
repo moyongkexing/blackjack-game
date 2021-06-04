@@ -15,10 +15,10 @@
         function Player(username) {
             this.hand = [];
             this.money = 400;
-            this.betAmount = Table_1.Table.betDenominations[0]; // 5
+            this.betAmount = Table_1.Table.betDenominations[0];
             this.status = "initial";
-            this.name = username;
             this.isTurnEnd = false;
+            this.name = username;
         }
         Object.defineProperty(Player.prototype, "handScore", {
             get: function () {
@@ -99,6 +99,12 @@
             this.betAmount = Table_1.Table.betDenominations[0];
             this.status = "initial";
             this.isTurnEnd = false;
+        };
+        Player.prototype.generateLog = function (verb) {
+            switch (verb) {
+                case "bet": return this.name + " has bet " + this.betAmount + "$.";
+                default: return this.name + " has chosen to " + verb + ".";
+            }
         };
         return Player;
     }());

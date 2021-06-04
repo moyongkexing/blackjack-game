@@ -31,12 +31,13 @@ var __extends = (this && this.__extends) || (function () {
     var Bot = /** @class */ (function (_super) {
         __extends(Bot, _super);
         function Bot(username) {
-            return _super.call(this, username) || this;
+            var _this = _super.call(this, username) || this;
+            _this.type = username.toUpperCase();
+            return _this;
         }
         Bot.prototype.bet = function () {
-            // betDenominations = [5,20,50,100];
             var randomIndex = Math.floor(Math.random() * 3);
-            this.betAmount = this.money >= Table_1.Table.betDenominations[3] * 3
+            this.betAmount = this.money >= Table_1.Table.betDenominations[3] * 3 // betDenominations = [5,20,50,100];
                 ? Table_1.Table.betDenominations[Table_1.Table.betDenominations.length - 1]
                 : Table_1.Table.betDenominations[randomIndex];
         };

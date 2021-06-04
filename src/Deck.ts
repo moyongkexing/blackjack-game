@@ -1,15 +1,14 @@
 import { Card } from "./Card";
-import { Table } from "./Table";
 
 export class Deck {
-  private static suits = ["H", "D", "C", "S"];
+  private static suits = ["heart", "diamond", "club", "spade"];
   private static ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
   private cards: Card[] = [];
 
   public constructor() {
     this.resetDeck();
   }
-  private resetDeck(): void {
+  public resetDeck(): void {
     this.cards = [];
     for(let suit of Deck.suits) {
       for(let rank of Deck.ranks) {

@@ -5,13 +5,12 @@ export class Player {
   public name: string;
   public hand: Card[] = [];
   public money: number = 400;
-  public betAmount: number = Table.betDenominations[0]; // 5
+  public betAmount: number = Table.betDenominations[0];
   public status: "surrender" | "stand" | "bust" | "doublebust" | "blackjack" | "initial" = "initial";
-  public isTurnEnd: boolean;
+  public isTurnEnd: boolean = false;
 
   public constructor(username: string) {
     this.name = username;
-    this.isTurnEnd = false;
   }
 
   public get handScore(): number {
@@ -85,6 +84,13 @@ export class Player {
     this.betAmount = Table.betDenominations[0];
     this.status = "initial";
     this.isTurnEnd = false;
+  }
+
+  public generateLog(verb: string): string {
+    switch(verb) {
+      case "bet": return `${this.name} has bet ${this.betAmount}$.`
+      default: return `${this.name} has chosen to ${verb}.`
+    }
   }
 }
 

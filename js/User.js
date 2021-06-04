@@ -29,7 +29,9 @@ var __extends = (this && this.__extends) || (function () {
     var User = /** @class */ (function (_super) {
         __extends(User, _super);
         function User(username) {
-            return _super.call(this, username) || this;
+            var _this = _super.call(this, username) || this;
+            _this.type = "USER";
+            return _this;
         }
         User.prototype.bet = function (userBetAmount) {
             this.betAmount = userBetAmount;
