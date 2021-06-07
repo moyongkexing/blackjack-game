@@ -6,7 +6,7 @@ export class Player {
   public hand: Card[] = [];
   public money: number = 400;
   public betAmount: number = Table.betDenominations[0];
-  public status: "surrender" | "stand" | "bust" | "doublebust" | "blackjack" | "initial" = "initial";
+  public status: "surrender" | "stand" | "bust" | "doubleBust" | "blackjack" | "initial" = "initial";
   public isTurnEnd: boolean = false;
 
   public constructor(username: string) {
@@ -66,7 +66,7 @@ export class Player {
   public double(card: Card): void {
     this.getCard(card);
     if(this.handScore > 21) {
-      this.status = "doublebust";
+      this.status = "doubleBust";
       this.isTurnEnd = true;
     } 
   }
@@ -84,13 +84,6 @@ export class Player {
     this.betAmount = Table.betDenominations[0];
     this.status = "initial";
     this.isTurnEnd = false;
-  }
-
-  public generateLog(verb: string): string {
-    switch(verb) {
-      case "bet": return `${this.name} has bet ${this.betAmount}$.`
-      default: return `${this.name} has chosen to ${verb}.`
-    }
   }
 }
 

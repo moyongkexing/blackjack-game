@@ -22,6 +22,7 @@ export class Dealer {
     }
     return score;
   }
+  
   private get NumAce(): number {
     return this.hand.filter((card) => card.rank === "A").length;
   }
@@ -50,9 +51,6 @@ export class Dealer {
   public resetState(): void {
     this.hand = [];
     this.status = "stand";
-  }
-
-  public generateLog(verb: string): string {
-    return `${this.name} has chosen to ${verb}.`
+    this.isTurnEnd = false;
   }
 }

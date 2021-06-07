@@ -76,9 +76,7 @@
         Dealer.prototype.resetState = function () {
             this.hand = [];
             this.status = "stand";
-        };
-        Dealer.prototype.generateLog = function (verb) {
-            return this.name + " has chosen to " + verb + ".";
+            this.isTurnEnd = false;
         };
         return Dealer;
     }());

@@ -40,26 +40,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Table"], factory);
+        define(["require", "exports", "./Table", "./User"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ViewController = void 0;
     var Table_1 = require("./Table");
+    var User_1 = require("./User");
     var ViewController = /** @class */ (function () {
         function ViewController() {
-            var username = document.getElementById("username")
-                .value;
+            var username = document.getElementById("username").value;
             this.table = new Table_1.Table(username);
             this.hide("start-page");
             this.show("bet-page");
-            this.renderBetPage();
+            this.initializeBetPage();
             this.initializeClickEvent();
         }
         ViewController.prototype.initializeClickEvent = function () {
             var _this = this;
-            var betAmount = document.getElementById("betAmountInBetPage");
+            var betAmount = document.getElementById("bet-amount");
             var _loop_1 = function (d) {
                 document.getElementById("bet-" + d).addEventListener("click", function () {
                     var total = parseInt(betAmount.innerText) + d;
@@ -79,23 +79,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            this.table.bet(parseInt(betAmount.innerText));
+                            console.log(this.table.players.filter(function (player) { return player instanceof User_1.User; }));
                             this.hide("bet-page");
                             this.show("deal-page");
+                            this.table.bet(parseInt(betAmount.innerText));
                             this.table.distribution();
                             return [4 /*yield*/, this.renderDistribution()];
                         case 1:
                             _a.sent();
-                            this.show("action-buttons");
-                            if (this.table.user.isTurnEnd) {
-                                this.hide("action-buttons");
-                                this.table.dealerAct();
-                                this.table.evaluation();
-                                // state、つまりblackjackなどのstateがログに記録されないこと
-                                // 一人一人のレンダリングに合わせてそれぞれのログを出力したい
-                                // 勝敗の結果が記録されないこと
-                            }
-                            return [2 /*return*/];
+                            this.updateLog();
+                            this.show("action-ctrl");
+                            if (!this.table.user.isTurnEnd) return [3 /*break*/, 3];
+                            return [4 /*yield*/, this.afterUserTurn()];
+                        case 2:
+                            _a.sent();
+                            _a.label = 3;
+                        case 3: return [2 /*return*/];
                     }
                 });
             }); });
@@ -107,22 +106,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         switch (_a.label) {
                             case 0:
                                 this.table.userAct(action);
-                                this.renderUserAction();
-                                if (!this.table.user.isTurnEnd) return [3 /*break*/, 3];
-                                this.hide("action-buttons");
-                                this.table.botAct();
-                                return [4 /*yield*/, this.renderBotAction()];
+                                this.updateHand(this.table.user);
+                                this.updateLog();
+                                if (!this.table.user.isTurnEnd) return [3 /*break*/, 2];
+                                return [4 /*yield*/, this.afterUserTurn()];
                             case 1:
                                 _a.sent();
-                                this.table.dealerAct();
-                                return [4 /*yield*/, this.renderDealerAction()];
-                            case 2:
-                                _a.sent();
-                                this.table.evaluation();
-                                _a.label = 3;
-                            case 3:
-                                this.toString();
-                                return [2 /*return*/];
+                                _a.label = 2;
+                            case 2: return [2 /*return*/];
                         }
                     });
                 }); });
@@ -131,47 +122,23 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 var action = actions_1[_b];
                 _loop_2(action);
             }
-        };
-        ViewController.prototype.renderDistribution = function () {
-            return __awaiter(this, void 0, void 0, function () {
-                var players, _i, players_1, player;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            players = [];
-                            players.push(this.table.dealer);
-                            this.table.players.forEach(function (player) { return players.push(player); });
-                            _i = 0, players_1 = players;
-                            _a.label = 1;
-                        case 1:
-                            if (!(_i < players_1.length)) return [3 /*break*/, 4];
-                            player = players_1[_i];
-                            return [4 /*yield*/, new Promise(function (resolve) { return setTimeout(resolve, 1000); })];
-                        case 2:
-                            _a.sent(); // wait a second
-                            this.updateHand(player);
-                            if (player.status !== "initial")
-                                this.updateStatus(player);
-                            _a.label = 3;
-                        case 3:
-                            _i++;
-                            return [3 /*break*/, 1];
-                        case 4: return [2 /*return*/];
-                    }
-                });
+            document.getElementById("next-btn").addEventListener("click", function () {
+                _this.hide("deal-page");
+                _this.show("bet-page");
+                _this.initializeBetPage();
+                _this.resetDealPage();
+                _this.table.resetTable();
             });
         };
-        ViewController.prototype.renderUserAction = function () {
-            this.updateHand(this.table.user);
-            if (this.table.user.status !== "initial")
-                this.updateStatus(this.table.user);
-        };
-        ViewController.prototype.renderBotAction = function () {
+        ViewController.prototype.afterUserTurn = function () {
             return __awaiter(this, void 0, void 0, function () {
                 var _i, _a, bot;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
+                            document.getElementById("action-buttons").style.visibility = "hidden";
+                            this.updateStatus(this.table.user);
+                            this.table.botAct();
                             _i = 0, _a = this.table.bots;
                             _b.label = 1;
                         case 1:
@@ -181,8 +148,43 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         case 2:
                             _b.sent();
                             this.updateHand(bot);
-                            if (bot.status !== "initial")
-                                this.updateStatus(bot);
+                            this.updateStatus(bot);
+                            _b.label = 3;
+                        case 3:
+                            _i++;
+                            return [3 /*break*/, 1];
+                        case 4:
+                            this.updateLog();
+                            this.table.dealerAct();
+                            return [4 /*yield*/, new Promise(function (resolve) { return setTimeout(resolve, 1000); })];
+                        case 5:
+                            _b.sent();
+                            this.updateHand(this.table.dealer);
+                            this.updateStatus(this.table.dealer);
+                            this.updateLog();
+                            this.table.evaluation();
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        ViewController.prototype.renderDistribution = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var _i, _a, player;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            _i = 0, _a = this.table.players;
+                            _b.label = 1;
+                        case 1:
+                            if (!(_i < _a.length)) return [3 /*break*/, 4];
+                            player = _a[_i];
+                            return [4 /*yield*/, new Promise(function (resolve) { return setTimeout(resolve, 1000); })];
+                        case 2:
+                            _b.sent();
+                            this.updateHand(player);
+                            if (player.status === "blackjack")
+                                this.updateStatus(player);
                             _b.label = 3;
                         case 3:
                             _i++;
@@ -192,20 +194,49 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 });
             });
         };
-        ViewController.prototype.renderDealerAction = function () {
+        ViewController.prototype.initializeBetPage = function () {
+            document.getElementById("money-amount").innerText = String(this.table.user.money);
+        };
+        ViewController.prototype.resetDealPage = function () {
+            for (var _i = 0, _a = this.table.players; _i < _a.length; _i++) {
+                var player = _a[_i];
+                for (var i = 1; i <= player.hand.length; i++) {
+                    document.getElementById(player.type + "-card-" + i).innerHTML = "";
+                }
+                document.getElementById(player.type + "-status").innerHTML = "";
+            }
+            document.getElementById("action-buttons").style.visibility = "visible";
+        };
+        ViewController.prototype.updateHand = function (player) {
             return __awaiter(this, void 0, void 0, function () {
+                var i, card;
                 return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, new Promise(function (resolve) { return setTimeout(resolve, 1500); })];
-                        case 1:
-                            _a.sent();
-                            this.updateHand(this.table.dealer);
-                            if (this.table.dealer.status !== "initial")
-                                this.updateStatus(this.table.dealer);
-                            return [2 /*return*/];
+                    for (i = 1; i <= player.hand.length; i++) {
+                        card = player.hand[i - 1];
+                        document.getElementById(player.type + "-card-" + i).innerHTML = "<div class=\"card " + card.suit + "\"><span>" + card.rank + "</span></div>";
                     }
+                    document.getElementById(player.type + "-width").style.width = (player.hand.length + 3) * 28 + "px";
+                    return [2 /*return*/];
                 });
             });
+        };
+        ViewController.prototype.updateStatus = function (player) {
+            document.getElementById(player.type + "-status").innerHTML = "" + player.status;
+        };
+        ViewController.prototype.hide = function (id) {
+            document.getElementById(id).classList.add("hidden");
+        };
+        ViewController.prototype.show = function (id) {
+            document.getElementById(id).classList.remove("hidden");
+        };
+        ViewController.prototype.updateLog = function () {
+            var lastIndex = this.table.log.length - 1;
+            var target = document.getElementById("game-log");
+            for (var _i = 0, _a = this.table.log[lastIndex]; _i < _a.length; _i++) {
+                var sentence = _a[_i];
+                target.innerHTML += "<p>" + sentence + "</p>";
+            }
+            target.scrollTop = target.scrollHeight;
         };
         ViewController.prototype.toString = function () {
             console.log("");
@@ -223,25 +254,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             console.log(this.table.dealer.hand);
             console.log("handScore");
             console.log(this.table.dealer.handScore);
-        };
-        ViewController.prototype.renderBetPage = function () {
-            document.getElementById("moneyAmountInBetPage").innerText = String(this.table.user.money);
-        };
-        ViewController.prototype.updateHand = function (player) {
-            for (var i = 1; i <= player.hand.length; i++) {
-                var card = player.hand[i - 1];
-                document.getElementById(player.type + "-card-" + i).innerHTML = "<div class=\"card " + card.suit + "\"><span>" + card.rank + "</span></div>";
-            }
-            document.getElementById(player.type + "-width").style.width = (player.hand.length + 3) * 28 + "px";
-        };
-        ViewController.prototype.updateStatus = function (player) {
-            document.getElementById(player.type + "-status").innerHTML = "" + player.status;
-        };
-        ViewController.prototype.hide = function (id) {
-            document.getElementById(id).classList.add("hidden");
-        };
-        ViewController.prototype.show = function (id) {
-            document.getElementById(id).classList.remove("hidden");
         };
         return ViewController;
     }());

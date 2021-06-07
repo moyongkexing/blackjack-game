@@ -84,7 +84,7 @@
         Player.prototype.double = function (card) {
             this.getCard(card);
             if (this.handScore > 21) {
-                this.status = "doublebust";
+                this.status = "doubleBust";
                 this.isTurnEnd = true;
             }
         };
@@ -99,12 +99,6 @@
             this.betAmount = Table_1.Table.betDenominations[0];
             this.status = "initial";
             this.isTurnEnd = false;
-        };
-        Player.prototype.generateLog = function (verb) {
-            switch (verb) {
-                case "bet": return this.name + " has bet " + this.betAmount + "$.";
-                default: return this.name + " has chosen to " + verb + ".";
-            }
         };
         return Player;
     }());

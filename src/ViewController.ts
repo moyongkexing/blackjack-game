@@ -8,19 +8,16 @@ export class ViewController {
   private table: Table;
 
   public constructor() {
-    const username = (document.getElementById("username") as HTMLInputElement)
-      .value;
+    const username = (document.getElementById("username") as HTMLInputElement).value;
     this.table = new Table(username);
     this.hide("start-page");
     this.show("bet-page");
-    this.renderBetPage();
+    this.initializeBetPage();
     this.initializeClickEvent();
   }
 
   private initializeClickEvent(): void {
-    let betAmount = document.getElementById(
-      "betAmountInBetPage"
-    ) as HTMLSpanElement;
+    let betAmount = document.getElementById("bet-amount") as HTMLSpanElement;
 
     // button of [5,20,50,100]
     for (let d of Table.betDenominations) {
@@ -44,108 +41,92 @@ export class ViewController {
     (document.getElementById("deal-btn") as HTMLElement).addEventListener
     ("click",
       async () => {
-        this.table.bet(parseInt(betAmount.innerText));
+        console.log(this.table.players.filter(player => player instanceof User))
         this.hide("bet-page");
-
         this.show("deal-page");
+
+        this.table.bet(parseInt(betAmount.innerText));
         this.table.distribution();
         await this.renderDistribution();
+        this.updateLog();
 
-        this.show("action-buttons");
-
-        if (this.table.user.isTurnEnd) {
-          this.hide("action-buttons");
-          this.table.dealerAct();
-          this.table.evaluation();
-
-          // state、つまりblackjackなどのstateがログに記録されないこと
-          // 一人一人のレンダリングに合わせてそれぞれのログを出力したい
-          // 勝敗の結果が記録されないこと
-        }
+        this.show("action-ctrl");
+        if (this.table.user.isTurnEnd) await this.afterUserTurn();
       }
     );
 
     // button of ["surrender", "stand", "hit", "double"]
     const actions: ActionType[] = ["surrender", "stand", "hit", "double"];
     for (let action of actions) {
-      (
-        document.getElementById(`${action}-btn`) as HTMLButtonElement
+      (document.getElementById(`${action}-btn`) as HTMLButtonElement
       ).addEventListener("click", async () => {
         this.table.userAct(action);
-
-        this.renderUserAction();
-        if (this.table.user.isTurnEnd) {
-          this.hide("action-buttons");
-
-          this.table.botAct();
-          await this.renderBotAction();
-
-          this.table.dealerAct();
-          await this.renderDealerAction();
-          
-          this.table.evaluation();
-        }
-        this.toString();
+        this.updateHand(this.table.user);
+        this.updateLog();
+        if (this.table.user.isTurnEnd) await this.afterUserTurn();
       });
     }
+
+    (document.getElementById("next-btn") as HTMLButtonElement).addEventListener
+    ("click", () => {
+      this.hide("deal-page");
+      this.show("bet-page");
+
+      this.initializeBetPage();
+      this.resetDealPage();
+      this.table.resetTable();
+    })
+  }
+
+  public async afterUserTurn() {
+    (document.getElementById("action-buttons") as HTMLElement).style.visibility = "hidden";
+    
+    this.updateStatus(this.table.user);
+
+    this.table.botAct();
+    for(let bot of this.table.bots) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      this.updateHand(bot);
+      this.updateStatus(bot);
+    }
+    this.updateLog();
+
+    this.table.dealerAct();
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    this.updateHand(this.table.dealer);
+    this.updateStatus(this.table.dealer);
+    this.updateLog();
+
+    this.table.evaluation();
+    // log
   }
 
   private async renderDistribution() {
-    let players: Array<User | Bot | Dealer> = [];
-    players.push(this.table.dealer);
-    this.table.players.forEach((player) => players.push(player));
-
-    for (let player of players) {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // wait a second
-      this.updateHand(player);
-      if (player.status !== "initial") this.updateStatus(player);
-    }
-  }
-
-  private renderUserAction() {
-    this.updateHand(this.table.user);
-    if (this.table.user.status !== "initial") this.updateStatus(this.table.user);
-  }
-  
-  private async renderBotAction() {
-    for (let bot of this.table.bots) {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      this.updateHand(bot);
-      if (bot.status !== "initial") this.updateStatus(bot);
-    }
-  }
-
-  private async renderDealerAction() {
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    this.updateHand(this.table.dealer);
-    if (this.table.dealer.status !== "initial") this.updateStatus(this.table.dealer);
-  }
-
-  private toString(): void {
-    console.log("");
-    console.log("");
     for (let player of this.table.players) {
-      console.log(player);
-      console.log(player.hand);
-      console.log("isTurnEnd");
-      console.log(player.isTurnEnd);
-      console.log("handScore");
-      console.log(player.handScore);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      this.updateHand(player);
+      if (player.status === "blackjack") this.updateStatus(player);
     }
-    console.log(this.table.dealer);
-    console.log(this.table.dealer.hand);
-    console.log("handScore");
-    console.log(this.table.dealer.handScore);
   }
 
-  
-
-  private renderBetPage(): void {
-    (document.getElementById("moneyAmountInBetPage") as HTMLSpanElement
+  private initializeBetPage(): void {
+    (document.getElementById("money-amount") as HTMLSpanElement
     ).innerText = String(this.table.user.money);
   }
 
-  private updateHand(player: User | Bot | Dealer): void {
+  private resetDealPage(): void {
+    for(let player of this.table.players) {
+      for (let i = 1; i <= player.hand.length; i++) {
+        (document.getElementById(`${player.type}-card-${i}`) as HTMLElement
+        ).innerHTML = "";
+      }
+      (document.getElementById(`${player.type}-status`) as HTMLElement
+      ).innerHTML = "";
+    }
+    (document.getElementById("action-buttons") as HTMLElement).style.visibility = "visible";
+  }
+
+  private async updateHand(player: User | Bot | Dealer) {
     for (let i = 1; i <= player.hand.length; i++) {
       let card = player.hand[i - 1];
       (document.getElementById(`${player.type}-card-${i}`) as HTMLElement
@@ -167,5 +148,31 @@ export class ViewController {
 
   private show(id: string): void {
     (document.getElementById(id) as HTMLElement).classList.remove("hidden");
+  }
+
+
+  private updateLog(): void {
+    const lastIndex = this.table.log.length - 1;
+    const target = (document.getElementById("game-log") as HTMLElement);
+    for(let sentence of this.table.log[lastIndex]) {
+      target.innerHTML += `<p>${sentence}</p>`;
+    }
+    target.scrollTop = target.scrollHeight;
+  }
+  private toString(): void {
+    console.log("");
+    console.log("");
+    for (let player of this.table.players) {
+      console.log(player);
+      console.log(player.hand);
+      console.log("isTurnEnd");
+      console.log(player.isTurnEnd);
+      console.log("handScore");
+      console.log(player.handScore);
+    }
+    console.log(this.table.dealer);
+    console.log(this.table.dealer.hand);
+    console.log("handScore");
+    console.log(this.table.dealer.handScore);
   }
 }
