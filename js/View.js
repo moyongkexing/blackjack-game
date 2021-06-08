@@ -91,7 +91,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             this.dealPage.classList.remove("hidden");
                             this.table.bet(parseInt(this.betAmount.innerText)); // assign the argument value to User.betAmount
                             this.table.distribution(); // assing two cards to all players (dealer get only one card as exception)
-                            this.debug();
                             _i = 0, _a = this.table.players;
                             _b.label = 1;
                         case 1:
@@ -247,23 +246,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         };
         View.prototype.sleep = function (time) {
             return new Promise(function (resolve) { return setTimeout(resolve, time); });
-        };
-        View.prototype.debug = function () {
-            console.log("");
-            console.log("");
-            for (var _i = 0, _a = this.table.players; _i < _a.length; _i++) {
-                var player = _a[_i];
-                console.log(player);
-                console.log(player.hand);
-                console.log("isTurnEnd");
-                console.log(player.isTurnEnd);
-                console.log("handScore");
-                console.log(player.handScore);
-            }
-            console.log(this.table.dealer);
-            console.log(this.table.dealer.hand);
-            console.log("handScore");
-            console.log(this.table.dealer.handScore);
         };
         return View;
     }());

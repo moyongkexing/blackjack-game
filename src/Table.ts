@@ -130,6 +130,4 @@ export class Table {
     let diff = player.handScore - this.dealer.handScore;
     return diff > 0 ? "win" : diff < 0 ? "lose" : "push";
   }
-
-  
 }

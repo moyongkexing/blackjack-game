@@ -53,7 +53,6 @@ export class View {
       this.table.bet(parseInt(this.betAmount.innerText)); // assign the argument value to User.betAmount
       this.table.distribution(); // assing two cards to all players (dealer get only one card as exception)
 
-      this.debug();
       for(let player of this.table.players) {
         await this.sleep(1000);
         this.updatePlayerHand(player); // draw the player's hand in the view
@@ -176,20 +175,20 @@ export class View {
     return new Promise(resolve => setTimeout(resolve, time));
   }
 
-  private debug(): void {
-    console.log("");
-    console.log("");
-    for (let player of this.table.players) {
-      console.log(player);
-      console.log(player.hand);
-      console.log("isTurnEnd");
-      console.log(player.isTurnEnd);
-      console.log("handScore");
-      console.log(player.handScore);
-    }
-    console.log(this.table.dealer);
-    console.log(this.table.dealer.hand);
-    console.log("handScore");
-    console.log(this.table.dealer.handScore);
-  }
+  // private debug(): void {
+  //   console.log("");
+  //   console.log("");
+  //   for (let player of this.table.players) {
+  //     console.log(player);
+  //     console.log(player.hand);
+  //     console.log("isTurnEnd");
+  //     console.log(player.isTurnEnd);
+  //     console.log("handScore");
+  //     console.log(player.handScore);
+  //   }
+  //   console.log(this.table.dealer);
+  //   console.log(this.table.dealer.hand);
+  //   console.log("handScore");
+  //   console.log(this.table.dealer.handScore);
+  // }
 }
