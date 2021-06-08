@@ -103,7 +103,7 @@ export class Table {
     for(let player of this.players.filter(player => !(player instanceof Dealer)) as Array<User | Bot>) {
       let result: "win" | "lose" | "push" = "push";
       switch(player.status) {
-        case "surrender": case "bust": case "doubleBust": result = "lose";break; // player loses unconditionally
+        case "surrender": case "bust": case "doublebust": result = "lose";break; // player loses unconditionally
         case "blackjack": if(this.dealer.status !== "blackjack") result = "win";break;
         case "stand": case "double": result = this.compareHand(player);break;
       }

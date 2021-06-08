@@ -6,7 +6,7 @@ export class Player {
   public hand: Card[] = [];
   public money: number = 400;
   public betAmount: number = Table.betDenominations[0];
-  public status: "surrender" | "stand" | "bust" | "double" | "doubleBust" | "blackjack" | "initial" = "initial";
+  public status: "surrender" | "stand" | "bust" | "double" | "doublebust" | "blackjack" | "initial" = "initial";
   public isTurnEnd: boolean = false;
 
   public constructor(username: string) {
@@ -66,7 +66,7 @@ export class Player {
   public double(card: Card): void {
     this.getCard(card);
     this.status = "double";
-    if(this.handScore > 21) this.status = "doubleBust";
+    if(this.handScore > 21) this.status = "doublebust";
     this.isTurnEnd = true;
   }
 
