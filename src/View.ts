@@ -4,57 +4,69 @@ import { User } from "./User";
 import { Bot } from "./Bot";
 import { Dealer } from "./Dealer";
 
+
 export class View {
   private table: Table;
+  
+  private startPage = document.getElementById("start-page") as HTMLElement;
+  private usernameInput = (document.getElementById("username-input") as HTMLInputElement);
+
+  private betPage = document.getElementById("bet-page") as HTMLElement;
+  private moneyAmount = document.getElementById("money-amount") as HTMLSpanElement;
+  private betAmount = document.getElementById("bet-amount") as HTMLSpanElement;
+  private dealBtn = document.getElementById("deal-btn") as HTMLElement;
+  private resetBtn = document.getElementById("reset-btn") as HTMLElement;
+
+  private dealPage = document.getElementById("deal-page") as HTMLElement;
+  private username = document.getElementById("username") as HTMLHeadingElement;
+  private actionBtns = document.getElementById("action-buttons") as HTMLElement;
+  private doubleBtn = document.getElementById("double-btn") as HTMLButtonElement;
+  private nextBtn = document.getElementById("next-btn") as HTMLButtonElement;
 
   public constructor() {
-    const username = (document.getElementById("username") as HTMLInputElement).value;
-    this.table = new Table(username);
-    this.initializeBetPage();
+    this.table = new Table(this.usernameInput.value);
+    this.initializeView();
     this.initializeController();
 
-    this.hide("start-page");
-    this.show("bet-page");
+    this.startPage.classList.add("hidden");
+    this.betPage.classList.remove("hidden");
+  }
+
+  private initializeView(): void {
+    this.username.innerText = this.table.user.name;
+    this.moneyAmount.innerText = String(this.table.user.money);
+    this.betAmount.innerText = String(Table.betDenominations[0]); // 5$
+
+    for(let player of this.table.players) {
+      (document.getElementById(`${player.type}-hands`) as HTMLElement).innerHTML = "";
+      (document.getElementById(`${player.type}-status`) as HTMLElement).innerHTML = "";
+    }
+    this.actionBtns.style.visibility = "hidden";
   }
 
   private initializeController(): void {
-    const betAmount = document.getElementById("bet-amount") as HTMLSpanElement;
-    const resetBtn = (document.getElementById("reset-btn") as HTMLElement);
-    const dealBtn = (document.getElementById("deal-btn") as HTMLElement);
-    const nextBtn = (document.getElementById("next-btn") as HTMLButtonElement);
-    const doubleBtn = (document.getElementById("double-btn") as HTMLButtonElement);
-    const actionBtns = (document.getElementById("action-buttons") as HTMLElement);
+    // "DEAL" button
+    this.dealBtn.addEventListener("click", async () => {
+      this.betPage.classList.add("hidden");
+      this.dealPage.classList.remove("hidden");
 
-    resetBtn.addEventListener("click", () => (betAmount.innerText = String(Table.betDenominations[0])));
-    dealBtn.addEventListener("click", async () => {
-        this.hide("bet-page");
-        this.show("deal-page");
+      this.table.bet(parseInt(this.betAmount.innerText)); // assign the argument value to User.betAmount
+      this.table.distribution(); // assing two cards to all players (dealer get only one card as exception)
 
-        this.table.bet(parseInt(betAmount.innerText));
-        this.table.distribution();
-        await this.renderDistribution();
-        this.updateTurnLog();
+      this.debug();
+      for(let player of this.table.players) {
+        await this.sleep(1000);
+        this.updatePlayerHand(player); // draw the player's hand in the view
+        this.updatePlayerStatus(player); // in the case of player is blackjack, draw the status in the view
+      };
+      this.updateTurnLog();
 
-        this.show("action-ctrl");
-        if (this.table.user.money < this.table.user.betAmount * 2) {
-          doubleBtn.classList.add("disable");
-        } 
-        if (this.table.user.isTurnEnd) await this.afterUserTurn();
-      }
-    );
+      this.actionBtns.style.visibility = "visible"; // display operation screen for User
+      if(!this.table.user.canDouble) this.doubleBtn.classList.add("disable");
+      if(this.table.user.isTurnEnd) await this.autoRendering();
+    });
 
-    nextBtn.addEventListener("click", () => {
-      this.table.resetTable();
-
-      this.initializeDealPage();
-      this.initializeBetPage();
-    
-      this.hide("deal-page");
-      this.show("bet-page");
-
-    })
-
-    // actionBtn
+    // Action button
     const actions: ActionType[] = ["surrender", "stand", "hit", "double"];
     for (let action of actions) {
       (document.getElementById(`${action}-btn`) as HTMLButtonElement
@@ -62,53 +74,44 @@ export class View {
         this.table.userAct(action);
         this.updatePlayerHand(this.table.user);
         this.updateTurnLog();
-        actionBtns.style.visibility = "hidden";
 
-        if (this.table.user.isTurnEnd) await this.afterUserTurn();
-        nextBtn.classList.remove("disable");
+        if (this.table.user.isTurnEnd) await this.autoRendering();
       });
     }
+    
+    // "Next Game" button
+    this.nextBtn.addEventListener("click", () => {
+      this.table.resetTable();
 
-    // betBtn
+      this.initializeView();
+    
+      this.dealPage.classList.add("hidden");
+      this.betPage.classList.remove("hidden");
+    });
+
+    // "RESET" button
+    this.resetBtn.addEventListener("click", () => {
+      this.betAmount.innerText = String(Table.betDenominations[0]); // 5$
+    });
+    
+
+    // Coin button
     for (let d of Table.betDenominations) {
       (document.getElementById(`bet-${d}`) as HTMLElement).addEventListener
       ("click", () => {
-          const total: number = parseInt(betAmount.innerText) + d;
-          betAmount.innerText =
-            total > this.table.user.money ? betAmount.innerText : String(total);
-        }
-      );
+          const total: number = parseInt(this.betAmount.innerText) + d;
+          this.betAmount.innerText =
+            total > this.table.user.money ? this.betAmount.innerText : String(total);
+      });
     }
   }
 
-  private initializeBetPage(): void {
-    (document.getElementById("money-amount") as HTMLSpanElement
-    ).innerText = String(this.table.user.money);
-    (document.getElementById("bet-amount") as HTMLSpanElement
-    ).innerText = String(this.table.user.betAmount);
-  }
+  private async autoRendering() {
+    this.actionBtns.style.visibility = "hidden";
 
-  private initializeDealPage(): void {
-    for(let player of this.table.players) {
-      (document.getElementById(`${player.type}-hands`) as HTMLElement).innerHTML = "";
-      (document.getElementById(`${player.type}-status`) as HTMLElement).innerHTML = "";
-    }
+    this.updatePlayerStatus(this.table.user);
 
-    this.hide("action-ctrl");
-    (document.getElementById("action-buttons") as HTMLElement).style.visibility = "visible";
-  }
-
-  private async renderDistribution() {
-    for (let player of this.table.players) {
-      await this.sleep(800);
-      this.updatePlayerHand(player);
-      this.updatePlayerStatus(this.table.user);
-      if (player.status === "blackjack") this.updatePlayerStatus(player);
-    }
-  }
-
-  private async afterUserTurn() {
-    for(let bot of this.table.bots) {
+    for(let bot of this.table.players.filter(player => player instanceof Bot) as Bot[]) {
       await this.sleep(1000);
       this.table.botAct(bot);
       this.updatePlayerHand(bot);
@@ -126,16 +129,22 @@ export class View {
     this.updatePlayerHand(this.table.dealer);
     this.updatePlayerStatus(this.table.dealer);
     this.updateTurnLog();
-    
+
     await this.sleep(1000);
     this.table.evaluation();
     this.updateTurnLog();
-    this.toString();
+
+    if(this.table.user.isBroke) {
+      this.table.gameOver();
+      this.updateTurnLog();
+    }
+    else this.nextBtn.classList.remove("disable");
   }
 
-  private updatePlayerHand(player: User | Bot | Dealer): void {
+  private updatePlayerHand(player: User | Bot | Dealer) {
     const handArea = (document.getElementById(`${player.type}-hands`) as HTMLElement);
     handArea.innerHTML = "";  
+
     for (let i = 1; i <= player.hand.length; i++) {
       let card = player.hand[i - 1];
       handArea.innerHTML += `
@@ -144,14 +153,15 @@ export class View {
         </div>
       `;
     }
-    
     // player's hand should be centered horizontally
     handArea.style.width = `${(player.hand.length + 3) * 28}px`;
   }
 
   private updatePlayerStatus(player: User | Bot | Dealer): void {
-    (document.getElementById(`${player.type}-status`) as HTMLElement
-    ).innerHTML = `${player.status}`;
+    if(player.status !== "initial") {
+      (document.getElementById(`${player.type}-status`) as HTMLElement
+      ).innerHTML = `${player.status}`;
+    }
   }
 
   private updateTurnLog(): void {
@@ -166,11 +176,20 @@ export class View {
     return new Promise(resolve => setTimeout(resolve, time));
   }
 
-  private hide(id: string): void {
-    (document.getElementById(id) as HTMLElement).classList.add("hidden");
-  }
-
-  private show(id: string): void {
-    (document.getElementById(id) as HTMLElement).classList.remove("hidden");
+  private debug(): void {
+    console.log("");
+    console.log("");
+    for (let player of this.table.players) {
+      console.log(player);
+      console.log(player.hand);
+      console.log("isTurnEnd");
+      console.log(player.isTurnEnd);
+      console.log("handScore");
+      console.log(player.handScore);
+    }
+    console.log(this.table.dealer);
+    console.log(this.table.dealer.hand);
+    console.log("handScore");
+    console.log(this.table.dealer.handScore);
   }
 }

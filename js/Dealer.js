@@ -79,7 +79,7 @@
         };
         Dealer.prototype.resetState = function () {
             this.hand = [];
-            this.status = "stand";
+            this.status = "initial";
             this.isTurnEnd = false;
         };
         return Dealer;

@@ -16,17 +16,13 @@
     var Dealer_1 = require("./Dealer");
     var Table = /** @class */ (function () {
         function Table(username) {
-            var _this = this;
-            this.bots = [];
             this.players = [];
             this.turnCounter = 0;
             this.turnLog = [];
             this.deck = new Deck_1.Deck();
             this.user = new User_1.User(username);
             this.dealer = new Dealer_1.Dealer();
-            this.bots = [new Bot_1.Bot("Bot1"), new Bot_1.Bot("Bot2")];
-            this.players.push(this.dealer, this.user);
-            this.bots.forEach(function (bot) { return _this.players.push(bot); });
+            this.players.push(this.dealer, this.user, new Bot_1.Bot("Bot1"), new Bot_1.Bot("Bot2"));
         }
         // ###########################################################################
         //  Each public method here is called in View class. 
@@ -108,19 +104,21 @@
             var log = [];
             while (!this.dealer.isTurnEnd) {
                 this.dealer.hit(this.deck.drawOne());
-                log.push(this.dealer.name + " drew a card.");
+                log.push(this.dealer.name + " has hit.");
             }
             this.turnLog.push(log);
         };
         Table.prototype.evaluation = function () {
             var log = [];
-            for (var _i = 0, _a = this.players.filter(function (player) { return !(player instanceof Dealer_1.Dealer); }); _i < _a.length; _i++) {
+            for (var _i = 0, _a = this.players; _i < _a.length; _i++) {
                 var player = _a[_i];
+                if (player instanceof Dealer_1.Dealer)
+                    continue;
                 var result = "push";
                 switch (player.status) {
                     case "surrender":
                     case "bust":
-                    case "doubleBust":
+                    case "doublebust":
                         result = "lose";
                         break; // player loses unconditionally
                     case "blackjack":
@@ -143,6 +141,9 @@
             this.deck.resetDeck();
             this.players.forEach(function (player) { return player.resetState(); });
             this.turnLog = [];
+        };
+        Table.prototype.gameOver = function () {
+            this.turnLog.push(["Game Over!"]);
         };
         Table.prototype.compareHand = function (player) {
             if (this.dealer.status === "blackjack")

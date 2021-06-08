@@ -40,62 +40,88 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Table"], factory);
+        define(["require", "exports", "./Table", "./Bot"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.View = void 0;
     var Table_1 = require("./Table");
+    var Bot_1 = require("./Bot");
     var View = /** @class */ (function () {
         function View() {
-            var username = document.getElementById("username").value;
-            this.table = new Table_1.Table(username);
-            this.initializeBetPage();
+            this.startPage = document.getElementById("start-page");
+            this.usernameInput = document.getElementById("username-input");
+            this.betPage = document.getElementById("bet-page");
+            this.moneyAmount = document.getElementById("money-amount");
+            this.betAmount = document.getElementById("bet-amount");
+            this.dealBtn = document.getElementById("deal-btn");
+            this.resetBtn = document.getElementById("reset-btn");
+            this.dealPage = document.getElementById("deal-page");
+            this.username = document.getElementById("username");
+            this.actionBtns = document.getElementById("action-buttons");
+            this.doubleBtn = document.getElementById("double-btn");
+            this.nextBtn = document.getElementById("next-btn");
+            this.table = new Table_1.Table(this.usernameInput.value);
+            this.initializeView();
             this.initializeController();
-            this.hide("start-page");
-            this.show("bet-page");
+            this.startPage.classList.add("hidden");
+            this.betPage.classList.remove("hidden");
         }
+        View.prototype.initializeView = function () {
+            this.username.innerText = this.table.user.name;
+            this.moneyAmount.innerText = String(this.table.user.money);
+            this.betAmount.innerText = String(Table_1.Table.betDenominations[0]); // 5$
+            for (var _i = 0, _a = this.table.players; _i < _a.length; _i++) {
+                var player = _a[_i];
+                document.getElementById(player.type + "-hands").innerHTML = "";
+                document.getElementById(player.type + "-status").innerHTML = "";
+            }
+            this.actionBtns.style.visibility = "hidden";
+        };
         View.prototype.initializeController = function () {
             var _this = this;
-            var betAmount = document.getElementById("bet-amount");
-            var resetBtn = document.getElementById("reset-btn");
-            var dealBtn = document.getElementById("deal-btn");
-            var nextBtn = document.getElementById("next-btn");
-            var doubleBtn = document.getElementById("double-btn");
-            resetBtn.addEventListener("click", function () { return (betAmount.innerText = String(Table_1.Table.betDenominations[0])); });
-            dealBtn.addEventListener("click", function () { return __awaiter(_this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
+            // "DEAL" button
+            this.dealBtn.addEventListener("click", function () { return __awaiter(_this, void 0, void 0, function () {
+                var _i, _a, player;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
                         case 0:
-                            this.hide("bet-page");
-                            this.show("deal-page");
-                            this.table.bet(parseInt(betAmount.innerText));
-                            this.table.distribution();
-                            return [4 /*yield*/, this.renderDistribution()];
+                            this.betPage.classList.add("hidden");
+                            this.dealPage.classList.remove("hidden");
+                            this.table.bet(parseInt(this.betAmount.innerText)); // assign the argument value to User.betAmount
+                            this.table.distribution(); // assing two cards to all players (dealer get only one card as exception)
+                            this.debug();
+                            _i = 0, _a = this.table.players;
+                            _b.label = 1;
                         case 1:
-                            _a.sent();
-                            this.updateTurnLog();
-                            this.show("action-ctrl");
-                            if (this.table.user.money < this.table.user.betAmount * 2)
-                                doubleBtn.classList.add("disable");
-                            if (!this.table.user.isTurnEnd) return [3 /*break*/, 3];
-                            return [4 /*yield*/, this.afterUserTurn()];
+                            if (!(_i < _a.length)) return [3 /*break*/, 4];
+                            player = _a[_i];
+                            return [4 /*yield*/, this.sleep(1000)];
                         case 2:
-                            _a.sent();
-                            _a.label = 3;
-                        case 3: return [2 /*return*/];
+                            _b.sent();
+                            this.updatePlayerHand(player); // draw the player's hand in the view
+                            this.updatePlayerStatus(player); // in the case of player is blackjack, draw the status in the view
+                            _b.label = 3;
+                        case 3:
+                            _i++;
+                            return [3 /*break*/, 1];
+                        case 4:
+                            ;
+                            this.updateTurnLog();
+                            this.actionBtns.style.visibility = "visible"; // display operation screen for User
+                            if (!this.table.user.canDouble)
+                                this.doubleBtn.classList.add("disable");
+                            if (!this.table.user.isTurnEnd) return [3 /*break*/, 6];
+                            return [4 /*yield*/, this.autoRendering()];
+                        case 5:
+                            _b.sent();
+                            _b.label = 6;
+                        case 6: return [2 /*return*/];
                     }
                 });
             }); });
-            nextBtn.addEventListener("click", function () {
-                _this.table.resetTable();
-                _this.initializeDealPage();
-                _this.initializeBetPage();
-                _this.hide("deal-page");
-                _this.show("bet-page");
-            });
-            // actionBtn
+            // Action button
             var actions = ["surrender", "stand", "hit", "double"];
             var _loop_1 = function (action) {
                 document.getElementById(action + "-btn").addEventListener("click", function () { return __awaiter(_this, void 0, void 0, function () {
@@ -106,7 +132,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                 this.updatePlayerHand(this.table.user);
                                 this.updateTurnLog();
                                 if (!this.table.user.isTurnEnd) return [3 /*break*/, 2];
-                                return [4 /*yield*/, this.afterUserTurn()];
+                                return [4 /*yield*/, this.autoRendering()];
                             case 1:
                                 _a.sent();
                                 _a.label = 2;
@@ -119,67 +145,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 var action = actions_1[_i];
                 _loop_1(action);
             }
+            // "Next Game" button
+            this.nextBtn.addEventListener("click", function () {
+                _this.table.resetTable();
+                _this.initializeView();
+                _this.dealPage.classList.add("hidden");
+                _this.betPage.classList.remove("hidden");
+            });
+            // "RESET" button
+            this.resetBtn.addEventListener("click", function () {
+                _this.betAmount.innerText = String(Table_1.Table.betDenominations[0]); // 5$
+            });
             var _loop_2 = function (d) {
                 document.getElementById("bet-" + d).addEventListener("click", function () {
-                    var total = parseInt(betAmount.innerText) + d;
-                    betAmount.innerText =
-                        total > _this.table.user.money ? betAmount.innerText : String(total);
+                    var total = parseInt(_this.betAmount.innerText) + d;
+                    _this.betAmount.innerText =
+                        total > _this.table.user.money ? _this.betAmount.innerText : String(total);
                 });
             };
-            // betBtn
+            // Coin button
             for (var _a = 0, _b = Table_1.Table.betDenominations; _a < _b.length; _a++) {
                 var d = _b[_a];
                 _loop_2(d);
             }
         };
-        View.prototype.initializeBetPage = function () {
-            document.getElementById("money-amount").innerText = String(this.table.user.money);
-            document.getElementById("bet-amount").innerText = String(this.table.user.betAmount);
-        };
-        View.prototype.initializeDealPage = function () {
-            for (var _i = 0, _a = this.table.players; _i < _a.length; _i++) {
-                var player = _a[_i];
-                document.getElementById(player.type + "-hands").innerHTML = "";
-                document.getElementById(player.type + "-status").innerHTML = "";
-            }
-            this.hide("action-ctrl");
-            document.getElementById("action-buttons").style.visibility = "visible";
-        };
-        View.prototype.renderDistribution = function () {
-            return __awaiter(this, void 0, void 0, function () {
-                var _i, _a, player;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            _i = 0, _a = this.table.players;
-                            _b.label = 1;
-                        case 1:
-                            if (!(_i < _a.length)) return [3 /*break*/, 4];
-                            player = _a[_i];
-                            return [4 /*yield*/, this.sleep(800)];
-                        case 2:
-                            _b.sent();
-                            this.updatePlayerHand(player);
-                            if (player.status === "blackjack")
-                                this.updatePlayerStatus(player);
-                            _b.label = 3;
-                        case 3:
-                            _i++;
-                            return [3 /*break*/, 1];
-                        case 4: return [2 /*return*/];
-                    }
-                });
-            });
-        };
-        View.prototype.afterUserTurn = function () {
+        View.prototype.autoRendering = function () {
             return __awaiter(this, void 0, void 0, function () {
                 var _i, _a, bot;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
-                            document.getElementById("action-buttons").style.visibility = "hidden";
+                            this.actionBtns.style.visibility = "hidden";
                             this.updatePlayerStatus(this.table.user);
-                            _i = 0, _a = this.table.bots;
+                            _i = 0, _a = this.table.players.filter(function (player) { return player instanceof Bot_1.Bot; });
                             _b.label = 1;
                         case 1:
                             if (!(_i < _a.length)) return [3 /*break*/, 4];
@@ -213,8 +211,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             _b.sent();
                             this.table.evaluation();
                             this.updateTurnLog();
-                            this.toString();
-                            document.getElementById("next-btn").classList.remove("disable");
+                            if (this.table.user.isBroke) {
+                                this.table.gameOver();
+                                this.updateTurnLog();
+                            }
+                            else
+                                this.nextBtn.classList.remove("disable");
                             return [2 /*return*/];
                     }
                 });
@@ -231,7 +233,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             handArea.style.width = (player.hand.length + 3) * 28 + "px";
         };
         View.prototype.updatePlayerStatus = function (player) {
-            document.getElementById(player.type + "-status").innerHTML = "" + player.status;
+            if (player.status !== "initial") {
+                document.getElementById(player.type + "-status").innerHTML = "" + player.status;
+            }
         };
         View.prototype.updateTurnLog = function () {
             var target = document.getElementById("game-log");
@@ -244,11 +248,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         View.prototype.sleep = function (time) {
             return new Promise(function (resolve) { return setTimeout(resolve, time); });
         };
-        View.prototype.hide = function (id) {
-            document.getElementById(id).classList.add("hidden");
-        };
-        View.prototype.show = function (id) {
-            document.getElementById(id).classList.remove("hidden");
+        View.prototype.debug = function () {
+            console.log("");
+            console.log("");
+            for (var _i = 0, _a = this.table.players; _i < _a.length; _i++) {
+                var player = _a[_i];
+                console.log(player);
+                console.log(player.hand);
+                console.log("isTurnEnd");
+                console.log(player.isTurnEnd);
+                console.log("handScore");
+                console.log(player.handScore);
+            }
+            console.log(this.table.dealer);
+            console.log(this.table.dealer.hand);
+            console.log("handScore");
+            console.log(this.table.dealer.handScore);
         };
         return View;
     }());

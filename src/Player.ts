@@ -37,6 +37,9 @@ export class Player {
     return this.money < Table.betDenominations[0]; 
   }
 
+  public get canDouble(): boolean {
+    return this.money >= this.betAmount * 2;
+  }
   public getCard(card: Card): void {
     this.hand.push(card);
     if(this.hand.length === 2 && this.isBlackjack) {
@@ -78,14 +81,16 @@ export class Player {
   }
 
   public calculation(result: "win" | "lose"): void {
-    const winAmountMap: {[status: string]: number} = {
+    // const calMap: { [key in Omit<Player["status"], "initial">] : number } = { // error
+    // const calMap: { [key: Omit<Player["status"], "initial">] : number } = { // error
+    const calMap: {[key: string]: number} = {
       surrender: .5,
       bust: -1,
-      doubleBust: -2,
+      doublebust: -2,
       stand: result === "win" ? 1 : -1,
       double: result === "win" ? 2 : -2,
       blackjack: 1.5,
     };
-    this.money += Math.floor(this.betAmount * winAmountMap[this.status]);
+    this.money += Math.floor(this.betAmount * calMap[this.status]);
   }
 }

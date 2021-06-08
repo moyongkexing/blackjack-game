@@ -59,6 +59,13 @@
             enumerable: false,
             configurable: true
         });
+        Object.defineProperty(Player.prototype, "canDouble", {
+            get: function () {
+                return this.money >= this.betAmount * 2;
+            },
+            enumerable: false,
+            configurable: true
+        });
         Player.prototype.getCard = function (card) {
             this.hand.push(card);
             if (this.hand.length === 2 && this.isBlackjack) {
@@ -85,7 +92,7 @@
             this.getCard(card);
             this.status = "double";
             if (this.handScore > 21)
-                this.status = "doubleBust";
+                this.status = "doublebust";
             this.isTurnEnd = true;
         };
         Player.prototype.resetState = function () {
@@ -95,15 +102,17 @@
             this.isTurnEnd = false;
         };
         Player.prototype.calculation = function (result) {
-            var winAmountMap = {
+            // const calMap: { [key in Omit<Player["status"], "initial">] : number } = { // error
+            // const calMap: { [key: Omit<Player["status"], "initial">] : number } = { // error
+            var calMap = {
                 surrender: .5,
                 bust: -1,
-                doubleBust: -2,
+                doublebust: -2,
                 stand: result === "win" ? 1 : -1,
                 double: result === "win" ? 2 : -2,
                 blackjack: 1.5,
             };
-            this.money += Math.floor(this.betAmount * winAmountMap[this.status]);
+            this.money += Math.floor(this.betAmount * calMap[this.status]);
         };
         return Player;
     }());

@@ -55,7 +55,7 @@ export class Dealer {
   
   public resetState(): void {
     this.hand = [];
-    this.status = "stand";
+    this.status = "initial";
     this.isTurnEnd = false;
   }
 }

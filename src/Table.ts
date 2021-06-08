@@ -3,6 +3,7 @@ import { User } from "./User";
 import { Bot } from "./Bot";
 import { Dealer } from "./Dealer";
 import { ActionType } from "./types/ActionType";
+import { Card } from "./Card";
 
 export class Table {
   public static readonly betDenominations = [5,20,50,100];
@@ -10,7 +11,6 @@ export class Table {
 
   public user: User;
   public dealer: Dealer;
-  public bots: Bot[] = [];
   public players: Array<User | Bot | Dealer> = [];
 
   public turnCounter: number = 0;
@@ -21,10 +21,7 @@ export class Table {
 
     this.user = new User(username);
     this.dealer = new Dealer();
-    this.bots = [new Bot("Bot1"), new Bot("Bot2")];
-
-    this.players.push(this.dealer, this.user);
-    this.bots.forEach(bot => this.players.push(bot));
+    this.players.push(this.dealer, this.user, new Bot("Bot1"), new Bot("Bot2"));
   }
 
 // ###########################################################################
@@ -51,7 +48,7 @@ export class Table {
 
   public distribution(): void {
     for(let player of this.players) {
-      if(player instanceof Dealer) player.getCard(this.deck.drawOne());
+      if (player instanceof Dealer) player.getCard(this.deck.drawOne());
       else {
         player.getCard(this.deck.drawOne());
         player.getCard(this.deck.drawOne());
@@ -93,14 +90,16 @@ export class Table {
     let log: string[] = [];
     while(!this.dealer.isTurnEnd) {
       this.dealer.hit(this.deck.drawOne());
-      log.push(`${this.dealer.name} drew a card.`);
+      log.push(`${this.dealer.name} has hit.`);
     }
     this.turnLog.push(log);
   }
 
   public evaluation(): void {
     let log: string[] = [];
-    for(let player of this.players.filter(player => !(player instanceof Dealer)) as Array<User | Bot>) {
+    for(let player of this.players) {
+      if(player instanceof Dealer) continue;
+
       let result: "win" | "lose" | "push" = "push";
       switch(player.status) {
         case "surrender": case "bust": case "doublebust": result = "lose";break; // player loses unconditionally
@@ -112,7 +111,7 @@ export class Table {
       if(result !== "push") player.calculation(result);
       log.push(`${player.name} ${result}. (${exMoney}$ → ${player.money}$)`);
     }
-    this.turnLog.push(log); 
+    this.turnLog.push(log);
   }
   
   public resetTable(): void {
@@ -121,10 +120,16 @@ export class Table {
     this.turnLog = [];
   }
 
+  public gameOver(): void {
+    this.turnLog.push(["Game Over!"]);
+  }
+
   private compareHand(player: User | Bot): "win" | "lose" | "push"{
     if(this.dealer.status === "blackjack") return "lose";
     if(this.dealer.status === "bust") return "win";
     let diff = player.handScore - this.dealer.handScore;
     return diff > 0 ? "win" : diff < 0 ? "lose" : "push";
   }
+
+  
 }
