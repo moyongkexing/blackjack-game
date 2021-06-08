@@ -46,8 +46,10 @@ var __extends = (this && this.__extends) || (function () {
             var actions = Object.keys(strategy);
             for (var _i = 0, actions_1 = actions; _i < actions_1.length; _i++) {
                 var action = actions_1[_i];
-                if (strategy[action].indexOf(this.handScore) !== -1)
-                    return action;
+                if (strategy[action].indexOf(this.handScore) !== -1) {
+                    if (action === "double")
+                        return this.betAmount * 2 <= this.money ? "double" : "hit";
+                }
             }
             return "stand";
         };

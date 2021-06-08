@@ -10,7 +10,7 @@
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.BotStrategies = void 0;
-    // https://www.youtube.com/watch?v=iyfrI0Eqw40
+    // https://www.blackjackinfo.com/16vt-rs-wtf/
     exports.BotStrategies = {
         2: {
             "hit": [3, 4, 5, 6, 7, 8, 9, 12],

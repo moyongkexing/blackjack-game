@@ -19,14 +19,15 @@ export class Bot extends Player {
   }
 
   public makeAction(openCard: Card): ActionType {
-    const strategy = BotStrategies[String(openCard.rankNum)];// src/BotStrategies.ts
+    const strategy = BotStrategies[String(openCard.rankNum)]; // src/BotStrategies.ts
     const actions = Object.keys(strategy) as ActionType[];
     for(let action of actions) {
-      if(strategy[action].indexOf(this.handScore) !== -1) return action;
+      if(strategy[action].indexOf(this.handScore) !== -1) {
+        if(action === "double") return this.betAmount * 2 <= this.money ? "double" : "hit";
+      }
     }
     return "stand";
   }
 }
-
 
 

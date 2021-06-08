@@ -8,6 +8,7 @@ export class Deck {
   public constructor() {
     this.resetDeck();
   }
+
   public resetDeck(): void {
     this.cards = [];
     for(let suit of Deck.suits) {
@@ -17,6 +18,11 @@ export class Deck {
     }
     this.shuffle();
   }
+
+  public drawOne(): Card {
+    return this.cards.pop() as Card;
+  }
+
   private shuffle(): void {
     const len = this.cards.length;
     for(let i = 0; i < len; i++) {
@@ -25,8 +31,5 @@ export class Deck {
       this.cards[i] = this.cards[random];
       this.cards[random] = temp;
     }
-  }
-  public drawOne(): Card {
-    return this.cards.pop() as Card;
   }
 }

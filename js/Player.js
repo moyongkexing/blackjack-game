@@ -27,7 +27,7 @@
                     var card = _a[_i];
                     score += card.rankNum;
                 }
-                // If the score is over 21, subtract 10 if there is an Ace in player's hand (switch rank of A from 11 to 1)
+                // If the score is over 21, subtract 10 if there is an Ace in player's hand (switch rank of Ace from 11 to 1)
                 var i = this.NumAce;
                 while (score > 21 && i > 0) {
                     score -= 10;
@@ -83,22 +83,27 @@
         };
         Player.prototype.double = function (card) {
             this.getCard(card);
-            if (this.handScore > 21) {
+            this.status = "double";
+            if (this.handScore > 21)
                 this.status = "doubleBust";
-                this.isTurnEnd = true;
-            }
-        };
-        Player.prototype.loseMoney = function (amount) {
-            this.money = Math.floor(this.money - amount);
-        };
-        Player.prototype.earnMoney = function (amount) {
-            this.money = Math.floor(this.money + amount);
+            this.isTurnEnd = true;
         };
         Player.prototype.resetState = function () {
             this.hand = [];
             this.betAmount = Table_1.Table.betDenominations[0];
             this.status = "initial";
             this.isTurnEnd = false;
+        };
+        Player.prototype.calculation = function (result) {
+            var winAmountMap = {
+                surrender: .5,
+                bust: -1,
+                doubleBust: -2,
+                stand: result === "win" ? 1 : -1,
+                double: result === "win" ? 2 : -2,
+                blackjack: 1.5,
+            };
+            this.money += Math.floor(this.betAmount * winAmountMap[this.status]);
         };
         return Player;
     }());

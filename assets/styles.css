@@ -202,7 +202,7 @@ main {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  color: rgb(61, 61, 61);
+  opacity: .3;
   pointer-events: none;
   cursor: default;
 }
@@ -302,10 +302,15 @@ div.blue { background: #4cc3fe }
   margin-top: 45px;
 }
 
-#game-log {
+.scroll {
   width: 100%;
   height: 8rem;
   position: absolute;
   bottom: 6rem;
   overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scroll::-webkit-scrollbar {
+  display:none;
 }

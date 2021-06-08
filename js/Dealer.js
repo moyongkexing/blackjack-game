@@ -64,6 +64,10 @@
                 this.isTurnEnd = true;
             }
         };
+        Dealer.prototype.stand = function () {
+            this.status = "stand";
+            this.isTurnEnd = true;
+        };
         Dealer.prototype.hit = function (card) {
             this.getCard(card);
             if (this.handScore > 16) {

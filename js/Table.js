@@ -16,26 +16,28 @@
     var Dealer_1 = require("./Dealer");
     var Table = /** @class */ (function () {
         function Table(username) {
-            this.numBots = 2;
+            var _this = this;
             this.bots = [];
             this.players = [];
-            this.log = [];
+            this.turnCounter = 0;
+            this.turnLog = [];
             this.deck = new Deck_1.Deck();
             this.user = new User_1.User(username);
             this.dealer = new Dealer_1.Dealer();
-            for (var i = 1; i <= this.numBots; i++) {
-                var newBot = new Bot_1.Bot("Bot" + i);
-                this.bots.push(newBot);
-                this.players.push(newBot);
-            }
-            this.players.push(this.user, this.dealer);
+            this.bots = [new Bot_1.Bot("Bot1"), new Bot_1.Bot("Bot2")];
+            this.players.push(this.dealer, this.user);
+            this.bots.forEach(function (bot) { return _this.players.push(bot); });
         }
         // ###########################################################################
-        //  Each public method here is called in ViewController
-        //  bet → distribution → userAct → botAct → dealerAct → evaluation → bet → ...
+        //  Each public method here is called in View class. 
+        //  bet → distribution → userAct → botAct → dealerOpen → dealerAct → evaluation → bet → ...
         // ###########################################################################
         Table.prototype.bet = function (userBetAmount) {
-            var betLog = [];
+            this.turnCounter++;
+            var betLog = [
+                "---------------------------------------------",
+                "Turn " + this.turnCounter + "."
+            ];
             for (var _i = 0, _a = this.players; _i < _a.length; _i++) {
                 var player = _a[_i];
                 if (player instanceof Dealer_1.Dealer)
@@ -44,9 +46,9 @@
                     player.bet(userBetAmount);
                 if (player instanceof Bot_1.Bot)
                     player.bet();
-                betLog.push(player.name + " has bet " + player.betAmount + "$");
+                betLog.push(player.name + " has bet " + player.betAmount + "$.");
             }
-            this.log.push(betLog);
+            this.turnLog.push(betLog);
         };
         Table.prototype.distribution = function () {
             for (var _i = 0, _a = this.players; _i < _a.length; _i++) {
@@ -60,7 +62,6 @@
             }
         };
         Table.prototype.userAct = function (action) {
-            console.log("userAct() is called");
             switch (action) {
                 case "surrender":
                     this.user.surrender();
@@ -75,93 +76,81 @@
                     this.user.double(this.deck.drawOne());
                     break;
             }
-            this.log.push([this.user.name + " has chosen to " + action]);
+            this.turnLog.push([this.user.name + " has chosen to " + action + "."]);
         };
-        Table.prototype.botAct = function () {
-            console.log("botAct() is called");
+        Table.prototype.botAct = function (bot) {
             var botActLog = [];
-            for (var _i = 0, _a = this.bots; _i < _a.length; _i++) {
-                var bot = _a[_i];
-                while (!bot.isTurnEnd) {
-                    var action = bot.makeAction(this.dealer.openCard);
-                    switch (action) {
-                        case "surrender":
-                            bot.surrender();
-                            break;
-                        case "stand":
-                            bot.stand();
-                            break;
-                        case "hit":
-                            bot.hit(this.deck.drawOne());
-                            break;
-                        case "double":
-                            bot.double(this.deck.drawOne());
-                            break;
-                    }
-                    botActLog.push(bot.name + " has chosen to " + action);
-                }
-            }
-            this.log.push(botActLog);
-        };
-        Table.prototype.dealerAct = function () {
-            console.log("dealerAct() is called");
-            this.dealer.getCard(this.deck.drawOne());
-            var dealerActLog = [];
-            while (!this.dealer.isTurnEnd) {
-                this.dealer.hit(this.deck.drawOne());
-                dealerActLog.push(this.dealer.name + " has chosen to hit");
-            }
-            this.log.push(dealerActLog);
-        };
-        Table.prototype.evaluation = function () {
-            console.log("evaluation() is called");
-            for (var _i = 0, _a = this.players.filter(function (player) { return !(player instanceof Dealer_1.Dealer); }); _i < _a.length; _i++) {
-                var player = _a[_i];
-                switch (player.status) {
+            while (!bot.isTurnEnd) {
+                var action = bot.makeAction(this.dealer.openCard);
+                switch (action) {
                     case "surrender":
-                        player.loseMoney(player.betAmount * .5);
-                        break;
-                    case "bust":
-                        player.loseMoney(player.betAmount);
-                        break;
-                    case "doubleBust":
-                        player.loseMoney(player.betAmount * 2);
+                        bot.surrender();
                         break;
                     case "stand":
-                        {
-                            switch (this.dealer.status) {
-                                case "bust":
-                                    player.earnMoney(player.betAmount);
-                                    break;
-                                case "stand":
-                                    this.compareHand(player);
-                                    break;
-                                case "blackjack":
-                                    player.loseMoney(player.betAmount);
-                                    break;
-                                default: break;
-                            }
-                        }
+                        bot.stand();
                         break;
-                    case "blackjack": {
-                        if (this.dealer.status === "blackjack")
-                            break;
-                        else
-                            player.earnMoney(player.betAmount * 1.5);
+                    case "hit":
+                        bot.hit(this.deck.drawOne());
                         break;
-                    }
+                    case "double":
+                        bot.double(this.deck.drawOne());
+                        break;
                 }
+                botActLog.push(bot.name + " has chosen to " + action + ".");
             }
+            this.turnLog.push(botActLog);
         };
-        Table.prototype.compareHand = function (player) {
-            if (player.handScore > this.dealer.handScore)
-                player.earnMoney(player.betAmount);
-            if (player.handScore < this.dealer.handScore)
-                player.loseMoney(player.betAmount);
+        Table.prototype.dealerOpen = function () {
+            this.dealer.hit(this.deck.drawOne());
+            this.turnLog.push([this.dealer.name + " opened the first card."]);
+        };
+        Table.prototype.dealerAct = function () {
+            var log = [];
+            while (!this.dealer.isTurnEnd) {
+                this.dealer.hit(this.deck.drawOne());
+                log.push(this.dealer.name + " drew a card.");
+            }
+            this.turnLog.push(log);
+        };
+        Table.prototype.evaluation = function () {
+            var log = [];
+            for (var _i = 0, _a = this.players.filter(function (player) { return !(player instanceof Dealer_1.Dealer); }); _i < _a.length; _i++) {
+                var player = _a[_i];
+                var result = "push";
+                switch (player.status) {
+                    case "surrender":
+                    case "bust":
+                    case "doubleBust":
+                        result = "lose";
+                        break; // player loses unconditionally
+                    case "blackjack":
+                        if (this.dealer.status !== "blackjack")
+                            result = "win";
+                        break;
+                    case "stand":
+                    case "double":
+                        result = this.compareHand(player);
+                        break;
+                }
+                var exMoney = player.money;
+                if (result !== "push")
+                    player.calculation(result);
+                log.push(player.name + " " + result + ". (" + exMoney + "$ \u2192 " + player.money + "$)");
+            }
+            this.turnLog.push(log);
         };
         Table.prototype.resetTable = function () {
             this.deck.resetDeck();
             this.players.forEach(function (player) { return player.resetState(); });
+            this.turnLog = [];
+        };
+        Table.prototype.compareHand = function (player) {
+            if (this.dealer.status === "blackjack")
+                return "lose";
+            if (this.dealer.status === "bust")
+                return "win";
+            var diff = player.handScore - this.dealer.handScore;
+            return diff > 0 ? "win" : diff < 0 ? "lose" : "push";
         };
         Table.betDenominations = [5, 20, 50, 100];
         return Table;

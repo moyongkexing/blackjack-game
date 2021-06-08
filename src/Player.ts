@@ -6,7 +6,7 @@ export class Player {
   public hand: Card[] = [];
   public money: number = 400;
   public betAmount: number = Table.betDenominations[0];
-  public status: "surrender" | "stand" | "bust" | "doubleBust" | "blackjack" | "initial" = "initial";
+  public status: "surrender" | "stand" | "bust" | "double" | "doubleBust" | "blackjack" | "initial" = "initial";
   public isTurnEnd: boolean = false;
 
   public constructor(username: string) {
@@ -16,7 +16,7 @@ export class Player {
   public get handScore(): number {
     let score = 0;
     for (let card of this.hand) score += card.rankNum;
-    // If the score is over 21, subtract 10 if there is an Ace in player's hand (switch rank of A from 11 to 1)
+    // If the score is over 21, subtract 10 if there is an Ace in player's hand (switch rank of Ace from 11 to 1)
     let i = this.NumAce;
     while (score > 21 && i > 0) {
       score -= 10;
@@ -65,18 +65,9 @@ export class Player {
 
   public double(card: Card): void {
     this.getCard(card);
-    if(this.handScore > 21) {
-      this.status = "doubleBust";
-      this.isTurnEnd = true;
-    } 
-  }
-  
-  public loseMoney(amount: number): void {
-    this.money = Math.floor(this.money - amount);
-  }
-
-  public earnMoney(amount: number): void {
-    this.money = Math.floor(this.money + amount);
+    this.status = "double";
+    if(this.handScore > 21) this.status = "doubleBust";
+    this.isTurnEnd = true;
   }
 
   public resetState(): void {
@@ -85,25 +76,16 @@ export class Player {
     this.status = "initial";
     this.isTurnEnd = false;
   }
+
+  public calculation(result: "win" | "lose"): void {
+    const winAmountMap: {[status: string]: number} = {
+      surrender: .5,
+      bust: -1,
+      doubleBust: -2,
+      stand: result === "win" ? 1 : -1,
+      double: result === "win" ? 2 : -2,
+      blackjack: 1.5,
+    };
+    this.money += Math.floor(this.betAmount * winAmountMap[this.status]);
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

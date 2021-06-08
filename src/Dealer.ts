@@ -39,6 +39,11 @@ export class Dealer {
     } 
   }
 
+  public stand(): void {
+    this.status = "stand";
+    this.isTurnEnd = true;
+  }
+
   public hit(card: Card): void {
     this.getCard(card);
     if(this.handScore > 16) {
