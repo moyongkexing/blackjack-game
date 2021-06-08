@@ -23,6 +23,7 @@ export class View {
     const dealBtn = (document.getElementById("deal-btn") as HTMLElement);
     const nextBtn = (document.getElementById("next-btn") as HTMLButtonElement);
     const doubleBtn = (document.getElementById("double-btn") as HTMLButtonElement);
+    const actionBtns = (document.getElementById("action-buttons") as HTMLElement);
 
     resetBtn.addEventListener("click", () => (betAmount.innerText = String(Table.betDenominations[0])));
     dealBtn.addEventListener("click", async () => {
@@ -35,7 +36,9 @@ export class View {
         this.updateTurnLog();
 
         this.show("action-ctrl");
-        if (this.table.user.money < this.table.user.betAmount * 2) doubleBtn.classList.add("disable");
+        if (this.table.user.money < this.table.user.betAmount * 2) {
+          doubleBtn.classList.add("disable");
+        } 
         if (this.table.user.isTurnEnd) await this.afterUserTurn();
       }
     );
@@ -59,7 +62,10 @@ export class View {
         this.table.userAct(action);
         this.updatePlayerHand(this.table.user);
         this.updateTurnLog();
+        actionBtns.style.visibility = "hidden";
+
         if (this.table.user.isTurnEnd) await this.afterUserTurn();
+        nextBtn.classList.remove("disable");
       });
     }
 
@@ -96,15 +102,12 @@ export class View {
     for (let player of this.table.players) {
       await this.sleep(800);
       this.updatePlayerHand(player);
+      this.updatePlayerStatus(this.table.user);
       if (player.status === "blackjack") this.updatePlayerStatus(player);
     }
   }
 
-  public async afterUserTurn() {
-    (document.getElementById("action-buttons") as HTMLElement).style.visibility = "hidden";
-    
-    this.updatePlayerStatus(this.table.user);
-
+  private async afterUserTurn() {
     for(let bot of this.table.bots) {
       await this.sleep(1000);
       this.table.botAct(bot);
@@ -128,7 +131,6 @@ export class View {
     this.table.evaluation();
     this.updateTurnLog();
     this.toString();
-    (document.getElementById("next-btn") as HTMLButtonElement).classList.remove("disable");
   }
 
   private updatePlayerHand(player: User | Bot | Dealer): void {
@@ -171,21 +173,4 @@ export class View {
   private show(id: string): void {
     (document.getElementById(id) as HTMLElement).classList.remove("hidden");
   }
-
-  // private debug(): void {
-  //   console.log("");
-  //   console.log("");
-  //   for (let player of this.table.players) {
-  //     console.log(player);
-  //     console.log(player.hand);
-  //     console.log("isTurnEnd");
-  //     console.log(player.isTurnEnd);
-  //     console.log("handScore");
-  //     console.log(player.handScore);
-  //   }
-  //   console.log(this.table.dealer);
-  //   console.log(this.table.dealer.hand);
-  //   console.log("handScore");
-  //   console.log(this.table.dealer.handScore);
-  // }
 }
