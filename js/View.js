@@ -90,6 +90,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             this.betPage.classList.add("hidden");
                             this.dealPage.classList.remove("hidden");
                             this.nextBtn.classList.add("disable");
+                            this.makeChipButtonClickable();
                             this.table.bet(parseInt(this.betAmount.innerText)); // assign the argument value to User.betAmount
                             this.table.distribution(); // assing two cards to all players (dealer get only one card as exception)
                             _i = 0, _a = this.table.players;
@@ -155,18 +156,25 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             // "RESET" button
             this.resetBtn.addEventListener("click", function () {
                 _this.betAmount.innerText = String(Table_1.Table.betDenominations[0]); // 5$
+                _this.makeChipButtonClickable();
             });
-            var _loop_2 = function (d) {
-                document.getElementById("bet-" + d).addEventListener("click", function () {
-                    var total = parseInt(_this.betAmount.innerText) + d;
-                    _this.betAmount.innerText =
-                        total > _this.table.user.money ? _this.betAmount.innerText : String(total);
+            var _loop_2 = function (i) {
+                var chipBtn = document.getElementById("bet-" + Table_1.Table.betDenominations[i]);
+                chipBtn.addEventListener("click", function () {
+                    var total = parseInt(_this.betAmount.innerText) + Table_1.Table.betDenominations[i];
+                    if (total + Table_1.Table.betDenominations[i] > _this.table.user.money) {
+                        for (var j = i; j < Table_1.Table.betDenominations.length; j++) {
+                            var unclickableBtn = document.getElementById("bet-" + Table_1.Table.betDenominations[j]);
+                            unclickableBtn.classList.add("disable");
+                        }
+                    }
+                    if (total <= _this.table.user.money)
+                        _this.betAmount.innerText = String(total);
                 });
             };
-            // Coin button
-            for (var _a = 0, _b = Table_1.Table.betDenominations; _a < _b.length; _a++) {
-                var d = _b[_a];
-                _loop_2(d);
+            // Chip button
+            for (var i = 0; i < Table_1.Table.betDenominations.length; i++) {
+                _loop_2(i);
             }
         };
         View.prototype.autoRendering = function () {
@@ -247,6 +255,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         };
         View.prototype.sleep = function (time) {
             return new Promise(function (resolve) { return setTimeout(resolve, time); });
+        };
+        View.prototype.makeChipButtonClickable = function () {
+            for (var _i = 0, _a = Table_1.Table.betDenominations; _i < _a.length; _i++) {
+                var d = _a[_i];
+                var chipBtn = document.getElementById("bet-" + d);
+                chipBtn.classList.remove("disable");
+            }
         };
         return View;
     }());

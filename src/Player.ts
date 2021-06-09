@@ -82,9 +82,9 @@ export class Player {
 
   public calculation(result: "win" | "lose"): void {
     // const calMap: { [key in Omit<Player["status"], "initial">] : number } = { // error
-    // const calMap: { [key: Omit<Player["status"], "initial">] : number } = { // error
+    // const calMap: { [key: Omit<Player["status"], "initial">] : number } = { // error...
     const calMap: {[key: string]: number} = {
-      surrender: .5,
+      surrender: -0.5,
       bust: -1,
       doublebust: -2,
       stand: result === "win" ? 1 : -1,

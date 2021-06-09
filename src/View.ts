@@ -50,6 +50,7 @@ export class View {
       this.betPage.classList.add("hidden");
       this.dealPage.classList.remove("hidden");
       this.nextBtn.classList.add("disable");
+      this.makeChipButtonClickable();
 
       this.table.bet(parseInt(this.betAmount.innerText)); // assign the argument value to User.betAmount
       this.table.distribution(); // assing two cards to all players (dealer get only one card as exception)
@@ -92,16 +93,22 @@ export class View {
     // "RESET" button
     this.resetBtn.addEventListener("click", () => {
       this.betAmount.innerText = String(Table.betDenominations[0]); // 5$
+      this.makeChipButtonClickable();
     });
     
 
-    // Coin button
-    for (let d of Table.betDenominations) {
-      (document.getElementById(`bet-${d}`) as HTMLElement).addEventListener
-      ("click", () => {
-          const total: number = parseInt(this.betAmount.innerText) + d;
-          this.betAmount.innerText =
-            total > this.table.user.money ? this.betAmount.innerText : String(total);
+    // Chip button
+    for (let i = 0; i < Table.betDenominations.length; i++) {
+      let chipBtn = document.getElementById(`bet-${Table.betDenominations[i]}`) as HTMLElement;
+      chipBtn.addEventListener("click", () => {
+        const total: number = parseInt(this.betAmount.innerText) + Table.betDenominations[i];
+        if(total + Table.betDenominations[i] > this.table.user.money) {
+          for(let j = i; j < Table.betDenominations.length; j++) {
+            let unclickableBtn = document.getElementById(`bet-${Table.betDenominations[j]}`) as HTMLElement;
+            unclickableBtn.classList.add("disable");
+          }
+        }
+        if(total <= this.table.user.money) this.betAmount.innerText = String(total);
       });
     }
   }
@@ -174,6 +181,13 @@ export class View {
 
   private sleep(time: number) {
     return new Promise(resolve => setTimeout(resolve, time));
+  }
+
+  private makeChipButtonClickable(): void {
+    for (let d of Table.betDenominations) {
+      let chipBtn = document.getElementById(`bet-${d}`) as HTMLElement;
+      chipBtn.classList.remove("disable");
+    }
   }
 
   // private debug(): void {
