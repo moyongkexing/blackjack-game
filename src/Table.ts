@@ -3,7 +3,6 @@ import { User } from "./User";
 import { Bot } from "./Bot";
 import { Dealer } from "./Dealer";
 import { ActionType } from "./types/ActionType";
-import { Card } from "./Card";
 
 export class Table {
   public static readonly betDenominations = [5,20,50,100];
