@@ -60,22 +60,22 @@
         Dealer.prototype.getCard = function (card) {
             this.hand.push(card);
             if (this.hand.length === 2 && this.isBlackjack) {
-                this.status = "blackjack";
+                this.status = "Blackjack";
                 this.isTurnEnd = true;
             }
         };
         Dealer.prototype.stand = function () {
-            this.status = "stand";
+            this.status = "Stand";
             this.isTurnEnd = true;
         };
         Dealer.prototype.hit = function (card) {
             this.getCard(card);
             if (this.handScore > 16) {
-                this.status = "stand";
+                this.status = "Stand";
                 this.isTurnEnd = true;
             }
             if (this.handScore > 21)
-                this.status = "bust";
+                this.status = "Bust";
         };
         Dealer.prototype.resetState = function () {
             this.hand = [];

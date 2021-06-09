@@ -69,30 +69,30 @@
         Player.prototype.getCard = function (card) {
             this.hand.push(card);
             if (this.hand.length === 2 && this.isBlackjack) {
-                this.status = "blackjack";
+                this.status = "Blackjack";
                 this.isTurnEnd = true;
             }
         };
         Player.prototype.surrender = function () {
-            this.status = "surrender";
+            this.status = "Surrender";
             this.isTurnEnd = true;
         };
         Player.prototype.stand = function () {
-            this.status = "stand";
+            this.status = "Stand";
             this.isTurnEnd = true;
         };
         Player.prototype.hit = function (card) {
             this.getCard(card);
             if (this.handScore > 21) {
-                this.status = "bust";
+                this.status = "Bust";
                 this.isTurnEnd = true;
             }
         };
         Player.prototype.double = function (card) {
             this.getCard(card);
-            this.status = "double";
+            this.status = "Double";
             if (this.handScore > 21)
-                this.status = "doublebust";
+                this.status = "Doublebust";
             this.isTurnEnd = true;
         };
         Player.prototype.resetState = function () {
@@ -105,12 +105,12 @@
             // const calMap: { [key in Omit<Player["status"], "initial">] : number } = { // error
             // const calMap: { [key: Omit<Player["status"], "initial">] : number } = { // error...
             var calMap = {
-                surrender: -0.5,
-                bust: -1,
-                doublebust: -2,
-                stand: result === "win" ? 1 : -1,
-                double: result === "win" ? 2 : -2,
-                blackjack: 1.5,
+                Surrender: -0.5,
+                Bust: -1,
+                Doublebust: -2,
+                Stand: result === "win" ? 1 : -1,
+                Double: result === "win" ? 2 : -2,
+                Blackjack: 1.5,
             };
             this.money += Math.floor(this.betAmount * calMap[this.status]);
         };

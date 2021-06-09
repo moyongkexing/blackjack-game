@@ -4,7 +4,7 @@ export class Dealer {
   public type: string = "DEALER";
   public name: string = "Dealer";
   public hand: Card[] = [];
-  public status: "bust" | "blackjack" | "stand" | "initial" = "initial";
+  public status: "Bust" | "Blackjack" | "Stand" | "initial" = "initial";
   public isTurnEnd: boolean = false;
 
   public get openCard(): Card {
@@ -34,23 +34,23 @@ export class Dealer {
   public getCard(card: Card): void {
     this.hand.push(card);
     if(this.hand.length === 2 && this.isBlackjack) {
-      this.status = "blackjack";
+      this.status = "Blackjack";
       this.isTurnEnd = true;
     } 
   }
 
   public stand(): void {
-    this.status = "stand";
+    this.status = "Stand";
     this.isTurnEnd = true;
   }
 
   public hit(card: Card): void {
     this.getCard(card);
     if(this.handScore > 16) {
-      this.status = "stand";
+      this.status = "Stand";
       this.isTurnEnd = true;
     }
-    if(this.handScore > 21) this.status = "bust";
+    if(this.handScore > 21) this.status = "Bust";
   }
   
   public resetState(): void {

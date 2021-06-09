@@ -35,7 +35,7 @@ var __extends = (this && this.__extends) || (function () {
             _this.type = username.toUpperCase();
             return _this;
         }
-        Bot.prototype.bet = function () {
+        Bot.prototype.makeBet = function () {
             var randomIndex = Math.floor(Math.random() * 3);
             this.betAmount = this.money >= Table_1.Table.betDenominations[3] * 3 // betDenominations = [5,20,50,100];
                 ? Table_1.Table.betDenominations[Table_1.Table.betDenominations.length - 1]

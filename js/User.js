@@ -33,7 +33,7 @@ var __extends = (this && this.__extends) || (function () {
             _this.type = "USER";
             return _this;
         }
-        User.prototype.bet = function (userBetAmount) {
+        User.prototype.makeBet = function (userBetAmount) {
             this.betAmount = userBetAmount;
         };
         return User;

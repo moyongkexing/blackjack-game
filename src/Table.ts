@@ -56,6 +56,7 @@ export class Table {
   }
 
   public userAct(action: ActionType): void {
+    if(this.user.isTurnEnd) return;
     switch(action) {
       case "surrender": this.user.surrender();break;
       case "stand": this.user.stand();break;
@@ -101,9 +102,9 @@ export class Table {
 
       let result: "win" | "lose" | "push" = "push";
       switch(player.status) {
-        case "surrender": case "bust": case "doublebust": result = "lose";break; // player loses unconditionally
-        case "blackjack": if(this.dealer.status !== "blackjack") result = "win";break;
-        case "stand": case "double": result = this.compareHand(player);break;
+        case "Surrender": case "Bust": case "Doublebust": result = "lose";break; // player loses unconditionally
+        case "Blackjack": if(this.dealer.status !== "Blackjack") result = "win";break;
+        case "Stand": case "Double": result = this.compareHand(player);break;
       }
 
       const exMoney = player.money;
@@ -124,8 +125,8 @@ export class Table {
   }
 
   private compareHand(player: User | Bot): "win" | "lose" | "push"{
-    if(this.dealer.status === "blackjack") return "lose";
-    if(this.dealer.status === "bust") return "win";
+    if(this.dealer.status === "Blackjack") return "lose";
+    if(this.dealer.status === "Bust") return "win";
     let diff = player.handScore - this.dealer.handScore;
     return diff > 0 ? "win" : diff < 0 ? "lose" : "push";
   }

@@ -6,7 +6,7 @@ export class Player {
   public hand: Card[] = [];
   public money: number = 400;
   public betAmount: number = Table.betDenominations[0];
-  public status: "surrender" | "stand" | "bust" | "double" | "doublebust" | "blackjack" | "initial" = "initial";
+  public status: "Surrender" | "Stand" | "Bust" | "Double" | "Doublebust" | "Blackjack" | "initial" = "initial";
   public isTurnEnd: boolean = false;
 
   public constructor(username: string) {
@@ -43,33 +43,33 @@ export class Player {
   public getCard(card: Card): void {
     this.hand.push(card);
     if(this.hand.length === 2 && this.isBlackjack) {
-      this.status = "blackjack";
+      this.status = "Blackjack";
       this.isTurnEnd = true;
     }
   }
   
   public surrender(): void {
-    this.status = "surrender";
+    this.status = "Surrender";
     this.isTurnEnd = true;
   }
 
   public stand(): void {
-    this.status = "stand";
+    this.status = "Stand";
     this.isTurnEnd = true;
   }
 
   public hit(card: Card): void {
     this.getCard(card);
     if(this.handScore > 21) {
-      this.status = "bust";
+      this.status = "Bust";
       this.isTurnEnd = true;
     } 
   }
 
   public double(card: Card): void {
     this.getCard(card);
-    this.status = "double";
-    if(this.handScore > 21) this.status = "doublebust";
+    this.status = "Double";
+    if(this.handScore > 21) this.status = "Doublebust";
     this.isTurnEnd = true;
   }
 
@@ -84,12 +84,12 @@ export class Player {
     // const calMap: { [key in Omit<Player["status"], "initial">] : number } = { // error
     // const calMap: { [key: Omit<Player["status"], "initial">] : number } = { // error...
     const calMap: {[key: string]: number} = {
-      surrender: -0.5,
-      bust: -1,
-      doublebust: -2,
-      stand: result === "win" ? 1 : -1,
-      double: result === "win" ? 2 : -2,
-      blackjack: 1.5,
+      Surrender: -0.5,
+      Bust: -1,
+      Doublebust: -2,
+      Stand: result === "win" ? 1 : -1,
+      Double: result === "win" ? 2 : -2,
+      Blackjack: 1.5,
     };
     this.money += Math.floor(this.betAmount * calMap[this.status]);
   }

@@ -39,9 +39,9 @@
                 if (player instanceof Dealer_1.Dealer)
                     continue;
                 if (player instanceof User_1.User)
-                    player.bet(userBetAmount);
+                    player.makeBet(userBetAmount);
                 if (player instanceof Bot_1.Bot)
-                    player.bet();
+                    player.makeBet();
                 betLog.push(player.name + " has bet " + player.betAmount + "$.");
             }
             this.turnLog.push(betLog);
@@ -58,6 +58,8 @@
             }
         };
         Table.prototype.userAct = function (action) {
+            if (this.user.isTurnEnd)
+                return;
             switch (action) {
                 case "surrender":
                     this.user.surrender();
@@ -116,17 +118,17 @@
                     continue;
                 var result = "push";
                 switch (player.status) {
-                    case "surrender":
-                    case "bust":
-                    case "doublebust":
+                    case "Surrender":
+                    case "Bust":
+                    case "Doublebust":
                         result = "lose";
                         break; // player loses unconditionally
-                    case "blackjack":
-                        if (this.dealer.status !== "blackjack")
+                    case "Blackjack":
+                        if (this.dealer.status !== "Blackjack")
                             result = "win";
                         break;
-                    case "stand":
-                    case "double":
+                    case "Stand":
+                    case "Double":
                         result = this.compareHand(player);
                         break;
                 }
@@ -146,9 +148,9 @@
             this.turnLog.push(["Game Over!"]);
         };
         Table.prototype.compareHand = function (player) {
-            if (this.dealer.status === "blackjack")
+            if (this.dealer.status === "Blackjack")
                 return "lose";
-            if (this.dealer.status === "bust")
+            if (this.dealer.status === "Bust")
                 return "win";
             var diff = player.handScore - this.dealer.handScore;
             return diff > 0 ? "win" : diff < 0 ? "lose" : "push";
