@@ -11,7 +11,7 @@ export class Bot extends Player {
     this.type = username.toUpperCase();
   }
   
-  public bet(): void {
+  public makeBet(): void {
     const randomIndex = Math.floor(Math.random() * 3);
     this.betAmount = this.money >= Table.betDenominations[3] * 3 // betDenominations = [5,20,50,100];
     ? Table.betDenominations[Table.betDenominations.length - 1]

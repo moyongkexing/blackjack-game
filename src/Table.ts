@@ -38,8 +38,8 @@ export class Table {
 
     for(let player of this.players) {
       if(player instanceof Dealer) continue;
-      if(player instanceof User) player.bet(userBetAmount);
-      if(player instanceof Bot) player.bet();
+      if(player instanceof User) player.makeBet(userBetAmount);
+      if(player instanceof Bot) player.makeBet();
       betLog.push(`${player.name} has bet ${player.betAmount}$.`);
     }
     this.turnLog.push(betLog);
