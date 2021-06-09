@@ -89,6 +89,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         case 0:
                             this.betPage.classList.add("hidden");
                             this.dealPage.classList.remove("hidden");
+                            this.nextBtn.classList.add("disable");
                             this.table.bet(parseInt(this.betAmount.innerText)); // assign the argument value to User.betAmount
                             this.table.distribution(); // assing two cards to all players (dealer get only one card as exception)
                             _i = 0, _a = this.table.players;

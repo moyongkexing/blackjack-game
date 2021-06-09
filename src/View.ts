@@ -49,6 +49,7 @@ export class View {
     this.dealBtn.addEventListener("click", async () => {
       this.betPage.classList.add("hidden");
       this.dealPage.classList.remove("hidden");
+      this.nextBtn.classList.add("disable");
 
       this.table.bet(parseInt(this.betAmount.innerText)); // assign the argument value to User.betAmount
       this.table.distribution(); // assing two cards to all players (dealer get only one card as exception)
