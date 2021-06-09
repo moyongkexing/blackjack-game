@@ -21,6 +21,7 @@ https://blackjack-game-oop.vercel.app/
 ```
 $ git clone https://github.com/moyongkexing/clicker-empire-game.git
 $ cd clicker-empire-game
+$ npm i
 $ npx tsc -w
 ```
 
