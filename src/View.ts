@@ -4,7 +4,6 @@ import { User } from "./User";
 import { Bot } from "./Bot";
 import { Dealer } from "./Dealer";
 
-
 export class View {
   private table: Table;
   
