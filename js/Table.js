@@ -24,10 +24,10 @@
             this.dealer = new Dealer_1.Dealer();
             this.players.push(this.dealer, this.user, new Bot_1.Bot("Bot1"), new Bot_1.Bot("Bot2"));
         }
-        // ###########################################################################
-        //  Each public method here is called in View class. 
+        // ######################################
+        //  Each public method here is called in View class
         //  bet → distribution → userAct → botAct → dealerOpen → dealerAct → evaluation → bet → ...
-        // ###########################################################################
+        // ######################################
         Table.prototype.bet = function (userBetAmount) {
             this.turnCounter++;
             var betLog = [
@@ -118,11 +118,12 @@
                     continue;
                 var result = "push";
                 switch (player.status) {
+                    // player loses unconditionally
                     case "Surrender":
                     case "Bust":
                     case "Doublebust":
                         result = "lose";
-                        break; // player loses unconditionally
+                        break;
                     case "Blackjack":
                         if (this.dealer.status !== "Blackjack")
                             result = "win";
@@ -142,7 +143,6 @@
         Table.prototype.resetTable = function () {
             this.deck.resetDeck();
             this.players.forEach(function (player) { return player.resetState(); });
-            this.turnLog = [];
         };
         Table.prototype.gameOver = function () {
             this.turnLog.push(["Game Over!"]);

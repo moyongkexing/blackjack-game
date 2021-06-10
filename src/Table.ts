@@ -23,12 +23,11 @@ export class Table {
     this.players.push(this.dealer, this.user, new Bot("Bot1"), new Bot("Bot2"));
   }
 
-// ###########################################################################
-//  Each public method here is called in View class. 
+// ######################################
+//  Each public method here is called in View class
 //  bet → distribution → userAct → botAct → dealerOpen → dealerAct → evaluation → bet → ...
-// ###########################################################################
+// ######################################
 
-  
   public bet(userBetAmount: number): void {
     this.turnCounter++;
     let betLog = [
@@ -102,7 +101,8 @@ export class Table {
 
       let result: "win" | "lose" | "push" = "push";
       switch(player.status) {
-        case "Surrender": case "Bust": case "Doublebust": result = "lose";break; // player loses unconditionally
+        // player loses unconditionally
+        case "Surrender": case "Bust": case "Doublebust": result = "lose";break; 
         case "Blackjack": if(this.dealer.status !== "Blackjack") result = "win";break;
         case "Stand": case "Double": result = this.compareHand(player);break;
       }
@@ -117,7 +117,6 @@ export class Table {
   public resetTable(): void {
     this.deck.resetDeck();
     this.players.forEach(player => player.resetState());
-    this.turnLog = [];
   }
 
   public gameOver(): void {
