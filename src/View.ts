@@ -22,6 +22,7 @@ export class View {
   private actionBtns = document.getElementById("action-buttons") as HTMLElement;
   private doubleBtn = document.getElementById("double-btn") as HTMLButtonElement;
   private nextBtn = document.getElementById("next-btn") as HTMLButtonElement;
+  private gameLog = (document.getElementById("game-log") as HTMLElement);
 
   public constructor() {
     this.table = new Table(this.usernameInput.value);
@@ -50,20 +51,28 @@ export class View {
       this.betPage.classList.add("hidden");
       this.dealPage.classList.remove("hidden");
       this.nextBtn.classList.add("disable");
-      this.makeChipButtonClickable();
 
-      this.table.bet(parseInt(this.betAmount.innerText)); // assign the argument value to User.betAmount
-      this.table.distribution(); // assing two cards to all players (dealer get only one card as exception)
+      // assign the argument value to User.betAmount
+      this.table.bet(parseInt(this.betAmount.innerText)); 
+      // assign two cards to all players (dealer get only one card as exception)
+      this.table.distribution(); 
 
       for(let player of this.table.players) {
         await this.sleep(1000);
-        this.updatePlayerHand(player); // draw the player's hand in the view
-        this.updatePlayerStatus(player); // in the case of player is blackjack, draw the status in the view
+        // draw the player's hand in the view
+        this.updatePlayerHand(player); 
+        // in the case of player is blackjack, draw the status in the view
+        this.updatePlayerStatus(player); 
       };
-      this.updateTurnLog();
+      // ex: "BOT1 has bet 100$."
+      this.updateTurnLog(); 
 
-      this.actionBtns.style.visibility = "visible"; // display operation screen for User
+      // display operation screen for user
+      this.actionBtns.style.visibility = "visible";
+      // user who has bet more than half of total money cannot double
       if(!this.table.user.canDouble) this.doubleBtn.classList.add("disable");
+      else this.doubleBtn.classList.remove("disable");
+      // if user is blackjack, end the turn and let the bots and dealers act
       if(this.table.user.isTurnEnd) await this.autoRendering();
     });
 
@@ -74,17 +83,17 @@ export class View {
       ).addEventListener("click", async () => {
         this.table.userAct(action);
         this.updatePlayerHand(this.table.user);
+        // ex: "user has chosen to stand."
         this.updateTurnLog();
-
-        if (this.table.user.isTurnEnd) await this.autoRendering();
+        if(this.table.user.isTurnEnd) await this.autoRendering();
       });
     }
     
     // "Next Game" button
     this.nextBtn.addEventListener("click", () => {
       this.table.resetTable();
-
       this.initializeView();
+      this.makeChipButtonClickable();
     
       this.dealPage.classList.add("hidden");
       this.betPage.classList.remove("hidden");
@@ -118,7 +127,10 @@ export class View {
 
     this.updatePlayerStatus(this.table.user);
 
-    for(let bot of this.table.players.filter(player => player instanceof Bot) as Bot[]) {
+    for(let bot of this.table.players) {
+      if(bot instanceof User) continue;
+      if(bot instanceof Dealer) continue;
+
       await this.sleep(1000);
       this.table.botAct(bot);
       this.updatePlayerHand(bot);
@@ -172,11 +184,10 @@ export class View {
   }
 
   private updateTurnLog(): void {
-    const target = (document.getElementById("game-log") as HTMLElement);
-    for(let sentence of this.table.turnLog[this.table.turnLog.length - 1]) {
-      target.innerHTML += `<p>${sentence}</p>`;
+    for(let sentence of this.table.turnLog.pop() as string[]) {
+      this.gameLog.innerHTML += `<p>${sentence}</p>`;
     }
-    target.scrollTop = target.scrollHeight;
+    this.gameLog.scrollTop = this.gameLog.scrollHeight;
   }
 
   private sleep(time: number) {

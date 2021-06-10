@@ -40,14 +40,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Table", "./Bot"], factory);
+        define(["require", "exports", "./Table", "./User", "./Dealer"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.View = void 0;
     var Table_1 = require("./Table");
-    var Bot_1 = require("./Bot");
+    var User_1 = require("./User");
+    var Dealer_1 = require("./Dealer");
     var View = /** @class */ (function () {
         function View() {
             this.startPage = document.getElementById("start-page");
@@ -62,6 +63,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             this.actionBtns = document.getElementById("action-buttons");
             this.doubleBtn = document.getElementById("double-btn");
             this.nextBtn = document.getElementById("next-btn");
+            this.gameLog = document.getElementById("game-log");
             this.table = new Table_1.Table(this.usernameInput.value);
             this.initializeView();
             this.initializeController();
@@ -90,9 +92,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             this.betPage.classList.add("hidden");
                             this.dealPage.classList.remove("hidden");
                             this.nextBtn.classList.add("disable");
-                            this.makeChipButtonClickable();
-                            this.table.bet(parseInt(this.betAmount.innerText)); // assign the argument value to User.betAmount
-                            this.table.distribution(); // assing two cards to all players (dealer get only one card as exception)
+                            // assign the argument value to User.betAmount
+                            this.table.bet(parseInt(this.betAmount.innerText));
+                            // assign two cards to all players (dealer get only one card as exception)
+                            this.table.distribution();
                             _i = 0, _a = this.table.players;
                             _b.label = 1;
                         case 1:
@@ -101,18 +104,25 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             return [4 /*yield*/, this.sleep(1000)];
                         case 2:
                             _b.sent();
-                            this.updatePlayerHand(player); // draw the player's hand in the view
-                            this.updatePlayerStatus(player); // in the case of player is blackjack, draw the status in the view
+                            // draw the player's hand in the view
+                            this.updatePlayerHand(player);
+                            // in the case of player is blackjack, draw the status in the view
+                            this.updatePlayerStatus(player);
                             _b.label = 3;
                         case 3:
                             _i++;
                             return [3 /*break*/, 1];
                         case 4:
                             ;
+                            // ex: "BOT1 has bet 100$."
                             this.updateTurnLog();
-                            this.actionBtns.style.visibility = "visible"; // display operation screen for User
+                            // display operation screen for user
+                            this.actionBtns.style.visibility = "visible";
+                            // user who has bet more than half of total money cannot double
                             if (!this.table.user.canDouble)
                                 this.doubleBtn.classList.add("disable");
+                            else
+                                this.doubleBtn.classList.remove("disable");
                             if (!this.table.user.isTurnEnd) return [3 /*break*/, 6];
                             return [4 /*yield*/, this.autoRendering()];
                         case 5:
@@ -131,6 +141,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             case 0:
                                 this.table.userAct(action);
                                 this.updatePlayerHand(this.table.user);
+                                // ex: "user has chosen to stand."
                                 this.updateTurnLog();
                                 if (!this.table.user.isTurnEnd) return [3 /*break*/, 2];
                                 return [4 /*yield*/, this.autoRendering()];
@@ -150,6 +161,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             this.nextBtn.addEventListener("click", function () {
                 _this.table.resetTable();
                 _this.initializeView();
+                _this.makeChipButtonClickable();
                 _this.dealPage.classList.add("hidden");
                 _this.betPage.classList.remove("hidden");
             });
@@ -185,11 +197,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         case 0:
                             this.actionBtns.style.visibility = "hidden";
                             this.updatePlayerStatus(this.table.user);
-                            _i = 0, _a = this.table.players.filter(function (player) { return player instanceof Bot_1.Bot; });
+                            _i = 0, _a = this.table.players;
                             _b.label = 1;
                         case 1:
                             if (!(_i < _a.length)) return [3 /*break*/, 4];
                             bot = _a[_i];
+                            if (bot instanceof User_1.User)
+                                return [3 /*break*/, 3];
+                            if (bot instanceof Dealer_1.Dealer)
+                                return [3 /*break*/, 3];
                             return [4 /*yield*/, this.sleep(1000)];
                         case 2:
                             _b.sent();
@@ -246,12 +262,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             }
         };
         View.prototype.updateTurnLog = function () {
-            var target = document.getElementById("game-log");
-            for (var _i = 0, _a = this.table.turnLog[this.table.turnLog.length - 1]; _i < _a.length; _i++) {
+            for (var _i = 0, _a = this.table.turnLog.pop(); _i < _a.length; _i++) {
                 var sentence = _a[_i];
-                target.innerHTML += "<p>" + sentence + "</p>";
+                this.gameLog.innerHTML += "<p>" + sentence + "</p>";
             }
-            target.scrollTop = target.scrollHeight;
+            this.gameLog.scrollTop = this.gameLog.scrollHeight;
         };
         View.prototype.sleep = function (time) {
             return new Promise(function (resolve) { return setTimeout(resolve, time); });
