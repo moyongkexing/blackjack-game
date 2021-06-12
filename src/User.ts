@@ -6,7 +6,7 @@ export class User extends Player {
     super(username);
   }
   
-  public makeBet(userBetAmount: number): void {
+  public makeBet(userBetAmount: Player["betAmount"]): void {
     this.betAmount = userBetAmount;
   }
 }

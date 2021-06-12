@@ -13,6 +13,8 @@ export abstract class Player {
     this.name = username;
   }
 
+  abstract makeBet(arg: Player["betAmount"] | null): void;
+
   public get handScore(): number {
     let score = 0;
     for (let card of this.hand) score += card.rankNum;
@@ -40,6 +42,7 @@ export abstract class Player {
   public get canDouble(): boolean {
     return this.money >= this.betAmount * 2;
   }
+
   public getCard(card: Card): void {
     this.hand.push(card);
     if(this.hand.length === 2 && this.isBlackjack) {
