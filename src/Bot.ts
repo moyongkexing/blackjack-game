@@ -23,6 +23,7 @@ export class Bot extends Player {
     const actions = Object.keys(strategy) as ActionType[];
     for(let action of actions) {
       if(strategy[action].indexOf(this.handScore) !== -1) {
+        // If bot doesn't have enough money, choose to hit instead of double
         if(action === "double") return this.betAmount * 2 <= this.money ? "double" : "hit";
       }
     }
