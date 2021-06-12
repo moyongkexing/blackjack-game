@@ -1,7 +1,7 @@
 import { Card } from "./Card";
 import { Table } from "./Table";
 
-export class Player {
+export abstract class Player {
   public name: string;
   public hand: Card[] = [];
   public money: number = 400;
