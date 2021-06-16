@@ -4,7 +4,7 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Deck", "./User", "./Bot", "./Dealer", "./types/StatusType"], factory);
+        define(["require", "exports", "./Deck", "./User", "./Bot", "./Dealer", "./types/ActionType", "./types/StatusType"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -14,6 +14,7 @@
     var User_1 = require("./User");
     var Bot_1 = require("./Bot");
     var Dealer_1 = require("./Dealer");
+    var ActionType_1 = require("./types/ActionType");
     var StatusType_1 = require("./types/StatusType");
     var Table = /** @class */ (function () {
         function Table(username) {
@@ -62,16 +63,16 @@
             if (this.user.isTurnEnd)
                 return;
             switch (action) {
-                case "surrender":
+                case ActionType_1.Action.SURRENDER:
                     this.user.surrender();
                     break;
-                case "stand":
+                case ActionType_1.Action.STAND:
                     this.user.stand();
                     break;
-                case "hit":
+                case ActionType_1.Action.HIT:
                     this.user.hit(this.deck.drawOne());
                     break;
-                case "double":
+                case ActionType_1.Action.DOUBLE:
                     this.user.double(this.deck.drawOne());
                     break;
             }
@@ -82,16 +83,16 @@
             while (!bot.isTurnEnd) {
                 var action = bot.makeAction(this.dealer.openCard);
                 switch (action) {
-                    case "surrender":
+                    case ActionType_1.Action.SURRENDER:
                         bot.surrender();
                         break;
-                    case "stand":
+                    case ActionType_1.Action.STAND:
                         bot.stand();
                         break;
-                    case "hit":
+                    case ActionType_1.Action.HIT:
                         bot.hit(this.deck.drawOne());
                         break;
-                    case "double":
+                    case ActionType_1.Action.DOUBLE:
                         bot.double(this.deck.drawOne());
                         break;
                 }

@@ -2,7 +2,7 @@ import { Deck } from "./Deck";
 import { User } from "./User";
 import { Bot } from "./Bot";
 import { Dealer } from "./Dealer";
-import { ActionType } from "./types/ActionType";
+import { Action } from "./types/ActionType";
 import { PlayerStatus, DealerStatus } from "./types/StatusType";
 
 export class Table {
@@ -55,13 +55,13 @@ export class Table {
     }
   }
 
-  public userAct(action: ActionType): void {
+  public userAct(action: Action): void {
     if(this.user.isTurnEnd) return;
     switch(action) {
-      case "surrender": this.user.surrender();break;
-      case "stand": this.user.stand();break;
-      case "hit": this.user.hit(this.deck.drawOne());break;
-      case "double": this.user.double(this.deck.drawOne());break;
+      case Action.SURRENDER: this.user.surrender();break;
+      case Action.STAND: this.user.stand();break;
+      case Action.HIT: this.user.hit(this.deck.drawOne());break;
+      case Action.DOUBLE: this.user.double(this.deck.drawOne());break;
     }
     this.turnLog.push([`${this.user.name} has chosen to ${action}.`]);
   }
@@ -71,10 +71,10 @@ export class Table {
     while(!bot.isTurnEnd) {
       let action = bot.makeAction(this.dealer.openCard);
       switch(action) {
-        case "surrender": bot.surrender();break;
-        case "stand": bot.stand();break;
-        case "hit": bot.hit(this.deck.drawOne());break;
-        case "double": bot.double(this.deck.drawOne());break;
+        case Action.SURRENDER: bot.surrender();break;
+        case Action.STAND: bot.stand();break;
+        case Action.HIT: bot.hit(this.deck.drawOne());break;
+        case Action.DOUBLE: bot.double(this.deck.drawOne());break;
       }
       botActLog.push(`${bot.name} has chosen to ${action}.`);
     }

@@ -1,1 +1,6 @@
-export type ActionType = "surrender" | "stand" | "hit" | "double";
+export enum Action {
+  SURRENDER = "Surrender",
+  STAND = "Stand",
+  HIT = "Hit",
+  DOUBLE = "Double",
+}

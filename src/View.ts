@@ -1,5 +1,5 @@
 import { Table } from "./Table";
-import { ActionType } from "./types/ActionType";
+import { Action } from "./types/ActionType";
 import { User } from "./User";
 import { Bot } from "./Bot";
 import { Dealer } from "./Dealer";
@@ -77,7 +77,7 @@ export class View {
     });
 
     // Action button
-    const actions: ActionType[] = ["surrender", "stand", "hit", "double"];
+    const actions: Action[] = [Action.SURRENDER, Action.STAND, Action.HIT, Action.DOUBLE];
     for (let action of actions) {
       (document.getElementById(`${action}-btn`) as HTMLButtonElement
       ).addEventListener("click", async () => {

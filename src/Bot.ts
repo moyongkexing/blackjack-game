@@ -1,7 +1,7 @@
 import { Player } from "./Player";
 import { Table } from "./Table";
 import { BotStrategies } from "./BotStrategies";
-import { ActionType } from "./types/ActionType";
+import { Action } from "./types/ActionType";
 import { Card } from "./Card";
 
 export class Bot extends Player {
@@ -16,17 +16,18 @@ export class Bot extends Player {
     : Table.betDenominations[randomIndex];
   }
 
-  public makeAction(openCard: Card): ActionType {
+  public makeAction(openCard: Card): Action {
     // src/BotStrategies.ts
     const strategy = BotStrategies[String(openCard.rankNum)];
-    const actions = Object.keys(strategy) as ActionType[];
+    const actions = Object.keys(strategy) as Action[];
     for(let action of actions) {
       if(strategy[action].indexOf(this.handScore) !== -1) {
         // If bot doesn't have enough money, choose to hit instead of double
-        if(action === "double") return this.betAmount * 2 <= this.money ? "double" : "hit";
+        if(action === "Double") return this.betAmount * 2 <= this.money ? Action.DOUBLE : Action.HIT;
+        else return action;
       }
     }
-    return "stand";
+    return Action.STAND;
   }
 }
 

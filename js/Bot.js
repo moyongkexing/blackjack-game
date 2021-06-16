@@ -19,7 +19,7 @@ var __extends = (this && this.__extends) || (function () {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Player", "./Table", "./BotStrategies"], factory);
+        define(["require", "exports", "./Player", "./Table", "./BotStrategies", "./types/ActionType"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -28,6 +28,7 @@ var __extends = (this && this.__extends) || (function () {
     var Player_1 = require("./Player");
     var Table_1 = require("./Table");
     var BotStrategies_1 = require("./BotStrategies");
+    var ActionType_1 = require("./types/ActionType");
     var Bot = /** @class */ (function (_super) {
         __extends(Bot, _super);
         function Bot(username) {
@@ -47,11 +48,13 @@ var __extends = (this && this.__extends) || (function () {
                 var action = actions_1[_i];
                 if (strategy[action].indexOf(this.handScore) !== -1) {
                     // If bot doesn't have enough money, choose to hit instead of double
-                    if (action === "double")
-                        return this.betAmount * 2 <= this.money ? "double" : "hit";
+                    if (action === "Double")
+                        return this.betAmount * 2 <= this.money ? ActionType_1.Action.DOUBLE : ActionType_1.Action.HIT;
+                    else
+                        return action;
                 }
             }
-            return "stand";
+            return ActionType_1.Action.STAND;
         };
         return Bot;
     }(Player_1.Player));

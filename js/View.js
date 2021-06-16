@@ -40,13 +40,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Table", "./User", "./Bot", "./Dealer", "./types/StatusType"], factory);
+        define(["require", "exports", "./Table", "./types/ActionType", "./User", "./Bot", "./Dealer", "./types/StatusType"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.View = void 0;
     var Table_1 = require("./Table");
+    var ActionType_1 = require("./types/ActionType");
     var User_1 = require("./User");
     var Bot_1 = require("./Bot");
     var Dealer_1 = require("./Dealer");
@@ -135,7 +136,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 });
             }); });
             // Action button
-            var actions = ["surrender", "stand", "hit", "double"];
+            var actions = [ActionType_1.Action.SURRENDER, ActionType_1.Action.STAND, ActionType_1.Action.HIT, ActionType_1.Action.DOUBLE];
             var _loop_1 = function (action) {
                 document.getElementById(action + "-btn").addEventListener("click", function () { return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
