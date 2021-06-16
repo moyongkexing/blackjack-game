@@ -4,19 +4,20 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Table"], factory);
+        define(["require", "exports", "./Table", "./types/StatusType"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Player = void 0;
     var Table_1 = require("./Table");
+    var StatusType_1 = require("./types/StatusType");
     var Player = /** @class */ (function () {
         function Player(username) {
             this.hand = [];
             this.money = 400;
             this.betAmount = Table_1.Table.betDenominations[0];
-            this.status = "initial";
+            this.status = StatusType_1.PlayerStatus.INITIAL;
             this.isTurnEnd = false;
             this.name = username;
         }
@@ -69,44 +70,43 @@
         Player.prototype.getCard = function (card) {
             this.hand.push(card);
             if (this.hand.length === 2 && this.isBlackjack) {
-                this.status = "Blackjack";
+                this.status = StatusType_1.PlayerStatus.BLACKJACK;
                 this.isTurnEnd = true;
             }
         };
         Player.prototype.surrender = function () {
-            this.status = "Surrender";
+            this.status = StatusType_1.PlayerStatus.SURRENDER;
             this.isTurnEnd = true;
         };
         Player.prototype.stand = function () {
-            this.status = "Stand";
+            this.status = StatusType_1.PlayerStatus.STAND;
             this.isTurnEnd = true;
         };
         Player.prototype.hit = function (card) {
             this.getCard(card);
             if (this.handScore > 21) {
-                this.status = "Bust";
+                this.status = StatusType_1.PlayerStatus.BUST;
                 this.isTurnEnd = true;
             }
         };
         Player.prototype.double = function (card) {
             this.getCard(card);
-            this.status = "Double";
+            this.status = StatusType_1.PlayerStatus.DOUBLE;
             if (this.handScore > 21)
-                this.status = "Doublebust";
+                this.status = StatusType_1.PlayerStatus.DOUBLEBUST;
             this.isTurnEnd = true;
         };
         Player.prototype.resetState = function () {
             this.hand = [];
             this.betAmount = Table_1.Table.betDenominations[0];
-            this.status = "initial";
+            this.status = StatusType_1.PlayerStatus.INITIAL;
             this.isTurnEnd = false;
         };
         Player.prototype.calculation = function (result) {
-            var status = this.status;
             var map = {
                 Surrender: -0.5,
                 Bust: -1,
-                Doublebust: -2,
+                DoubleBust: -2,
                 Stand: result === "win" ? 1 : -1,
                 Double: result === "win" ? 2 : -2,
                 Blackjack: 1.5,

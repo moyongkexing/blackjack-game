@@ -3,6 +3,7 @@ import { ActionType } from "./types/ActionType";
 import { User } from "./User";
 import { Bot } from "./Bot";
 import { Dealer } from "./Dealer";
+import { PlayerStatus } from "./types/StatusType";
 
 export class View {
   private table: Table;
@@ -38,8 +39,9 @@ export class View {
     
     this.username.innerText = this.table.user.name;
     for(let player of this.table.players) {
-      (document.getElementById(`${player.type}-hands`) as HTMLElement).innerHTML = "";
-      (document.getElementById(`${player.type}-status`) as HTMLElement).innerHTML = "";
+      const playerType = player instanceof User ? "USER" : player instanceof Bot ? "BOT" : "DEALER"; 
+      (document.getElementById(`${playerType}-hands`) as HTMLElement).innerHTML = "";
+      (document.getElementById(`${playerType}-status`) as HTMLElement).innerHTML = "";
     }
     this.actionBtns.style.visibility = "hidden";
   }
@@ -159,13 +161,14 @@ export class View {
   }
 
   private updatePlayerHand(player: User | Bot | Dealer) {
-    const handArea = (document.getElementById(`${player.type}-hands`) as HTMLElement);
+    const playerType = player instanceof User ? "USER" : player instanceof Bot ? "BOT" : "DEALER"; 
+    const handArea = (document.getElementById(`${playerType}-hands`) as HTMLElement);
     handArea.innerHTML = "";  
 
     for (let i = 1; i <= player.hand.length; i++) {
       let card = player.hand[i - 1];
       handArea.innerHTML += `
-        <div id="${player.type}-card-${i}">
+        <div id="${playerType}-card-${i}">
           <div class="card ${card.suit}"><span>${card.rank}</span></div>
         </div>
       `;
@@ -175,8 +178,9 @@ export class View {
   }
 
   private updatePlayerStatus(player: User | Bot | Dealer): void {
-    if(player.status !== "initial") {
-      (document.getElementById(`${player.type}-status`) as HTMLElement
+    const playerType = player instanceof User ? "USER" : player instanceof Bot ? "BOT" : "DEALER"; 
+    if(player.status !== PlayerStatus.INITIAL) {
+      (document.getElementById(`${playerType}-status`) as HTMLElement
       ).innerHTML = `${player.status}`;
     }
   }

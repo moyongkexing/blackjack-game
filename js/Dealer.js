@@ -4,18 +4,18 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
+        define(["require", "exports", "./types/StatusType"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Dealer = void 0;
+    var StatusType_1 = require("./types/StatusType");
     var Dealer = /** @class */ (function () {
         function Dealer() {
-            this.type = "DEALER";
             this.name = "Dealer";
             this.hand = [];
-            this.status = "initial";
+            this.status = StatusType_1.DealerStatus.INITIAL;
             this.isTurnEnd = false;
         }
         Object.defineProperty(Dealer.prototype, "openCard", {
@@ -60,26 +60,24 @@
         Dealer.prototype.getCard = function (card) {
             this.hand.push(card);
             if (this.hand.length === 2 && this.isBlackjack) {
-                this.status = "Blackjack";
+                this.status = StatusType_1.DealerStatus.BLACKJACK;
                 this.isTurnEnd = true;
             }
         };
         Dealer.prototype.stand = function () {
-            this.status = "Stand";
+            this.status = StatusType_1.DealerStatus.STAND;
             this.isTurnEnd = true;
         };
         Dealer.prototype.hit = function (card) {
             this.getCard(card);
-            if (this.handScore > 16) {
-                this.status = "Stand";
-                this.isTurnEnd = true;
-            }
+            if (this.handScore > 16)
+                this.stand();
             if (this.handScore > 21)
-                this.status = "Bust";
+                this.status = StatusType_1.DealerStatus.BUST;
         };
         Dealer.prototype.resetState = function () {
             this.hand = [];
-            this.status = "initial";
+            this.status = StatusType_1.DealerStatus.INITIAL;
             this.isTurnEnd = false;
         };
         return Dealer;

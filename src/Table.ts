@@ -3,6 +3,7 @@ import { User } from "./User";
 import { Bot } from "./Bot";
 import { Dealer } from "./Dealer";
 import { ActionType } from "./types/ActionType";
+import { PlayerStatus, DealerStatus } from "./types/StatusType";
 
 export class Table {
   public static readonly betDenominations = [5,20,50,100];
@@ -101,10 +102,9 @@ export class Table {
 
       let result: "win" | "lose" | "push" = "push";
       switch(player.status) {
-        // player loses unconditionally
-        case "Surrender": case "Bust": case "Doublebust": result = "lose";break; 
-        case "Blackjack": if(this.dealer.status !== "Blackjack") result = "win";break;
-        case "Stand": case "Double": result = this.compareHand(player);break;
+        case PlayerStatus.SURRENDER: case PlayerStatus.BUST: case PlayerStatus.DOUBLEBUST: result = "lose";break; 
+        case PlayerStatus.BLACKJACK: if(this.dealer.status !== "Blackjack") result = "win";break;
+        case PlayerStatus.STAND: case PlayerStatus.DOUBLE: result = this.compareHand(player);break;
       }
 
       const exMoney = player.money;
@@ -124,8 +124,8 @@ export class Table {
   }
 
   private compareHand(player: User | Bot): "win" | "lose" | "push"{
-    if(this.dealer.status === "Blackjack") return "lose";
-    if(this.dealer.status === "Bust") return "win";
+    if(this.dealer.status === DealerStatus.BLACKJACK) return "lose";
+    if(this.dealer.status === DealerStatus.BUST) return "win";
     let diff = player.handScore - this.dealer.handScore;
     return diff > 0 ? "win" : diff < 0 ? "lose" : "push";
   }

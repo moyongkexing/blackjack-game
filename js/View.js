@@ -40,7 +40,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Table", "./User", "./Dealer"], factory);
+        define(["require", "exports", "./Table", "./User", "./Bot", "./Dealer", "./types/StatusType"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -48,7 +48,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     exports.View = void 0;
     var Table_1 = require("./Table");
     var User_1 = require("./User");
+    var Bot_1 = require("./Bot");
     var Dealer_1 = require("./Dealer");
+    var StatusType_1 = require("./types/StatusType");
     var View = /** @class */ (function () {
         function View() {
             this.startPage = document.getElementById("start-page");
@@ -76,8 +78,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             this.username.innerText = this.table.user.name;
             for (var _i = 0, _a = this.table.players; _i < _a.length; _i++) {
                 var player = _a[_i];
-                document.getElementById(player.type + "-hands").innerHTML = "";
-                document.getElementById(player.type + "-status").innerHTML = "";
+                var playerType = player instanceof User_1.User ? "USER" : player instanceof Bot_1.Bot ? "BOT" : "DEALER";
+                document.getElementById(playerType + "-hands").innerHTML = "";
+                document.getElementById(playerType + "-status").innerHTML = "";
             }
             this.actionBtns.style.visibility = "hidden";
         };
@@ -246,18 +249,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             });
         };
         View.prototype.updatePlayerHand = function (player) {
-            var handArea = document.getElementById(player.type + "-hands");
+            var playerType = player instanceof User_1.User ? "USER" : player instanceof Bot_1.Bot ? "BOT" : "DEALER";
+            var handArea = document.getElementById(playerType + "-hands");
             handArea.innerHTML = "";
             for (var i = 1; i <= player.hand.length; i++) {
                 var card = player.hand[i - 1];
-                handArea.innerHTML += "\n        <div id=\"" + player.type + "-card-" + i + "\">\n          <div class=\"card " + card.suit + "\"><span>" + card.rank + "</span></div>\n        </div>\n      ";
+                handArea.innerHTML += "\n        <div id=\"" + playerType + "-card-" + i + "\">\n          <div class=\"card " + card.suit + "\"><span>" + card.rank + "</span></div>\n        </div>\n      ";
             }
             // player's hand should be centered horizontally
             handArea.style.width = (player.hand.length + 3) * 28 + "px";
         };
         View.prototype.updatePlayerStatus = function (player) {
-            if (player.status !== "initial") {
-                document.getElementById(player.type + "-status").innerHTML = "" + player.status;
+            var playerType = player instanceof User_1.User ? "USER" : player instanceof Bot_1.Bot ? "BOT" : "DEALER";
+            if (player.status !== StatusType_1.PlayerStatus.INITIAL) {
+                document.getElementById(playerType + "-status").innerHTML = "" + player.status;
             }
         };
         View.prototype.updateTurnLog = function () {

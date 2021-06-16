@@ -1,10 +1,10 @@
 import { Card } from "./Card";
+import { DealerStatus } from "./types/StatusType";
 
 export class Dealer {
-  public type: string = "DEALER";
   public name: string = "Dealer";
   public hand: Card[] = [];
-  public status: "Bust" | "Blackjack" | "Stand" | "initial" = "initial";
+  public status = DealerStatus.INITIAL;
   public isTurnEnd: boolean = false;
 
   public get openCard(): Card {
@@ -34,28 +34,25 @@ export class Dealer {
   public getCard(card: Card): void {
     this.hand.push(card);
     if(this.hand.length === 2 && this.isBlackjack) {
-      this.status = "Blackjack";
+      this.status = DealerStatus.BLACKJACK;
       this.isTurnEnd = true;
     } 
   }
 
   public stand(): void {
-    this.status = "Stand";
+    this.status = DealerStatus.STAND;
     this.isTurnEnd = true;
   }
 
   public hit(card: Card): void {
     this.getCard(card);
-    if(this.handScore > 16) {
-      this.status = "Stand";
-      this.isTurnEnd = true;
-    }
-    if(this.handScore > 21) this.status = "Bust";
+    if(this.handScore > 16) this.stand();
+    if(this.handScore > 21) this.status = DealerStatus.BUST;
   }
   
   public resetState(): void {
     this.hand = [];
-    this.status = "initial";
+    this.status = DealerStatus.INITIAL;
     this.isTurnEnd = false;
   }
 }

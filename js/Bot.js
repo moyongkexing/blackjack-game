@@ -31,18 +31,17 @@ var __extends = (this && this.__extends) || (function () {
     var Bot = /** @class */ (function (_super) {
         __extends(Bot, _super);
         function Bot(username) {
-            var _this = _super.call(this, username) || this;
-            _this.type = username.toUpperCase();
-            return _this;
+            return _super.call(this, username) || this;
         }
         Bot.prototype.makeBet = function () {
             var randomIndex = Math.floor(Math.random() * 3);
-            this.betAmount = this.money >= Table_1.Table.betDenominations[3] * 3 // betDenominations = [5,20,50,100];
+            this.betAmount = this.money >= Table_1.Table.betDenominations[3] * 3
                 ? Table_1.Table.betDenominations[Table_1.Table.betDenominations.length - 1]
                 : Table_1.Table.betDenominations[randomIndex];
         };
         Bot.prototype.makeAction = function (openCard) {
-            var strategy = BotStrategies_1.BotStrategies[String(openCard.rankNum)]; // src/BotStrategies.ts
+            // src/BotStrategies.ts
+            var strategy = BotStrategies_1.BotStrategies[String(openCard.rankNum)];
             var actions = Object.keys(strategy);
             for (var _i = 0, actions_1 = actions; _i < actions_1.length; _i++) {
                 var action = actions_1[_i];
