@@ -1,7 +1,7 @@
 import { Card } from "./Card";
 import { Table } from "./Table";
 
-export class Player {
+export abstract class Player {
   public name: string;
   public hand: Card[] = [];
   public money: number = 400;
@@ -12,6 +12,8 @@ export class Player {
   public constructor(username: string) {
     this.name = username;
   }
+
+  abstract makeBet(arg: Player["betAmount"] | null): void;
 
   public get handScore(): number {
     let score = 0;
@@ -40,6 +42,7 @@ export class Player {
   public get canDouble(): boolean {
     return this.money >= this.betAmount * 2;
   }
+
   public getCard(card: Card): void {
     this.hand.push(card);
     if(this.hand.length === 2 && this.isBlackjack) {

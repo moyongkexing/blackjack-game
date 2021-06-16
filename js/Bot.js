@@ -47,6 +47,7 @@ var __extends = (this && this.__extends) || (function () {
             for (var _i = 0, actions_1 = actions; _i < actions_1.length; _i++) {
                 var action = actions_1[_i];
                 if (strategy[action].indexOf(this.handScore) !== -1) {
+                    // If bot doesn't have enough money, choose to hit instead of double
                     if (action === "double")
                         return this.betAmount * 2 <= this.money ? "double" : "hit";
                 }
