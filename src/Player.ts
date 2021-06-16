@@ -80,10 +80,10 @@ export class Player {
     this.isTurnEnd = false;
   }
 
+  //
   public calculation(result: "win" | "lose"): void {
-    // const calMap: { [key in Omit<Player["status"], "initial">] : number } = { // error
-    // const calMap: { [key: Omit<Player["status"], "initial">] : number } = { // error...
-    const calMap: {[key: string]: number} = {
+    const status  = this.status as Exclude<Player["status"], "initial">;
+    const map: { [key in typeof status]: number } = {
       Surrender: -0.5,
       Bust: -1,
       Doublebust: -2,
@@ -91,6 +91,6 @@ export class Player {
       Double: result === "win" ? 2 : -2,
       Blackjack: 1.5,
     };
-    this.money += Math.floor(this.betAmount * calMap[this.status]);
+    this.money += Math.floor(this.betAmount * map[status]);
   }
 }

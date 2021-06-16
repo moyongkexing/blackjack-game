@@ -101,10 +101,10 @@
             this.status = "initial";
             this.isTurnEnd = false;
         };
+        //
         Player.prototype.calculation = function (result) {
-            // const calMap: { [key in Omit<Player["status"], "initial">] : number } = { // error
-            // const calMap: { [key: Omit<Player["status"], "initial">] : number } = { // error...
-            var calMap = {
+            var status = this.status;
+            var map = {
                 Surrender: -0.5,
                 Bust: -1,
                 Doublebust: -2,
@@ -112,7 +112,7 @@
                 Double: result === "win" ? 2 : -2,
                 Blackjack: 1.5,
             };
-            this.money += Math.floor(this.betAmount * calMap[this.status]);
+            this.money += Math.floor(this.betAmount * map[status]);
         };
         return Player;
     }());
