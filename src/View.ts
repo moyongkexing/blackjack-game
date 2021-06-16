@@ -6,7 +6,7 @@ import { Dealer } from "./Dealer";
 
 export class View {
   private table: Table;
-  
+
   private startPage = document.getElementById("start-page") as HTMLElement;
   private usernameInput = (document.getElementById("username-input") as HTMLInputElement);
 
@@ -33,10 +33,10 @@ export class View {
   }
 
   private initializeView(): void {
-    this.username.innerText = this.table.user.name;
     this.moneyAmount.innerText = String(this.table.user.money);
     this.betAmount.innerText = String(Table.betDenominations[0]); // 5$
-
+    
+    this.username.innerText = this.table.user.name;
     for(let player of this.table.players) {
       (document.getElementById(`${player.type}-hands`) as HTMLElement).innerHTML = "";
       (document.getElementById(`${player.type}-status`) as HTMLElement).innerHTML = "";
@@ -66,9 +66,8 @@ export class View {
       // ex: "BOT1 has bet 100$."
       this.updateTurnLog(); 
 
-      // display operation screen for user
       this.actionBtns.style.visibility = "visible";
-      // user who has bet more than half of total money cannot double
+      // user who has bet more than half of total money cannot choose double
       if(!this.table.user.canDouble) this.doubleBtn.classList.add("disable");
       else this.doubleBtn.classList.remove("disable");
       // if user is blackjack, end the turn and let the bots and dealers act
@@ -199,21 +198,4 @@ export class View {
       chipBtn.classList.remove("disable");
     }
   }
-
-  // private debug(): void {
-  //   console.log("");
-  //   console.log("");
-  //   for (let player of this.table.players) {
-  //     console.log(player);
-  //     console.log(player.hand);
-  //     console.log("isTurnEnd");
-  //     console.log(player.isTurnEnd);
-  //     console.log("handScore");
-  //     console.log(player.handScore);
-  //   }
-  //   console.log(this.table.dealer);
-  //   console.log(this.table.dealer.hand);
-  //   console.log("handScore");
-  //   console.log(this.table.dealer.handScore);
-  // }
 }

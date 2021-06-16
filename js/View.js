@@ -71,9 +71,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             this.betPage.classList.remove("hidden");
         }
         View.prototype.initializeView = function () {
-            this.username.innerText = this.table.user.name;
             this.moneyAmount.innerText = String(this.table.user.money);
             this.betAmount.innerText = String(Table_1.Table.betDenominations[0]); // 5$
+            this.username.innerText = this.table.user.name;
             for (var _i = 0, _a = this.table.players; _i < _a.length; _i++) {
                 var player = _a[_i];
                 document.getElementById(player.type + "-hands").innerHTML = "";
@@ -116,9 +116,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             ;
                             // ex: "BOT1 has bet 100$."
                             this.updateTurnLog();
-                            // display operation screen for user
                             this.actionBtns.style.visibility = "visible";
-                            // user who has bet more than half of total money cannot double
+                            // user who has bet more than half of total money cannot choose double
                             if (!this.table.user.canDouble)
                                 this.doubleBtn.classList.add("disable");
                             else
