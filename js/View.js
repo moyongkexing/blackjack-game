@@ -40,7 +40,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Table", "./types/ActionType", "./User", "./Bot", "./Dealer", "./types/StatusType"], factory);
+        define(["require", "exports", "./Table", "./types/ActionType", "./User", "./Dealer", "./types/StatusType"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -49,7 +49,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     var Table_1 = require("./Table");
     var ActionType_1 = require("./types/ActionType");
     var User_1 = require("./User");
-    var Bot_1 = require("./Bot");
     var Dealer_1 = require("./Dealer");
     var StatusType_1 = require("./types/StatusType");
     var View = /** @class */ (function () {
@@ -79,9 +78,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             this.username.innerText = this.table.user.name;
             for (var _i = 0, _a = this.table.players; _i < _a.length; _i++) {
                 var player = _a[_i];
-                var playerType = player instanceof User_1.User ? "USER" : player instanceof Bot_1.Bot ? "BOT" : "DEALER";
-                document.getElementById(playerType + "-hands").innerHTML = "";
-                document.getElementById(playerType + "-status").innerHTML = "";
+                var id = this.getIdFromPlayer(player);
+                document.getElementById(id + "-hands").innerHTML = "";
+                document.getElementById(id + "-status").innerHTML = "";
             }
             this.actionBtns.style.visibility = "hidden";
         };
@@ -138,7 +137,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             // Action button
             var actions = [ActionType_1.Action.SURRENDER, ActionType_1.Action.STAND, ActionType_1.Action.HIT, ActionType_1.Action.DOUBLE];
             var _loop_1 = function (action) {
-                document.getElementById(action + "-btn").addEventListener("click", function () { return __awaiter(_this, void 0, void 0, function () {
+                document.getElementById(action.toLowerCase() + "-btn").addEventListener("click", function () { return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
@@ -250,20 +249,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             });
         };
         View.prototype.updatePlayerHand = function (player) {
-            var playerType = player instanceof User_1.User ? "USER" : player instanceof Bot_1.Bot ? "BOT" : "DEALER";
-            var handArea = document.getElementById(playerType + "-hands");
+            var id = this.getIdFromPlayer(player);
+            var handArea = document.getElementById(id + "-hands");
             handArea.innerHTML = "";
             for (var i = 1; i <= player.hand.length; i++) {
                 var card = player.hand[i - 1];
-                handArea.innerHTML += "\n        <div id=\"" + playerType + "-card-" + i + "\">\n          <div class=\"card " + card.suit + "\"><span>" + card.rank + "</span></div>\n        </div>\n      ";
+                handArea.innerHTML += "\n        <div id=\"" + id + "-card-" + i + "\">\n          <div class=\"card " + card.suit + "\"><span>" + card.rank + "</span></div>\n        </div>\n      ";
             }
             // player's hand should be centered horizontally
             handArea.style.width = (player.hand.length + 3) * 28 + "px";
         };
         View.prototype.updatePlayerStatus = function (player) {
-            var playerType = player instanceof User_1.User ? "USER" : player instanceof Bot_1.Bot ? "BOT" : "DEALER";
+            var id = this.getIdFromPlayer(player);
             if (player.status !== StatusType_1.PlayerStatus.INITIAL) {
-                document.getElementById(playerType + "-status").innerHTML = "" + player.status;
+                document.getElementById(id + "-status").innerHTML = "" + player.status;
             }
         };
         View.prototype.updateTurnLog = function () {
@@ -282,6 +281,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 var chipBtn = document.getElementById("bet-" + d);
                 chipBtn.classList.remove("disable");
             }
+        };
+        View.prototype.getIdFromPlayer = function (player) {
+            return player instanceof User_1.User ? "USER" : player instanceof Dealer_1.Dealer ? "DEALER" : player.id;
+        };
+        View.prototype.debug = function () {
+            console.log("");
+            console.log("");
+            for (var _i = 0, _a = this.table.players; _i < _a.length; _i++) {
+                var player = _a[_i];
+                console.log(player);
+                console.log(player.hand);
+                console.log("isTurnEnd");
+                console.log(player.isTurnEnd);
+                console.log("handScore");
+                console.log(player.handScore);
+            }
+            console.log(this.table.dealer);
+            console.log(this.table.dealer.hand);
+            console.log("handScore");
+            console.log(this.table.dealer.handScore);
         };
         return View;
     }());

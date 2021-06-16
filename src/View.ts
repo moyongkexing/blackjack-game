@@ -39,9 +39,9 @@ export class View {
     
     this.username.innerText = this.table.user.name;
     for(let player of this.table.players) {
-      const playerType = player instanceof User ? "USER" : player instanceof Bot ? "BOT" : "DEALER"; 
-      (document.getElementById(`${playerType}-hands`) as HTMLElement).innerHTML = "";
-      (document.getElementById(`${playerType}-status`) as HTMLElement).innerHTML = "";
+      const id = this.getIdFromPlayer(player);
+      (document.getElementById(`${id}-hands`) as HTMLElement).innerHTML = "";
+      (document.getElementById(`${id}-status`) as HTMLElement).innerHTML = "";
     }
     this.actionBtns.style.visibility = "hidden";
   }
@@ -79,7 +79,7 @@ export class View {
     // Action button
     const actions: Action[] = [Action.SURRENDER, Action.STAND, Action.HIT, Action.DOUBLE];
     for (let action of actions) {
-      (document.getElementById(`${action}-btn`) as HTMLButtonElement
+      (document.getElementById(`${action.toLowerCase()}-btn`) as HTMLButtonElement
       ).addEventListener("click", async () => {
         this.table.userAct(action);
         this.updatePlayerHand(this.table.user);
@@ -161,14 +161,14 @@ export class View {
   }
 
   private updatePlayerHand(player: User | Bot | Dealer) {
-    const playerType = player instanceof User ? "USER" : player instanceof Bot ? "BOT" : "DEALER"; 
-    const handArea = (document.getElementById(`${playerType}-hands`) as HTMLElement);
+    const id = this.getIdFromPlayer(player);
+    const handArea = (document.getElementById(`${id}-hands`) as HTMLElement);
     handArea.innerHTML = "";  
 
     for (let i = 1; i <= player.hand.length; i++) {
       let card = player.hand[i - 1];
       handArea.innerHTML += `
-        <div id="${playerType}-card-${i}">
+        <div id="${id}-card-${i}">
           <div class="card ${card.suit}"><span>${card.rank}</span></div>
         </div>
       `;
@@ -178,9 +178,9 @@ export class View {
   }
 
   private updatePlayerStatus(player: User | Bot | Dealer): void {
-    const playerType = player instanceof User ? "USER" : player instanceof Bot ? "BOT" : "DEALER"; 
+    const id = this.getIdFromPlayer(player);
     if(player.status !== PlayerStatus.INITIAL) {
-      (document.getElementById(`${playerType}-status`) as HTMLElement
+      (document.getElementById(`${id}-status`) as HTMLElement
       ).innerHTML = `${player.status}`;
     }
   }
@@ -201,5 +201,26 @@ export class View {
       let chipBtn = document.getElementById(`bet-${d}`) as HTMLElement;
       chipBtn.classList.remove("disable");
     }
+  }
+
+  private getIdFromPlayer(player: User | Bot | Dealer): string {
+      return player instanceof User ? "USER" : player instanceof Dealer ? "DEALER" : player.id;
+  }
+
+  private debug(): void {
+    console.log("");
+    console.log("");
+    for (let player of this.table.players) {
+      console.log(player);
+      console.log(player.hand);
+      console.log("isTurnEnd");
+      console.log(player.isTurnEnd);
+      console.log("handScore");
+      console.log(player.handScore);
+    }
+    console.log(this.table.dealer);
+    console.log(this.table.dealer.hand);
+    console.log("handScore");
+    console.log(this.table.dealer.handScore);
   }
 }

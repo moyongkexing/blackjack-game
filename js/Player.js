@@ -111,7 +111,7 @@
                 Double: result === "win" ? 2 : -2,
                 Blackjack: 1.5,
             };
-            this.money += Math.floor(this.betAmount * map[status]);
+            this.money += Math.floor(this.betAmount * map[this.status]);
         };
         return Player;
     }());

@@ -85,7 +85,8 @@ export abstract class Player {
   }
 
   public calculation(result: "win" | "lose"): void {
-    const map: { [key in Exclude<PlayerStatus, PlayerStatus.INITIAL>]: number } = {
+    type finalStatus = Exclude<PlayerStatus, PlayerStatus.INITIAL>;
+    const map: { [key in finalStatus]: number } = {
       Surrender: -0.5,
       Bust: -1,
       DoubleBust: -2,
@@ -93,6 +94,6 @@ export abstract class Player {
       Double: result === "win" ? 2 : -2,
       Blackjack: 1.5,
     };
-    this.money += Math.floor(this.betAmount * map[status as Exclude<PlayerStatus, PlayerStatus.INITIAL>]);
+    this.money += Math.floor(this.betAmount * map[this.status as finalStatus]);
   }
 }

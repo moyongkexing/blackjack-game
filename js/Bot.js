@@ -32,7 +32,9 @@ var __extends = (this && this.__extends) || (function () {
     var Bot = /** @class */ (function (_super) {
         __extends(Bot, _super);
         function Bot(username) {
-            return _super.call(this, username) || this;
+            var _this = _super.call(this, username) || this;
+            _this.id = username.toUpperCase();
+            return _this;
         }
         Bot.prototype.makeBet = function () {
             var randomIndex = Math.floor(Math.random() * 3);
