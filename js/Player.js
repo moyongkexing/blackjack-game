@@ -101,7 +101,6 @@
             this.status = "initial";
             this.isTurnEnd = false;
         };
-        //
         Player.prototype.calculation = function (result) {
             var status = this.status;
             var map = {

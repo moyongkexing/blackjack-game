@@ -80,7 +80,6 @@ export class Player {
     this.isTurnEnd = false;
   }
 
-  //
   public calculation(result: "win" | "lose"): void {
     const status  = this.status as Exclude<Player["status"], "initial">;
     const map: { [key in typeof status]: number } = {
