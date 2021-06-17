@@ -6,7 +6,8 @@
       "ES5",
       "ES2016",
       "DOM",
-      "ScriptHost"],
+      "ScriptHost"
+    ],
     "outDir": "./js",             
     "strict": true,
     "noImplicitAny": true,
