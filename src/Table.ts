@@ -8,11 +8,9 @@ import { PlayerStatus, DealerStatus } from "./types/StatusType";
 export class Table {
   public static readonly betDenominations = [5,20,50,100];
   private deck: Deck;
-
-  public user: User;
-  public dealer: Dealer;
-  public players: Array<User | Bot | Dealer> = [];
-
+  public readonly user: User;
+  public readonly dealer: Dealer;
+  public readonly players: Array<User | Bot | Dealer> = [];
   public turnCounter: number = 0;
   public turnLog: string[][] = [];
 

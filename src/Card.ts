@@ -1,6 +1,6 @@
 export class Card {
-  public suit: string;
-  public rank: string;
+  public readonly suit: string;
+  public readonly rank: string;
 
   public constructor(arg: Omit<Card, 'rankNum'>) {
     this.suit = arg.suit;

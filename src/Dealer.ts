@@ -2,7 +2,7 @@ import { Card } from "./Card";
 import { DealerStatus } from "./types/StatusType";
 
 export class Dealer {
-  public name: string = "Dealer";
+  public readonly name: string = "Dealer";
   public hand: Card[] = [];
   public status = DealerStatus.INITIAL;
   public isTurnEnd: boolean = false;

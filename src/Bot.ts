@@ -5,7 +5,7 @@ import { Action } from "./types/ActionType";
 import { Card } from "./Card";
 
 export class Bot extends Player {
-  public id: string;
+  public readonly id: string;
   public constructor(username: string) {
     super(username);
     this.id = username.toUpperCase();
