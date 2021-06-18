@@ -19,7 +19,7 @@ export class View {
 
   private dealPage = document.getElementById("deal-page") as HTMLElement;
   private username = document.getElementById("username") as HTMLHeadingElement;
-  private actionBtns = document.getElementById("action-buttons") as HTMLElement;
+  private actionButtons = document.getElementById("action-buttons") as HTMLElement;
   private doubleBtn = document.getElementById("double-btn") as HTMLButtonElement;
   private nextBtn = document.getElementById("next-btn") as HTMLButtonElement;
   private gameLog = (document.getElementById("game-log") as HTMLElement);
@@ -43,7 +43,7 @@ export class View {
       (document.getElementById(`${id}-hands`) as HTMLElement).innerHTML = "";
       (document.getElementById(`${id}-status`) as HTMLElement).innerHTML = "";
     }
-    this.actionBtns.style.visibility = "hidden";
+    this.actionButtons.style.visibility = "hidden";
   }
 
   private initializeController(): void {
@@ -68,7 +68,7 @@ export class View {
       // ex: "BOT1 has bet 100$."
       this.updateTurnLog(); 
 
-      this.actionBtns.style.visibility = "visible";
+      this.actionButtons.style.visibility = "visible";
       // user who has bet more than half of total money cannot choose double
       if(!this.table.user.canDouble) this.doubleBtn.classList.add("disable");
       else this.doubleBtn.classList.remove("disable");
@@ -113,8 +113,8 @@ export class View {
         const total: number = parseInt(this.betAmount.innerText) + Table.betDenominations[i];
         if(total + Table.betDenominations[i] > this.table.user.money) {
           for(let j = i; j < Table.betDenominations.length; j++) {
-            let unclickableBtn = document.getElementById(`bet-${Table.betDenominations[j]}`) as HTMLElement;
-            unclickableBtn.classList.add("disable");
+            let disableChipBtn = document.getElementById(`bet-${Table.betDenominations[j]}`) as HTMLElement;
+            disableChipBtn.classList.add("disable");
           }
         }
         if(total <= this.table.user.money) this.betAmount.innerText = String(total);
@@ -123,7 +123,7 @@ export class View {
   }
 
   private async autoRendering() {
-    this.actionBtns.style.visibility = "hidden";
+    this.actionButtons.style.visibility = "hidden";
 
     this.updatePlayerStatus(this.table.user);
 

@@ -14,6 +14,7 @@
     var StatusType_1 = require("./types/StatusType");
     var Player = /** @class */ (function () {
         function Player(username) {
+            this.username = username;
             this.hand = [];
             this.money = 400;
             this.betAmount = Table_1.Table.betDenominations[0];

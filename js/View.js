@@ -62,7 +62,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             this.resetBtn = document.getElementById("reset-btn");
             this.dealPage = document.getElementById("deal-page");
             this.username = document.getElementById("username");
-            this.actionBtns = document.getElementById("action-buttons");
+            this.actionButtons = document.getElementById("action-buttons");
             this.doubleBtn = document.getElementById("double-btn");
             this.nextBtn = document.getElementById("next-btn");
             this.gameLog = document.getElementById("game-log");
@@ -82,7 +82,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 document.getElementById(id + "-hands").innerHTML = "";
                 document.getElementById(id + "-status").innerHTML = "";
             }
-            this.actionBtns.style.visibility = "hidden";
+            this.actionButtons.style.visibility = "hidden";
         };
         View.prototype.initializeController = function () {
             var _this = this;
@@ -119,7 +119,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             ;
                             // ex: "BOT1 has bet 100$."
                             this.updateTurnLog();
-                            this.actionBtns.style.visibility = "visible";
+                            this.actionButtons.style.visibility = "visible";
                             // user who has bet more than half of total money cannot choose double
                             if (!this.table.user.canDouble)
                                 this.doubleBtn.classList.add("disable");
@@ -178,8 +178,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     var total = parseInt(_this.betAmount.innerText) + Table_1.Table.betDenominations[i];
                     if (total + Table_1.Table.betDenominations[i] > _this.table.user.money) {
                         for (var j = i; j < Table_1.Table.betDenominations.length; j++) {
-                            var unclickableBtn = document.getElementById("bet-" + Table_1.Table.betDenominations[j]);
-                            unclickableBtn.classList.add("disable");
+                            var disableChipBtn = document.getElementById("bet-" + Table_1.Table.betDenominations[j]);
+                            disableChipBtn.classList.add("disable");
                         }
                     }
                     if (total <= _this.table.user.money)
@@ -197,7 +197,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
-                            this.actionBtns.style.visibility = "hidden";
+                            this.actionButtons.style.visibility = "hidden";
                             this.updatePlayerStatus(this.table.user);
                             _i = 0, _a = this.table.players;
                             _b.label = 1;
