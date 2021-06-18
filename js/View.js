@@ -110,7 +110,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             // draw the player's hand in the view
                             this.updatePlayerHand(player);
                             // in the case of player is blackjack, draw the status in the view
-                            this.updateChallengerStatus(player);
+                            this.updatePlayerStatus(player);
                             _b.label = 3;
                         case 3:
                             _i++;
@@ -198,7 +198,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     switch (_b.label) {
                         case 0:
                             this.actionButtons.style.visibility = "hidden";
-                            this.updateChallengerStatus(this.table.user);
+                            this.updatePlayerStatus(this.table.user);
                             _i = 0, _a = this.table.players;
                             _b.label = 1;
                         case 1:
@@ -213,7 +213,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             _b.sent();
                             this.table.botAct(bot);
                             this.updatePlayerHand(bot);
-                            this.updateChallengerStatus(bot);
+                            this.updatePlayerStatus(bot);
                             this.updateTurnLog();
                             _b.label = 3;
                         case 3:
@@ -230,7 +230,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             _b.sent();
                             this.table.dealerAct();
                             this.updatePlayerHand(this.table.dealer);
-                            this.updateChallengerStatus(this.table.dealer);
+                            this.updatePlayerStatus(this.table.dealer);
                             this.updateTurnLog();
                             return [4 /*yield*/, this.sleep(1000)];
                         case 7:
@@ -259,7 +259,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             // player's hand should be centered horizontally
             handArea.style.width = (player.hand.length + 3) * 28 + "px";
         };
-        View.prototype.updateChallengerStatus = function (player) {
+        View.prototype.updatePlayerStatus = function (player) {
             var id = this.getIdFromPlayer(player);
             if (player.status !== StatusType_1.ChallengerStatus.INITIAL) {
                 document.getElementById(id + "-status").innerHTML = "" + player.status;

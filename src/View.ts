@@ -63,7 +63,7 @@ export class View {
         // draw the player's hand in the view
         this.updatePlayerHand(player); 
         // in the case of player is blackjack, draw the status in the view
-        this.updateChallengerStatus(player); 
+        this.updatePlayerStatus(player); 
       };
       // ex: "BOT1 has bet 100$."
       this.updateTurnLog(); 
@@ -125,7 +125,7 @@ export class View {
   private async autoRendering() {
     this.actionButtons.style.visibility = "hidden";
 
-    this.updateChallengerStatus(this.table.user);
+    this.updatePlayerStatus(this.table.user);
 
     for(let bot of this.table.players) {
       if(bot instanceof User) continue;
@@ -134,7 +134,7 @@ export class View {
       await this.sleep(1000);
       this.table.botAct(bot);
       this.updatePlayerHand(bot);
-      this.updateChallengerStatus(bot);
+      this.updatePlayerStatus(bot);
       this.updateTurnLog();
     }
 
@@ -146,7 +146,7 @@ export class View {
     await this.sleep(1000);
     this.table.dealerAct();
     this.updatePlayerHand(this.table.dealer);
-    this.updateChallengerStatus(this.table.dealer);
+    this.updatePlayerStatus(this.table.dealer);
     this.updateTurnLog();
 
     await this.sleep(1000);
@@ -177,7 +177,7 @@ export class View {
     handArea.style.width = `${(player.hand.length + 3) * 28}px`;
   }
 
-  private updateChallengerStatus(player: User | Bot | Dealer): void {
+  private updatePlayerStatus(player: User | Bot | Dealer): void {
     const id = this.getIdFromPlayer(player);
     if(player.status !== ChallengerStatus.INITIAL) {
       (document.getElementById(`${id}-status`) as HTMLElement
