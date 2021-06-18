@@ -66,7 +66,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             this.doubleBtn = document.getElementById("double-btn");
             this.nextBtn = document.getElementById("next-btn");
             this.gameLog = document.getElementById("game-log");
-            this.table = new Table_1.Table(this.usernameInput.value);
+            this.table = Table_1.Table.getInstance(this.usernameInput.value);
             this.initializeView();
             this.initializeController();
             this.startPage.classList.add("hidden");

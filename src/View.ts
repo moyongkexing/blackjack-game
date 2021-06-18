@@ -25,7 +25,7 @@ export class View {
   private gameLog = (document.getElementById("game-log") as HTMLElement);
 
   public constructor() {
-    this.table = new Table(this.usernameInput.value);
+    this.table = Table.getInstance(this.usernameInput.value);
     this.initializeView();
     this.initializeController();
 

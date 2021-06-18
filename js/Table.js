@@ -26,6 +26,12 @@
             this.dealer = new Dealer_1.Dealer();
             this.players.push(this.dealer, this.user, new Bot_1.Bot("Bot1"), new Bot_1.Bot("Bot2"));
         }
+        Table.getInstance = function (username) {
+            if (this.instance)
+                return this.instance;
+            else
+                return new Table(username);
+        };
         // ######################################
         //  Each public method here is called in View class
         //  bet → distribution → userAct → botAct → dealerOpen → dealerAct → evaluation → bet → ...

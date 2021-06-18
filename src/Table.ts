@@ -6,6 +6,7 @@ import { Action } from "./types/ActionType";
 import { PlayerStatus, DealerStatus } from "./types/StatusType";
 
 export class Table {
+  public static instance: Table;
   public static readonly betDenominations = [5,20,50,100];
   private deck: Deck;
   public readonly user: User;
@@ -14,7 +15,7 @@ export class Table {
   public turnCounter: number = 0;
   public turnLog: string[][] = [];
 
-  public constructor(username: string) {
+  private constructor(username: string) {
     this.deck = new Deck();
 
     this.user = new User(username);
@@ -22,6 +23,11 @@ export class Table {
     this.players.push(this.dealer, this.user, new Bot("Bot1"), new Bot("Bot2"));
   }
 
+  static getInstance(username: string): Table {
+    if(this.instance) return this.instance;
+    else return new Table(username);
+  }
+  
 // ######################################
 //  Each public method here is called in View class
 //  bet → distribution → userAct → botAct → dealerOpen → dealerAct → evaluation → bet → ...
