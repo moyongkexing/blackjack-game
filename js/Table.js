@@ -27,10 +27,10 @@
             this.players.push(this.dealer, this.user, new Bot_1.Bot("Bot1"), new Bot_1.Bot("Bot2"));
         }
         Table.getInstance = function (username) {
-            if (this.instance)
-                return this.instance;
-            else
-                return new Table(username);
+            if (Table.instance)
+                return Table.instance;
+            Table.instance = new Table(username);
+            return Table.instance;
         };
         // ######################################
         //  Each public method here is called in View class

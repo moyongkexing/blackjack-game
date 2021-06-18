@@ -17,17 +17,17 @@ export class Table {
 
   private constructor(username: string) {
     this.deck = new Deck();
-
     this.user = new User(username);
     this.dealer = new Dealer();
     this.players.push(this.dealer, this.user, new Bot("Bot1"), new Bot("Bot2"));
   }
 
-  static getInstance(username: string): Table {
-    if(this.instance) return this.instance;
-    else return new Table(username);
+  public static getInstance(username: string): Table {
+    if(Table.instance) return Table.instance;
+    Table.instance = new Table(username);
+    return Table.instance;
   }
-  
+
 // ######################################
 //  Each public method here is called in View class
 //  bet → distribution → userAct → botAct → dealerOpen → dealerAct → evaluation → bet → ...
