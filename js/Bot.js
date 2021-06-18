@@ -19,13 +19,13 @@ var __extends = (this && this.__extends) || (function () {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Player", "./Table", "./BotStrategies", "./types/ActionType"], factory);
+        define(["require", "exports", "./Challenger", "./Table", "./BotStrategies", "./types/ActionType"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Bot = void 0;
-    var Player_1 = require("./Player");
+    var Challenger_1 = require("./Challenger");
     var Table_1 = require("./Table");
     var BotStrategies_1 = require("./BotStrategies");
     var ActionType_1 = require("./types/ActionType");
@@ -59,6 +59,6 @@ var __extends = (this && this.__extends) || (function () {
             return ActionType_1.Action.STAND;
         };
         return Bot;
-    }(Player_1.Player));
+    }(Challenger_1.Challenger));
     exports.Bot = Bot;
 });

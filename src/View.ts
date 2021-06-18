@@ -3,7 +3,7 @@ import { Action } from "./types/ActionType";
 import { User } from "./User";
 import { Bot } from "./Bot";
 import { Dealer } from "./Dealer";
-import { PlayerStatus } from "./types/StatusType";
+import { ChallengerStatus } from "./types/StatusType";
 
 export class View {
   private table: Table;
@@ -63,7 +63,7 @@ export class View {
         // draw the player's hand in the view
         this.updatePlayerHand(player); 
         // in the case of player is blackjack, draw the status in the view
-        this.updatePlayerStatus(player); 
+        this.updateChallengerStatus(player); 
       };
       // ex: "BOT1 has bet 100$."
       this.updateTurnLog(); 
@@ -125,7 +125,7 @@ export class View {
   private async autoRendering() {
     this.actionButtons.style.visibility = "hidden";
 
-    this.updatePlayerStatus(this.table.user);
+    this.updateChallengerStatus(this.table.user);
 
     for(let bot of this.table.players) {
       if(bot instanceof User) continue;
@@ -134,7 +134,7 @@ export class View {
       await this.sleep(1000);
       this.table.botAct(bot);
       this.updatePlayerHand(bot);
-      this.updatePlayerStatus(bot);
+      this.updateChallengerStatus(bot);
       this.updateTurnLog();
     }
 
@@ -146,7 +146,7 @@ export class View {
     await this.sleep(1000);
     this.table.dealerAct();
     this.updatePlayerHand(this.table.dealer);
-    this.updatePlayerStatus(this.table.dealer);
+    this.updateChallengerStatus(this.table.dealer);
     this.updateTurnLog();
 
     await this.sleep(1000);
@@ -177,9 +177,9 @@ export class View {
     handArea.style.width = `${(player.hand.length + 3) * 28}px`;
   }
 
-  private updatePlayerStatus(player: User | Bot | Dealer): void {
+  private updateChallengerStatus(player: User | Bot | Dealer): void {
     const id = this.getIdFromPlayer(player);
-    if(player.status !== PlayerStatus.INITIAL) {
+    if(player.status !== ChallengerStatus.INITIAL) {
       (document.getElementById(`${id}-status`) as HTMLElement
       ).innerHTML = `${player.status}`;
     }

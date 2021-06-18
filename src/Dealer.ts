@@ -15,7 +15,7 @@ export class Dealer {
     let score = 0;
     for (let card of this.hand) score += card.rankNum;
     // If score is over 21, subtract 10 if there is an ace in one's hand(switch the rank from 11 to 1).
-    let i = this.NumAce;
+    let i = this.numAce;
     while (score > 21 && i > 0) {
       score -= 10;
       i--;
@@ -23,12 +23,12 @@ export class Dealer {
     return score;
   }
   
-  private get NumAce(): number {
+  private get numAce(): number {
     return this.hand.filter((card) => card.rank === "A").length;
   }
 
   public get isBlackjack(): boolean {
-    return this.handScore === 21 && this.NumAce > 0;
+    return this.handScore === 21 && this.numAce > 0;
   }
 
   public getCard(card: Card): void {

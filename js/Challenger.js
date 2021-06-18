@@ -30,7 +30,7 @@
                     score += card.rankNum;
                 }
                 // If the score is over 21, subtract 10 if there is an Ace in Challenger's hand (switch rank of Ace from 11 to 1)
-                var i = this.NumAce;
+                var i = this.numAce;
                 while (score > 21 && i > 0) {
                     score -= 10;
                     i--;
@@ -40,7 +40,7 @@
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(Challenger.prototype, "NumAce", {
+        Object.defineProperty(Challenger.prototype, "numAce", {
             get: function () {
                 return this.hand.filter(function (card) { return card.rank === "A"; }).length;
             },
@@ -49,7 +49,7 @@
         });
         Object.defineProperty(Challenger.prototype, "isBlackjack", {
             get: function () {
-                return this.handScore === 21 && this.NumAce > 0;
+                return this.handScore === 21 && this.numAce > 0;
             },
             enumerable: false,
             configurable: true

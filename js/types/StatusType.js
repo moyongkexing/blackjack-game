@@ -9,18 +9,18 @@
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.DealerStatus = exports.PlayerStatus = void 0;
-    var PlayerStatus;
-    (function (PlayerStatus) {
-        PlayerStatus["INITIAL"] = "Initial";
-        PlayerStatus["SURRENDER"] = "Surrender";
-        PlayerStatus["STAND"] = "Stand";
-        PlayerStatus["BUST"] = "Bust";
-        PlayerStatus["DOUBLE"] = "Double";
-        PlayerStatus["DOUBLEBUST"] = "DoubleBust";
-        PlayerStatus["BLACKJACK"] = "Blackjack";
-    })(PlayerStatus || (PlayerStatus = {}));
-    exports.PlayerStatus = PlayerStatus;
+    exports.DealerStatus = exports.ChallengerStatus = void 0;
+    var ChallengerStatus;
+    (function (ChallengerStatus) {
+        ChallengerStatus["INITIAL"] = "Initial";
+        ChallengerStatus["SURRENDER"] = "Surrender";
+        ChallengerStatus["STAND"] = "Stand";
+        ChallengerStatus["BUST"] = "Bust";
+        ChallengerStatus["DOUBLE"] = "Double";
+        ChallengerStatus["DOUBLEBUST"] = "DoubleBust";
+        ChallengerStatus["BLACKJACK"] = "Blackjack";
+    })(ChallengerStatus || (ChallengerStatus = {}));
+    exports.ChallengerStatus = ChallengerStatus;
     var DealerStatus;
     (function (DealerStatus) {
         DealerStatus["INITIAL"] = "Initial";

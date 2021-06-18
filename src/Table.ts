@@ -3,7 +3,7 @@ import { User } from "./User";
 import { Bot } from "./Bot";
 import { Dealer } from "./Dealer";
 import { Action } from "./types/ActionType";
-import { PlayerStatus, DealerStatus } from "./types/StatusType";
+import { ChallengerStatus, DealerStatus } from "./types/StatusType";
 
 export class Table {
   public static instance: Table;
@@ -106,9 +106,9 @@ export class Table {
 
       let result: "win" | "lose" | "push" = "push";
       switch(player.status) {
-        case PlayerStatus.SURRENDER: case PlayerStatus.BUST: case PlayerStatus.DOUBLEBUST: result = "lose";break; 
-        case PlayerStatus.BLACKJACK: if(this.dealer.status !== "Blackjack") result = "win";break;
-        case PlayerStatus.STAND: case PlayerStatus.DOUBLE: result = this.compareHand(player);break;
+        case ChallengerStatus.SURRENDER: case ChallengerStatus.BUST: case ChallengerStatus.DOUBLEBUST: result = "lose";break; 
+        case ChallengerStatus.BLACKJACK: if(this.dealer.status !== "Blackjack") result = "win";break;
+        case ChallengerStatus.STAND: case ChallengerStatus.DOUBLE: result = this.compareHand(player);break;
       }
 
       const exMoney = player.money;

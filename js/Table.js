@@ -126,17 +126,17 @@
                     continue;
                 var result = "push";
                 switch (player.status) {
-                    case StatusType_1.PlayerStatus.SURRENDER:
-                    case StatusType_1.PlayerStatus.BUST:
-                    case StatusType_1.PlayerStatus.DOUBLEBUST:
+                    case StatusType_1.ChallengerStatus.SURRENDER:
+                    case StatusType_1.ChallengerStatus.BUST:
+                    case StatusType_1.ChallengerStatus.DOUBLEBUST:
                         result = "lose";
                         break;
-                    case StatusType_1.PlayerStatus.BLACKJACK:
+                    case StatusType_1.ChallengerStatus.BLACKJACK:
                         if (this.dealer.status !== "Blackjack")
                             result = "win";
                         break;
-                    case StatusType_1.PlayerStatus.STAND:
-                    case StatusType_1.PlayerStatus.DOUBLE:
+                    case StatusType_1.ChallengerStatus.STAND:
+                    case StatusType_1.ChallengerStatus.DOUBLE:
                         result = this.compareHand(player);
                         break;
                 }

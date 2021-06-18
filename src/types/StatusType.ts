@@ -1,4 +1,4 @@
-enum PlayerStatus {
+enum ChallengerStatus {
   INITIAL = "Initial",
   SURRENDER = "Surrender",
   STAND = "Stand",
@@ -15,4 +15,4 @@ enum DealerStatus {
   BLACKJACK = "Blackjack",
 }
 
-export { PlayerStatus, DealerStatus };
+export { ChallengerStatus, DealerStatus };

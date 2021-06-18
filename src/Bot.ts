@@ -1,10 +1,10 @@
-import { Player } from "./Player";
+import { Challenger } from "./Challenger";
 import { Table } from "./Table";
 import { BotStrategies } from "./BotStrategies";
 import { Action } from "./types/ActionType";
 import { Card } from "./Card";
 
-export class Bot extends Player {
+export class Bot extends Challenger {
   public readonly id: string;
   public constructor(username: string) {
     super(username);

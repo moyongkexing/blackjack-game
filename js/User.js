@@ -19,13 +19,13 @@ var __extends = (this && this.__extends) || (function () {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Player"], factory);
+        define(["require", "exports", "./Challenger"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.User = void 0;
-    var Player_1 = require("./Player");
+    var Challenger_1 = require("./Challenger");
     var User = /** @class */ (function (_super) {
         __extends(User, _super);
         function User(username) {
@@ -35,6 +35,6 @@ var __extends = (this && this.__extends) || (function () {
             this.betAmount = userBetAmount;
         };
         return User;
-    }(Player_1.Player));
+    }(Challenger_1.Challenger));
     exports.User = User;
 });
