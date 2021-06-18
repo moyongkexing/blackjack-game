@@ -3,13 +3,16 @@ import { Table } from "./Table";
 import { PlayerStatus } from "./types/StatusType";
 
 export abstract class Player {
+  public name: string;
   public hand: Card[] = [];
   public money: number = 400;
   public betAmount: number = Table.betDenominations[0];
   public status = PlayerStatus.INITIAL;
   public isTurnEnd: boolean = false;
 
-  public constructor(public username: string) {}
+  public constructor(public username: string) {
+    this.name = username;
+  }
 
   abstract makeBet(arg: Player["betAmount"] | null): void;
 
