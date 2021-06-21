@@ -40,8 +40,12 @@ export abstract class Challenger {
     return this.money < Table.betDenominations[0]; 
   }
 
+  public get canHit(): boolean {
+    return this.status !== ChallengerStatus.DOUBLE;
+  }
+  
   public get canDouble(): boolean {
-    return this.money >= this.betAmount * 2;
+    return this.money >= this.betAmount * 2 && this.status !== ChallengerStatus.DOUBLE;
   }
 
   public getCard(card: Card): void {
@@ -69,12 +73,14 @@ export abstract class Challenger {
       this.isTurnEnd = true;
     } 
   }
-
+  
   public double(card: Card): void {
     this.getCard(card);
     this.status = ChallengerStatus.DOUBLE;
-    if(this.handScore > 21) this.status = ChallengerStatus.DOUBLEBUST;
-    this.isTurnEnd = true;
+    if(this.handScore > 21) {
+      this.status = ChallengerStatus.DOUBLEBUST;
+      this.isTurnEnd = true;
+    }
   }
 
   public resetState(): void {

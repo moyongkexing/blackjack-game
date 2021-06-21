@@ -21,6 +21,7 @@ export class View {
   private username = document.getElementById("username") as HTMLHeadingElement;
   private actionButtons = document.getElementById("action-buttons") as HTMLElement;
   private doubleBtn = document.getElementById("double-btn") as HTMLButtonElement;
+  private hitBtn = document.getElementById("hit-btn") as HTMLButtonElement;
   private nextBtn = document.getElementById("next-btn") as HTMLButtonElement;
   private gameLog = (document.getElementById("game-log") as HTMLElement);
 
@@ -83,8 +84,10 @@ export class View {
       ).addEventListener("click", async () => {
         this.table.userAct(action);
         this.updatePlayerHand(this.table.user);
-        // ex: "user has chosen to stand."
         this.updateTurnLog();
+        console.log(this.table.user.status);
+        if(!this.table.user.canDouble) this.doubleBtn.classList.add("disable");
+        if(!this.table.user.canHit) this.hitBtn.classList.add("disable");
         if(this.table.user.isTurnEnd) await this.autoRendering();
       });
     }
@@ -124,7 +127,6 @@ export class View {
 
   private async autoRendering() {
     this.actionButtons.style.visibility = "hidden";
-
     this.updatePlayerStatus(this.table.user);
 
     for(let bot of this.table.players) {

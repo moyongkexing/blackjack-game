@@ -61,9 +61,16 @@
             enumerable: false,
             configurable: true
         });
+        Object.defineProperty(Challenger.prototype, "canHit", {
+            get: function () {
+                return this.status !== StatusType_1.ChallengerStatus.DOUBLE;
+            },
+            enumerable: false,
+            configurable: true
+        });
         Object.defineProperty(Challenger.prototype, "canDouble", {
             get: function () {
-                return this.money >= this.betAmount * 2;
+                return this.money >= this.betAmount * 2 && this.status !== StatusType_1.ChallengerStatus.DOUBLE;
             },
             enumerable: false,
             configurable: true
@@ -93,9 +100,10 @@
         Challenger.prototype.double = function (card) {
             this.getCard(card);
             this.status = StatusType_1.ChallengerStatus.DOUBLE;
-            if (this.handScore > 21)
+            if (this.handScore > 21) {
                 this.status = StatusType_1.ChallengerStatus.DOUBLEBUST;
-            this.isTurnEnd = true;
+                this.isTurnEnd = true;
+            }
         };
         Challenger.prototype.resetState = function () {
             this.hand = [];

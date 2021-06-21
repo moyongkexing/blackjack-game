@@ -64,6 +64,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             this.username = document.getElementById("username");
             this.actionButtons = document.getElementById("action-buttons");
             this.doubleBtn = document.getElementById("double-btn");
+            this.hitBtn = document.getElementById("hit-btn");
             this.nextBtn = document.getElementById("next-btn");
             this.gameLog = document.getElementById("game-log");
             this.table = Table_1.Table.getInstance(this.usernameInput.value);
@@ -143,8 +144,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             case 0:
                                 this.table.userAct(action);
                                 this.updatePlayerHand(this.table.user);
-                                // ex: "user has chosen to stand."
                                 this.updateTurnLog();
+                                console.log(this.table.user.status);
+                                if (!this.table.user.canDouble)
+                                    this.doubleBtn.classList.add("disable");
+                                if (!this.table.user.canHit)
+                                    this.hitBtn.classList.add("disable");
                                 if (!this.table.user.isTurnEnd) return [3 /*break*/, 2];
                                 return [4 /*yield*/, this.autoRendering()];
                             case 1:

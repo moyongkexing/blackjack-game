@@ -19,13 +19,12 @@ export class Bot extends Challenger {
   }
 
   public makeAction(openCard: Card): Action {
-    // src/BotStrategies.ts
     const strategy = BotStrategies[String(openCard.rankNum)];
     const actions = Object.keys(strategy) as Action[];
     for(let action of actions) {
       if(strategy[action].indexOf(this.handScore) !== -1) {
         // If bot doesn't have enough money, choose to hit instead of double
-        if(action === "Double") return this.betAmount * 2 <= this.money ? Action.DOUBLE : Action.HIT;
+        if(action === "Double") return this.canDouble ? Action.DOUBLE : Action.HIT;
         else return action;
       }
     }

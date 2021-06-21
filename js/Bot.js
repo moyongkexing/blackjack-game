@@ -43,7 +43,6 @@ var __extends = (this && this.__extends) || (function () {
                 : Table_1.Table.betDenominations[randomIndex];
         };
         Bot.prototype.makeAction = function (openCard) {
-            // src/BotStrategies.ts
             var strategy = BotStrategies_1.BotStrategies[String(openCard.rankNum)];
             var actions = Object.keys(strategy);
             for (var _i = 0, actions_1 = actions; _i < actions_1.length; _i++) {
@@ -51,7 +50,7 @@ var __extends = (this && this.__extends) || (function () {
                 if (strategy[action].indexOf(this.handScore) !== -1) {
                     // If bot doesn't have enough money, choose to hit instead of double
                     if (action === "Double")
-                        return this.betAmount * 2 <= this.money ? ActionType_1.Action.DOUBLE : ActionType_1.Action.HIT;
+                        return this.canDouble ? ActionType_1.Action.DOUBLE : ActionType_1.Action.HIT;
                     else
                         return action;
                 }
