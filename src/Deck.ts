@@ -1,8 +1,8 @@
 import { Card } from "./Card";
 
 export class Deck {
-  private static suits = ["heart", "diamond", "club", "spade"];
-  private static ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+  private static suits = ["heart", "diamond", "club", "spade"] as const;
+  private static ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"] as const;
   private cards: Card[] = [];
 
   public constructor() {

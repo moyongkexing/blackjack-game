@@ -7,7 +7,7 @@ import { ChallengerStatus, DealerStatus } from "./types/StatusType";
 
 export class Table {
   public static instance: Table;
-  public static readonly betDenominations = [5,20,50,100];
+  public static betDenominations = [5,20,50,100] as const;
   private deck: Deck;
   public readonly user: User;
   public readonly dealer: Dealer;
