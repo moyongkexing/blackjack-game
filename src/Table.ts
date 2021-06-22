@@ -14,6 +14,8 @@ export class Table {
   public readonly players: Array<User | Bot | Dealer> = [];
   public turnCounter: number = 0;
   public turnLog: string[][] = [];
+  // private cardCountingTotal: number = 0;
+  public cardCountingTotal: number = 0;
 
   private constructor(username: string) {
     this.deck = new Deck();
@@ -43,7 +45,7 @@ export class Table {
     for(let player of this.players) {
       if(player instanceof Dealer) continue;
       if(player instanceof User) player.makeBet(userBetAmount);
-      if(player instanceof Bot) player.makeBet();
+      if(player instanceof Bot) player.makeBet(this.cardCountingTotal);
       betLog.push(`${player.name} has bet ${player.betAmount}$.`);
     }
     this.turnLog.push(betLog);
@@ -106,9 +108,18 @@ export class Table {
 
       let result: "win" | "lose" | "push" = "push";
       switch(player.status) {
-        case ChallengerStatus.SURRENDER: case ChallengerStatus.BUST: case ChallengerStatus.DOUBLEBUST: result = "lose";break; 
-        case ChallengerStatus.BLACKJACK: if(this.dealer.status !== "Blackjack") result = "win";break;
-        case ChallengerStatus.STAND: case ChallengerStatus.DOUBLE: result = this.compareHand(player);break;
+        case ChallengerStatus.SURRENDER:
+        case ChallengerStatus.BUST:
+        case ChallengerStatus.DOUBLEBUST: {
+          result = "lose";break; 
+        }
+        case ChallengerStatus.BLACKJACK: {
+          if(this.dealer.status !== DealerStatus.BLACKJACK) result = "win";break;
+        }
+        case ChallengerStatus.STAND:
+        case ChallengerStatus.DOUBLE: {
+          result = this.compareHand(player);break;
+        }
       }
 
       const exMoney = player.money;
@@ -116,11 +127,14 @@ export class Table {
       log.push(`${player.name} ${result}. (${exMoney}$ → ${player.money}$)`);
     }
     this.turnLog.push(log);
+    this.setCardCountingTotal();
+    console.log(this.cardCountingTotal);
+    if(this.deck.remain <= 10) this.resetDeck();
   }
   
-  public resetTable(): void {
+  public resetDeck(): void {
     this.deck.resetDeck();
-    this.players.forEach(player => player.resetState());
+    this.cardCountingTotal = 0;
   }
 
   public gameOver(): void {
@@ -132,5 +146,13 @@ export class Table {
     if(this.dealer.status === DealerStatus.BUST) return "win";
     let diff = player.handScore - this.dealer.handScore;
     return diff > 0 ? "win" : diff < 0 ? "lose" : "push";
+  }
+
+  private setCardCountingTotal(): void {
+    for(let player of this.players) {
+      let score = 0;
+      player.hand.forEach(card => score += card.cardCountingValue);
+      this.cardCountingTotal += score;
+    }
   }
 }

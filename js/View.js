@@ -145,7 +145,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                 this.table.userAct(action);
                                 this.updatePlayerHand(this.table.user);
                                 this.updateTurnLog();
-                                console.log(this.table.user.status);
                                 if (!this.table.user.canDouble)
                                     this.doubleBtn.classList.add("disable");
                                 if (!this.table.user.canHit)
@@ -166,7 +165,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             }
             // "Next Game" button
             this.nextBtn.addEventListener("click", function () {
-                _this.table.resetTable();
+                _this.table.players.forEach(function (player) { return player.resetState(); });
                 _this.initializeView();
                 _this.makeChipButtonClickable();
                 _this.dealPage.classList.add("hidden");

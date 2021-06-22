@@ -85,7 +85,6 @@ export class View {
         this.table.userAct(action);
         this.updatePlayerHand(this.table.user);
         this.updateTurnLog();
-        console.log(this.table.user.status);
         if(!this.table.user.canDouble) this.doubleBtn.classList.add("disable");
         if(!this.table.user.canHit) this.hitBtn.classList.add("disable");
         if(this.table.user.isTurnEnd) await this.autoRendering();
@@ -94,10 +93,10 @@ export class View {
     
     // "Next Game" button
     this.nextBtn.addEventListener("click", () => {
-      this.table.resetTable();
+      this.table.players.forEach(player => player.resetState());
       this.initializeView();
+      
       this.makeChipButtonClickable();
-    
       this.dealPage.classList.add("hidden");
       this.betPage.classList.remove("hidden");
     });

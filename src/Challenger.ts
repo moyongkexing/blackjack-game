@@ -32,7 +32,7 @@ export abstract class Challenger {
     return this.hand.filter((card) => card.rank === "A").length;
   }
 
-  private get isBlackjack(): boolean {
+  public get isBlackjack(): boolean {
     return this.handScore === 21 && this.numAce > 0;
   }
 

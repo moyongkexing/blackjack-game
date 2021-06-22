@@ -7,7 +7,6 @@ export interface Player {
   status: ChallengerStatus | DealerStatus;
   isTurnEnd: boolean;
   handScore: number;
-  
   getCard(card: Card): void;
   stand(): void;
   hit(card: Card): void;
