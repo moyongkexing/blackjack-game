@@ -12,9 +12,10 @@ export class Bot extends Challenger {
   }
   
   public makeBet(): void {
-    const randomIndex = Math.floor(Math.random() * 3);
-    this.betAmount = this.money >= Table.betDenominations[3] * 3
-    ? Table.betDenominations[Table.betDenominations.length - 1]
+    const lastIndex = Table.betDenominations.length - 1;
+    const randomIndex = Math.floor(Math.random() * lastIndex);
+    this.betAmount = this.money >= lastIndex * 3
+    ? Table.betDenominations[lastIndex]
     : Table.betDenominations[randomIndex];
   }
 

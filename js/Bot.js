@@ -37,9 +37,10 @@ var __extends = (this && this.__extends) || (function () {
             return _this;
         }
         Bot.prototype.makeBet = function () {
-            var randomIndex = Math.floor(Math.random() * 3);
-            this.betAmount = this.money >= Table_1.Table.betDenominations[3] * 3
-                ? Table_1.Table.betDenominations[Table_1.Table.betDenominations.length - 1]
+            var lastIndex = Table_1.Table.betDenominations.length - 1;
+            var randomIndex = Math.floor(Math.random() * lastIndex);
+            this.betAmount = this.money >= lastIndex * 3
+                ? Table_1.Table.betDenominations[lastIndex]
                 : Table_1.Table.betDenominations[randomIndex];
         };
         Bot.prototype.makeAction = function (openCard) {
