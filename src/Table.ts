@@ -123,7 +123,7 @@ export class Table {
       }
 
       const exMoney = player.money;
-      if(result !== "push") player.calculation(result);
+      if(result !== "push") player.updateMoney(result);
       log.push(`${player.name} ${result}. (${exMoney}$ → ${player.money}$)`);
     }
     this.turnLog.push(log);

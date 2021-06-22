@@ -111,7 +111,7 @@
             this.status = StatusType_1.ChallengerStatus.INITIAL;
             this.isTurnEnd = false;
         };
-        Challenger.prototype.calculation = function (result) {
+        Challenger.prototype.updateMoney = function (result) {
             var map = {
                 Surrender: -0.5,
                 Bust: -1,

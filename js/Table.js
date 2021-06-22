@@ -147,7 +147,7 @@
                 }
                 var exMoney = player.money;
                 if (result !== "push")
-                    player.calculation(result);
+                    player.updateMoney(result);
                 log.push(player.name + " " + result + ". (" + exMoney + "$ \u2192 " + player.money + "$)");
             }
             this.turnLog.push(log);
