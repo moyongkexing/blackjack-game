@@ -290,23 +290,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         View.prototype.getIdFromPlayer = function (player) {
             return player instanceof User_1.User ? "USER" : player instanceof Dealer_1.Dealer ? "DEALER" : player.id;
         };
-        View.prototype.debug = function () {
-            console.log("");
-            console.log("");
-            for (var _i = 0, _a = this.table.players; _i < _a.length; _i++) {
-                var player = _a[_i];
-                console.log(player);
-                console.log(player.hand);
-                console.log("isTurnEnd");
-                console.log(player.isTurnEnd);
-                console.log("handScore");
-                console.log(player.handScore);
-            }
-            console.log(this.table.dealer);
-            console.log(this.table.dealer.hand);
-            console.log("handScore");
-            console.log(this.table.dealer.handScore);
-        };
         return View;
     }());
     exports.View = View;

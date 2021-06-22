@@ -3,6 +3,7 @@ import { Table } from "./Table";
 import { BotStrategies } from "./BotStrategies";
 import { Action } from "./types/ActionType";
 import { Card } from "./Card";
+import { Player } from "./types/PlayerInterface";
 
 export class Bot extends Challenger {
   public readonly id: string;

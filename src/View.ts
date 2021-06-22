@@ -209,20 +209,20 @@ export class View {
       return player instanceof User ? "USER" : player instanceof Dealer ? "DEALER" : player.id;
   }
 
-  private debug(): void {
-    console.log("");
-    console.log("");
-    for (let player of this.table.players) {
-      console.log(player);
-      console.log(player.hand);
-      console.log("isTurnEnd");
-      console.log(player.isTurnEnd);
-      console.log("handScore");
-      console.log(player.handScore);
-    }
-    console.log(this.table.dealer);
-    console.log(this.table.dealer.hand);
-    console.log("handScore");
-    console.log(this.table.dealer.handScore);
-  }
+  // private debug(): void {
+  //   console.log("");
+  //   console.log("");
+  //   for (let player of this.table.players) {
+  //     console.log(player);
+  //     console.log(player.hand);
+  //     console.log("isTurnEnd");
+  //     console.log(player.isTurnEnd);
+  //     console.log("handScore");
+  //     console.log(player.handScore);
+  //   }
+  //   console.log(this.table.dealer);
+  //   console.log(this.table.dealer.hand);
+  //   console.log("handScore");
+  //   console.log(this.table.dealer.handScore);
+  // }
 }
