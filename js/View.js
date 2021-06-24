@@ -145,7 +145,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                 this.table.userAct(action);
                                 this.updatePlayerHand(this.table.user);
                                 this.updateTurnLog();
-                                console.log(this.table.user.status);
                                 if (!this.table.user.canDouble)
                                     this.doubleBtn.classList.add("disable");
                                 if (!this.table.user.canHit)
@@ -166,7 +165,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             }
             // "Next Game" button
             this.nextBtn.addEventListener("click", function () {
-                _this.table.resetTable();
+                _this.table.players.forEach(function (player) { return player.resetState(); });
                 _this.initializeView();
                 _this.makeChipButtonClickable();
                 _this.dealPage.classList.add("hidden");
@@ -289,23 +288,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         };
         View.prototype.getIdFromPlayer = function (player) {
             return player instanceof User_1.User ? "USER" : player instanceof Dealer_1.Dealer ? "DEALER" : player.id;
-        };
-        View.prototype.debug = function () {
-            console.log("");
-            console.log("");
-            for (var _i = 0, _a = this.table.players; _i < _a.length; _i++) {
-                var player = _a[_i];
-                console.log(player);
-                console.log(player.hand);
-                console.log("isTurnEnd");
-                console.log(player.isTurnEnd);
-                console.log("handScore");
-                console.log(player.handScore);
-            }
-            console.log(this.table.dealer);
-            console.log(this.table.dealer.hand);
-            console.log("handScore");
-            console.log(this.table.dealer.handScore);
         };
         return View;
     }());

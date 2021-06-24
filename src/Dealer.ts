@@ -1,7 +1,8 @@
 import { Card } from "./Card";
 import { DealerStatus } from "./types/StatusType";
+import { Player } from "./types/PlayerInterface";
 
-export class Dealer {
+export class Dealer implements Player {
   public readonly name: string = "Dealer";
   public hand: Card[] = [];
   public status = DealerStatus.INITIAL;
@@ -27,7 +28,7 @@ export class Dealer {
     return this.hand.filter((card) => card.rank === "A").length;
   }
 
-  public get isBlackjack(): boolean {
+  private get isBlackjack(): boolean {
     return this.handScore === 21 && this.numAce > 0;
   }
 

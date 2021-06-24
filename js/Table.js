@@ -21,6 +21,8 @@
             this.players = [];
             this.turnCounter = 0;
             this.turnLog = [];
+            // private cardCountingTotal: number = 0;
+            this.cardCountingTotal = 0;
             this.deck = new Deck_1.Deck();
             this.user = new User_1.User(username);
             this.dealer = new Dealer_1.Dealer();
@@ -49,7 +51,7 @@
                 if (player instanceof User_1.User)
                     player.makeBet(userBetAmount);
                 if (player instanceof Bot_1.Bot)
-                    player.makeBet();
+                    player.makeBet(this.cardCountingTotal);
                 betLog.push(player.name + " has bet " + player.betAmount + "$.");
             }
             this.turnLog.push(betLog);
@@ -128,28 +130,35 @@
                 switch (player.status) {
                     case StatusType_1.ChallengerStatus.SURRENDER:
                     case StatusType_1.ChallengerStatus.BUST:
-                    case StatusType_1.ChallengerStatus.DOUBLEBUST:
+                    case StatusType_1.ChallengerStatus.DOUBLEBUST: {
                         result = "lose";
                         break;
-                    case StatusType_1.ChallengerStatus.BLACKJACK:
-                        if (this.dealer.status !== "Blackjack")
+                    }
+                    case StatusType_1.ChallengerStatus.BLACKJACK: {
+                        if (this.dealer.status !== StatusType_1.DealerStatus.BLACKJACK)
                             result = "win";
                         break;
+                    }
                     case StatusType_1.ChallengerStatus.STAND:
-                    case StatusType_1.ChallengerStatus.DOUBLE:
+                    case StatusType_1.ChallengerStatus.DOUBLE: {
                         result = this.compareHand(player);
                         break;
+                    }
                 }
                 var exMoney = player.money;
                 if (result !== "push")
-                    player.calculation(result);
+                    player.updateMoney(result);
                 log.push(player.name + " " + result + ". (" + exMoney + "$ \u2192 " + player.money + "$)");
             }
             this.turnLog.push(log);
+            this.setCardCountingTotal();
+            console.log(this.cardCountingTotal);
+            if (this.deck.remain <= 10)
+                this.resetDeck();
         };
-        Table.prototype.resetTable = function () {
+        Table.prototype.resetDeck = function () {
             this.deck.resetDeck();
-            this.players.forEach(function (player) { return player.resetState(); });
+            this.cardCountingTotal = 0;
         };
         Table.prototype.gameOver = function () {
             this.turnLog.push(["Game Over!"]);
@@ -161,6 +170,18 @@
                 return "win";
             var diff = player.handScore - this.dealer.handScore;
             return diff > 0 ? "win" : diff < 0 ? "lose" : "push";
+        };
+        Table.prototype.setCardCountingTotal = function () {
+            var _loop_1 = function (player) {
+                var score = 0;
+                player.hand.forEach(function (card) { return score += card.cardCountingValue; });
+                this_1.cardCountingTotal += score;
+            };
+            var this_1 = this;
+            for (var _i = 0, _a = this.players; _i < _a.length; _i++) {
+                var player = _a[_i];
+                _loop_1(player);
+            }
         };
         Table.betDenominations = [5, 20, 50, 100];
         return Table;

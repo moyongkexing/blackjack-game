@@ -27,6 +27,18 @@
             enumerable: false,
             configurable: true
         });
+        Object.defineProperty(Card.prototype, "cardCountingValue", {
+            get: function () {
+                if (2 <= this.rankNum && this.rankNum <= 7)
+                    return 1;
+                else if (8 <= this.rankNum && this.rankNum <= 9)
+                    return 0;
+                else
+                    return -1;
+            },
+            enumerable: false,
+            configurable: true
+        });
         return Card;
     }());
     exports.Card = Card;

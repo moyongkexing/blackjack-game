@@ -32,4 +32,8 @@ export class Deck {
       this.cards[random] = temp;
     }
   }
+
+  public get remain(): number {
+    return this.cards.length;
+  }
 }

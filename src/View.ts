@@ -85,7 +85,6 @@ export class View {
         this.table.userAct(action);
         this.updatePlayerHand(this.table.user);
         this.updateTurnLog();
-        console.log(this.table.user.status);
         if(!this.table.user.canDouble) this.doubleBtn.classList.add("disable");
         if(!this.table.user.canHit) this.hitBtn.classList.add("disable");
         if(this.table.user.isTurnEnd) await this.autoRendering();
@@ -94,10 +93,10 @@ export class View {
     
     // "Next Game" button
     this.nextBtn.addEventListener("click", () => {
-      this.table.resetTable();
+      this.table.players.forEach(player => player.resetState());
       this.initializeView();
+      
       this.makeChipButtonClickable();
-    
       this.dealPage.classList.add("hidden");
       this.betPage.classList.remove("hidden");
     });
@@ -209,20 +208,20 @@ export class View {
       return player instanceof User ? "USER" : player instanceof Dealer ? "DEALER" : player.id;
   }
 
-  private debug(): void {
-    console.log("");
-    console.log("");
-    for (let player of this.table.players) {
-      console.log(player);
-      console.log(player.hand);
-      console.log("isTurnEnd");
-      console.log(player.isTurnEnd);
-      console.log("handScore");
-      console.log(player.handScore);
-    }
-    console.log(this.table.dealer);
-    console.log(this.table.dealer.hand);
-    console.log("handScore");
-    console.log(this.table.dealer.handScore);
-  }
+  // private debug(): void {
+  //   console.log("");
+  //   console.log("");
+  //   for (let player of this.table.players) {
+  //     console.log(player);
+  //     console.log(player.hand);
+  //     console.log("isTurnEnd");
+  //     console.log(player.isTurnEnd);
+  //     console.log("handScore");
+  //     console.log(player.handScore);
+  //   }
+  //   console.log(this.table.dealer);
+  //   console.log(this.table.dealer.hand);
+  //   console.log("handScore");
+  //   console.log(this.table.dealer.handScore);
+  // }
 }

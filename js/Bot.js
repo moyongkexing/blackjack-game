@@ -33,14 +33,20 @@ var __extends = (this && this.__extends) || (function () {
         __extends(Bot, _super);
         function Bot(username) {
             var _this = _super.call(this, username) || this;
+            // K-O System - https://vegasdocs.com/blackjack/counting.html#anc6
+            _this.knockOutNumber = 2;
             _this.id = username.toUpperCase();
             return _this;
         }
-        Bot.prototype.makeBet = function () {
-            var randomIndex = Math.floor(Math.random() * 3);
-            this.betAmount = this.money >= Table_1.Table.betDenominations[3] * 3
-                ? Table_1.Table.betDenominations[Table_1.Table.betDenominations.length - 1]
+        Bot.prototype.makeBet = function (cardCountingTotal) {
+            var lastIndex = Table_1.Table.betDenominations.length - 1;
+            var randomIndex = Math.floor(Math.random() * lastIndex);
+            this.betAmount = this.money >= lastIndex * 3
+                ? Table_1.Table.betDenominations[lastIndex]
                 : Table_1.Table.betDenominations[randomIndex];
+            if (this.knockOutNumber <= cardCountingTotal) {
+                this.betAmount = this.betAmount * (1 + randomIndex / 10);
+            }
         };
         Bot.prototype.makeAction = function (openCard) {
             var strategy = BotStrategies_1.BotStrategies[String(openCard.rankNum)];

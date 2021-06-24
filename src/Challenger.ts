@@ -32,7 +32,7 @@ export abstract class Challenger {
     return this.hand.filter((card) => card.rank === "A").length;
   }
 
-  private get isBlackjack(): boolean {
+  public get isBlackjack(): boolean {
     return this.handScore === 21 && this.numAce > 0;
   }
 
@@ -90,7 +90,7 @@ export abstract class Challenger {
     this.isTurnEnd = false;
   }
 
-  public calculation(result: "win" | "lose"): void {
+  public updateMoney(result: "win" | "lose"): void {
     type finalStatus = Exclude<ChallengerStatus, ChallengerStatus.INITIAL>;
     const map: { [key in finalStatus]: number } = {
       Surrender: -0.5,
