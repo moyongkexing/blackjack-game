@@ -10,8 +10,10 @@
     ],
     "outDir": "./js",             
     "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
+    "noUnusedLocals": true, // 未使用のローカル変数 を エラー報告
+    "noUnusedParameters": true, // 未使用のパラメーター を エラー報告
+    "noImplicitReturns": true, // 不正確な return を エラー報告
+    "noFallthroughCasesInSwitch": true, // case 文 の フォールスルー を エラー報告
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
