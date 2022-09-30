@@ -19,11 +19,8 @@ https://blackjack-game-oop.vercel.app/
   
 ## Installation
 ```
-$ git clone https://github.com/moyongkexing/clicker-empire-game.git
-$ cd clicker-empire-game
+$ git clone https://github.com/moyongkexing/blackjack-game-oop.git
+$ cd blackjack-game-oop
 $ npm i
 $ npx tsc -w
 ```
-
-## Author
-Twitter: [mo4g_dev](https://twitter.com/mo4g_dev)
